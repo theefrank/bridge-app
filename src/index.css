@@ -1,0 +1,137 @@
+@import "tailwindcss";
+
+:root {
+  /* Sage */
+  --color-sage-100: #F4F7F5;
+  --color-sage-300: #B8C8C2;
+  --color-sage-500: #7C9A92;
+  --color-sage-700: #5F766F;
+
+  /* Terracotta */
+  --color-terracotta-100: #FAF1EB;
+  --color-terracotta-300: #E7B79B;
+  --color-terracotta-500: #D08C60;
+  --color-terracotta-700: #B26D44;
+
+  /* Accent */
+  --color-gold: #E9B44C;
+
+  /* Neutrals */
+  --color-cream: #FAF7F2;
+  --color-white: #FFFFFF;
+  --color-charcoal: #2D3436;
+  --color-gray: #6B7280;
+
+  /* Shadows */
+  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-cream);
+  color: var(--color-charcoal);
+  font-family:
+    Inter, sans-serif;
+  min-height: 100vh;
+}
+
+
+@layer components {
+
+  /* Primary Button */
+
+  .btn-primary {
+    @apply px-6 py-3 rounded-xl font-medium transition-all duration-200;
+    background-color: var(--color-sage-500);
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-sage-700);
+    transform: translateY(-1px);
+  }
+
+  /* Secondary Button */
+
+  .btn-secondary {
+    @apply px-6 py-3 rounded-xl font-medium transition-all duration-200;
+    background-color: var(--color-terracotta-500);
+    color: white;
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--color-terracotta-700);
+    transform: translateY(-1px);
+  }
+
+  /* Outline Button */
+
+  .btn-outline {
+    @apply px-6 py-3 rounded-xl border font-medium transition-all duration-200;
+    border-color: var(--color-sage-500);
+    color: var(--color-sage-700);
+    background-color: transparent;
+  }
+
+  .btn-outline:hover {
+    background-color: var(--color-sage-100);
+  }
+
+  /* Cards */
+
+  .bridge-card {
+    @apply rounded-2xl p-6;
+    background-color: white;
+    box-shadow: var(--shadow-soft);
+  }
+
+  /* Inputs */
+
+  .bridge-input {
+    @apply w-full px-4 py-3 rounded-xl border outline-none;
+    border-color: #d1d5db;
+    background-color: white;
+  }
+
+  .bridge-input:focus {
+    border-color: var(--color-sage-500);
+  }
+
+  /* Section Container */
+
+  .section-container {
+    @apply max-w-7xl mx-auto px-6 lg:px-8;
+  }
+}
+
+@layer utilities {
+
+  .text-sage {
+    color: var(--color-sage-500);
+  }
+
+  .text-terracotta {
+    color: var(--color-terracotta-500);
+  }
+
+  .bg-sage {
+    background-color: var(--color-sage-500);
+  }
+
+  .bg-terracotta {
+    background-color: var(--color-terracotta-500);
+  }
+
+  .bg-cream {
+    background-color: var(--color-cream);
+  }
+
+  .text-charcoal {
+    color: var(--color-charcoal);
+  }
+}
+
