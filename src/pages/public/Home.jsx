@@ -86,6 +86,17 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <section className="py-20 px-6 text-center">
+        <h2 className="text-4xl font-bold mb-6">
+          Ready to Make a Difference?
+        </h2>
+
+        <p className="mb-8">
+          Join Bridge today and become part of a supportive community.
+        </p>
+
+        <Button>Join Bridge</Button>
+      </section>
     </main>
   );
 }
