@@ -25,6 +25,32 @@ export default function Home() {
     </div>
   </div>
 </section>
+<section className="py-20 px-6">
+        <h2 className="text-3xl font-bold text-center mb-12">
+          How Bridge Works
+        </h2>
+
+        <div className="grid md:grid-cols-3 gap-6">
+          <Card title="Create a Request">
+            <p>
+              Tell the community what help you need.
+            </p>
+          </Card>
+
+          <Card title="Connect">
+            <p>
+              Find volunteers and community members ready to help.
+            </p>
+          </Card>
+
+          <Card title="Make Impact">
+            <p>
+              Volunteer your skills and make a difference.
+            </p>
+          </Card>
+        </div>
+      </section>
+
     </main>
   );
 }
