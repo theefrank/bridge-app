@@ -64,6 +64,28 @@ export default function Home() {
           <Card title="Wellness" />
         </div>
       </section>
+      <section className="py-20 px-6">
+        <h2 className="text-3xl font-bold text-center mb-12">
+          Community Impact
+        </h2>
+
+        <div className="grid md:grid-cols-3 gap-6 text-center">
+          <div className="bridge-card">
+            <h3 className="text-4xl font-bold">150+</h3>
+            <p>Requests Posted</p>
+          </div>
+
+          <div className="bridge-card">
+            <h3 className="text-4xl font-bold">75+</h3>
+            <p>Volunteers</p>
+          </div>
+
+          <div className="bridge-card">
+            <h3 className="text-4xl font-bold">300+</h3>
+            <p>Successful Connections</p>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }
