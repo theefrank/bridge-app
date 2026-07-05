@@ -50,7 +50,20 @@ export default function Home() {
           </Card>
         </div>
       </section>
+      <section className="py-20 px-6">
+        <h2 className="text-3xl font-bold text-center mb-12">
+          Popular Categories
+        </h2>
 
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+          <Card title="Education" />
+          <Card title="Technology" />
+          <Card title="Career" />
+          <Card title="Mentorship" />
+          <Card title="Community" />
+          <Card title="Wellness" />
+        </div>
+      </section>
     </main>
   );
 }
