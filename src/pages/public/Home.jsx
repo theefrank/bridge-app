@@ -143,28 +143,56 @@ export default function Home() {
                                                   </div>
                                                   </section>
 
-      <section className="py-20 px-6">
-        <h2 className="text-3xl font-bold text-center mb-12">
-          Community Impact
-        </h2>
+<section className="py-16 px-6">
+  <div className="max-w-6xl mx-auto">
 
-        <div className="grid md:grid-cols-3 gap-6 text-center">
-          <div className="bridge-card">
-            <h3 className="text-4xl font-bold">150+</h3>
-            <p>Requests Posted</p>
-          </div>
+    <div className="text-center mb-12">
+      <h2 className="text-3xl font-bold mb-3">
+        Community Impact
+      </h2>
 
-          <div className="bridge-card">
-            <h3 className="text-4xl font-bold">75+</h3>
-            <p>Volunteers</p>
-          </div>
+      <p className="text-gray-600 max-w-2xl mx-auto">
+        Every connection made through Bridge strengthens communities
+        and creates meaningful change.
+      </p>
+    </div>
 
-          <div className="bridge-card">
-            <h3 className="text-4xl font-bold">300+</h3>
-            <p>Successful Connections</p>
-          </div>
-        </div>
-      </section>
+    <div className="grid md:grid-cols-3 gap-6">
+
+      <div className="bridge-card text-center">
+        <h3 className="text-4xl font-bold text-[#D08C60]">
+          500+
+        </h3>
+
+        <p className="text-gray-600 mt-2">
+          Requests Fulfilled
+        </p>
+      </div>
+
+      <div className="bridge-card text-center">
+        <h3 className="text-4xl font-bold text-[#D08C60]">
+          200+
+        </h3>
+
+        <p className="text-gray-600 mt-2">
+          Active Volunteers
+        </p>
+      </div>
+
+      <div className="bridge-card text-center">
+        <h3 className="text-4xl font-bold text-[#D08C60]">
+          50+
+        </h3>
+
+        <p className="text-gray-600 mt-2">
+          Communities Reached
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
       <section className="py-20 px-6 text-center">
         <h2 className="text-4xl font-bold mb-6">
           Ready to Make a Difference?
