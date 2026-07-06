@@ -1,10 +1,13 @@
+import Navbar from "../../components/layout/Navbar";
 import Button from "../../components/common/Button";
 import Card from "../../components/common/Card";
 
 export default function Home() {
   return (
+    <>
+    <Navbar />
     <main>
-      <section className="py-12">
+      <section className="pb-12">
         <div className="grid lg:grid-cols-[45%_55%] items-center">
           <div className="max-w-7xl ml-auto px-6 lg:px-12">
             <span className="inline-block px-4 py-2 rounded-full bg-orange-50 text-orange-600 text-sm mb-6">
@@ -44,10 +47,10 @@ export default function Home() {
                                        h-full
                                        object-cover"
                              />
+                             </div>
+                             </div>
+                             </section>
 
-                            </div>
-                            </div>
-                            </section>
                             
 <section className="py-20 px-6">
         <h2 className="text-3xl font-bold text-center mb-12">
@@ -122,5 +125,6 @@ export default function Home() {
         <Button>Join Bridge</Button>
       </section>
     </main>
+    </>
   );
 }
