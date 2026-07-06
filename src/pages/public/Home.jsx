@@ -1,6 +1,16 @@
 import Navbar from "../../components/layout/Navbar";
 import Button from "../../components/common/Button";
 import Card from "../../components/common/Card";
+import {FileText, Users, Sparkles, GraduationCap, Laptop, Briefcase, Heart, HandHelping, BookOpen} from "lucide-react";
+
+const categories = [
+  { name: "Education", icon: GraduationCap },
+  { name: "Technology", icon: Laptop },
+  { name: "Career", icon: Briefcase },
+  { name: "Wellness", icon: Heart },
+  { name: "Community", icon: HandHelping },
+  { name: "Mentorship", icon: BookOpen },
+];
 
 export default function Home() {
   return (
@@ -51,46 +61,88 @@ export default function Home() {
                              </div>
                              </section>
 
-                            
-<section className="py-20 px-6">
-        <h2 className="text-3xl font-bold text-center mb-12">
-          How Bridge Works
-        </h2>
-
-        <div className="grid md:grid-cols-3 gap-6">
-          <Card title="Create a Request">
-            <p>
-              Tell the community what help you need.
+       <section className="max-w-7xl mx-auto px-6 py-16">
+       <div className="grid lg:grid-cols-2 gap-8 items-start">
+        <div className="bridge-card">
+          <h2 className="text-3xl font-bold mb-8">
+            How Bridge Works
+            </h2>
+            <p className="text-gray-600 mb-8">
+               Bridge connects people seeking support with volunteers and community members
+               who are ready to help.
             </p>
-          </Card>
+            <div className="grid md:grid-cols-3 gap-4">
+              <div className="bg-[#F4F7F5] p-8 rounded-2xl">
+                <FileText
+                size={32}
+                className="text-[#D08C60] mb-4"
+                />
+                <h3 className="font-semibold mb-2">
+                  Create a Request
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    Share what help you need from the community.
+                    </p>
+                    </div>
+                    <div className="bg-[#F4F7F5] p-8 rounded-2xl">
+                      <Users
+                      size={32}
+                      className="text-[#D08C60] mb-4"
+                      />
+                      <h3 className="font-semibold mb-2">
+                        Connect
+                        </h3>
+                        <p className="text-sm text-gray-600">
+                          Volunteers discover your request and offer support.
+                          </p>
+                          </div>
+                          <div className="bg-[#F4F7F5] p-8 rounded-2xl">
+                            <Sparkles
+                            size={32}
+                            className="text-[#D08C60] mb-4"
+                            />
+                            <h3 className="font-semibold text-lg">
+                              Make Impact
+                              </h3>
+                              <p className="text-gray-600">
+                                Build meaningful connections and strengthen communities.
+                                </p>
+                                </div>
+                                </div>
+                                </div>
 
-          <Card title="Connect">
-            <p>
-              Find volunteers and community members ready to help.
-            </p>
-          </Card>
+                                <div className="bridge-card">
+                                  <h2 className="text-3xl font-bold mb-8">
+                                    Popular Categories
+                                     </h2>
+                                     <p className="text-gray-600 mb-8">
+                                      Explore the most common ways community members seek and offer help.
+                                     </p>
+                                     <div className="grid grid-cols-3 gap-4">
+                                      {categories.map((category) => {
+                                        const Icon = category.icon;
+                                        return (
+                                          <div
+                                          key={category.name}
+                                          className="bg-[#F4F7F5] rounded-2xl p-5.25"
+                                          >
+                                            <div className="w-12 h-12 rounded-full bg-[#FAF1EB]] flex items-center justify-center mb-4">
+                                              <Icon
+                                              size={24}
+                                              className="text-[#D08C60]"
+                                              />
+                                              </div>
+                                              <h3 className="font-semibold text-lg">
+                                                {category.name}
+                                                </h3>
+                                                  </div>
+                                                  );
+                                                  })}
+                                                  </div>
+                                                  </div>
+                                                  </div>
+                                                  </section>
 
-          <Card title="Make Impact">
-            <p>
-              Volunteer your skills and make a difference.
-            </p>
-          </Card>
-        </div>
-      </section>
-      <section className="py-20 px-6">
-        <h2 className="text-3xl font-bold text-center mb-12">
-          Popular Categories
-        </h2>
-
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-          <Card title="Education" />
-          <Card title="Technology" />
-          <Card title="Career" />
-          <Card title="Mentorship" />
-          <Card title="Community" />
-          <Card title="Wellness" />
-        </div>
-      </section>
       <section className="py-20 px-6">
         <h2 className="text-3xl font-bold text-center mb-12">
           Community Impact
