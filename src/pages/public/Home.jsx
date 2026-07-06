@@ -4,27 +4,51 @@ import Card from "../../components/common/Card";
 export default function Home() {
   return (
     <main>
-      <section className="min-h-screen flex items-center">
-  <div>
-    <h1 className="text-5xl font-bold">
-      Need a Helping Hand?
-    </h1>
+      <section className="py-12">
+        <div className="grid lg:grid-cols-[45%_55%] items-center">
+          <div className="max-w-7xl ml-auto px-6 lg:px-12">
+            <span className="inline-block px-4 py-2 rounded-full bg-orange-50 text-orange-600 text-sm mb-6">
+              Building stronger communities together
+               </span>
 
-    <p className="mt-4">
-      Find Support. Share Skills. Build Community.
-    </p>
+               <h1 className="text-5xl lg:text-7xl font-bold leading-tight text-slate-800">
+                Need a
+                <br />
+                Helping Hand?
+                </h1>
 
-    <div className="flex gap-4 mt-6">
-      <Button>
-        Get Started
-      </Button>
+                <p className="mt-6 text-lg text-gray-600">
+                  Find support. Share skills. Build community.
+                  </p>
 
-      <Button variant="secondary">
-        Browse Requests
-      </Button>
-    </div>
-  </div>
-</section>
+                  <p className="mt-4 text-gray-500">
+                    Bridge connects people who need help with those
+                    who are ready to make a difference.                 
+                    </p>
+
+                    <div className="flex gap-4 mt-8">
+                      <button className="btn-primary">
+                        Get Started
+                        </button>
+                        <button className="btn-secondary">
+                          Browse Requests
+                          </button>
+                          </div>
+                          </div>
+
+                          <div className="h-150 lg:h-190 overflow-hidden">
+                            <img
+                            src="src/assets/bridge-hero.jpeg"
+                            alt="Bridge Community"
+                            className="w-full
+                                       h-full
+                                       object-cover"
+                             />
+
+                            </div>
+                            </div>
+                            </section>
+                            
 <section className="py-20 px-6">
         <h2 className="text-3xl font-bold text-center mb-12">
           How Bridge Works
