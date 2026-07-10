@@ -1,19 +1,25 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
-  const handleLogin = () => {
-    login({
-      id: 1,
-      name: "Test User",
-      role: "user",
-    });
+  async function handleSubmit(e) {
+    e.preventDefault();
 
-    navigate("/dashboard");
-  };
+    try {
+      await login(formData);
+      navigate("/dashboard");
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center">
@@ -22,24 +28,30 @@ export default function Login() {
           Login
         </h1>
 
-        <input
-          type="email"
-          placeholder="Email"
-          className="bridge-input mb-4"
-        />
+        <form onSubmit={handleSubmit}>
+          <input
+            type="email"
+            placeholder="Email"
+            className="bridge-input mb-4"
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          />
 
-        <input
-          type="password"
-          placeholder="Password"
-          className="bridge-input mb-6"
-        />
+          <input
+            type="password"
+            placeholder="Password"
+            className="bridge-input mb-6"
+            value={formData.password}
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+          />
 
-        <button
-          onClick={handleLogin}
-          className="btn-primary w-full"
-        >
-          Login
-        </button>
+          <button
+            type="submit"
+            className="btn-primary w-full"
+          >
+            Login
+          </button>
+        </form>
       </div>
     </div>
   );
