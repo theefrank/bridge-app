@@ -30,6 +30,10 @@ function App() {
       <Route path="/login" element={<Login />} />
 
       <Route path="/register" element={<Register />} />
+        
+      <Route path="/forgot-password" element={<ForgotPassword />} /> 
+        
+       
 
       {/* Protected Routes */}
       <Route
@@ -59,22 +63,22 @@ function App() {
         }
       />
       <Route
-  path="/opportunities"
-  element={
-    <ProtectedRoute>
-      <Opportunities />
-    </ProtectedRoute>
-  }
-/>
+        path="/opportunities"
+        element={
+         <ProtectedRoute>
+         <Opportunities />
+        </ProtectedRoute>
+       }
+      />
 
-<Route
-  path="/profile"
-  element={
-    <ProtectedRoute>
-      <Profile />
-    </ProtectedRoute>
-  }
-/>    
+      <Route
+       path="/profile"
+       element={
+        <ProtectedRoute>
+        <Profile />
+       </ProtectedRoute>
+       }
+       />    
           
           
 
@@ -87,16 +91,22 @@ function App() {
           </h1>
         }
       />
-      <Route path="/login" element={<Login />} />
+ 
 
-<Route path="/register" element={<Register />} />
 
-<Route
-  path="/forgot-password"
-  element={<ForgotPassword />}
-/>
 
-<Route path="/about" element={<About />} />
+          
+        <Route path="/requests" element={<Requests />} />
+
+        <Route
+        path="/requests/new"
+        element={<CreateRequest />}
+        />
+
+        <Route
+        path="/requests/:id"
+        element={<RequestDetails />}
+        />
     </Routes>
      
   );
