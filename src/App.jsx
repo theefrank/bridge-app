@@ -1,122 +1,114 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { Routes, Route } from "react-router-dom";
+
+// Public Pages
+import Home from "./pages/public/Home";
+import About from "./pages/public/About";
+import Login from "./pages/public/Login";
+import Register from "./pages/public/Register";
+import ForgotPassword from "./pages/public/ForgotPassword";
+
+// Dashboards
+import UserDashboard from "./pages/user/UserDashboard";
+import VolunteerDashboard from "./pages/volunteer/VolunteerDashboard";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+
+// Protected Route
+import ProtectedRoute from "./routes/ProtectedRoute";
+
+import Opportunities from "./pages/volunteer/Opportunities";
+import Profile from "./pages/profile/Profile";
+
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <Routes>
+      {/* Public Routes */}
+      <Route path="/" element={<Home />} />
 
-      <div className="ticks"></div>
+      <Route path="/about" element={<About />} />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      <Route path="/login" element={<Login />} />
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      <Route path="/register" element={<Register />} />
+        
+      <Route path="/forgot-password" element={<ForgotPassword />} /> 
+        
+       
+
+      {/* Protected Routes */}
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <UserDashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/volunteer-dashboard"
+        element={
+          <ProtectedRoute>
+            <VolunteerDashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin-dashboard"
+        element={
+          <ProtectedRoute>
+            <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/opportunities"
+        element={
+         <ProtectedRoute>
+         <Opportunities />
+        </ProtectedRoute>
+       }
+      />
+
+      <Route
+       path="/profile"
+       element={
+        <ProtectedRoute>
+        <Profile />
+       </ProtectedRoute>
+       }
+       />    
+          
+          
+
+      {/* 404 Route */}
+      <Route
+        path="*"
+        element={
+          <h1 className="text-center text-3xl mt-20">
+            404 - Page Not Found
+          </h1>
+        }
+      />
+ 
+
+
+
+          
+        <Route path="/requests" element={<Requests />} />
+
+        <Route
+        path="/requests/new"
+        element={<CreateRequest />}
+        />
+
+        <Route
+        path="/requests/:id"
+        element={<RequestDetails />}
+        />
+    </Routes>
+     
+  );
 }
-
-export default App
+export default App;
