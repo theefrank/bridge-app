@@ -1,10 +1,22 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Login() {
-  const handleSubmit = (e) => {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogin = (e) => {
     e.preventDefault();
-    alert("Login functionality coming soon!");
+    login({
+      id: 1,
+      name: "Test User",
+      role: "user",
+    });
+
+    navigate("/dashboard");
   };
+
+ 
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#FAF7F2] px-6">
@@ -17,7 +29,7 @@ export default function Login() {
           Sign in to your Bridge account.
         </p>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleLogin}>
           <input
             type="email"
             placeholder="Email"
