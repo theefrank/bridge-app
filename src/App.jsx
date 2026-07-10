@@ -17,6 +17,9 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 
 import Opportunities from "./pages/volunteer/Opportunities";
 import Profile from "./pages/profile/Profile";
+import Requests from "./pages/requests/Requests";
+import CreateRequest from "./pages/requests/CreateRequest";
+import RequestDetails from "./pages/requests/RequestDetails";
 
 
 function App() {
@@ -65,22 +68,20 @@ function App() {
       <Route
         path="/opportunities"
         element={
-         <ProtectedRoute>
-         <Opportunities />
-        </ProtectedRoute>
-       }
+          <ProtectedRoute>
+            <Opportunities />
+          </ProtectedRoute>
+        }
       />
 
       <Route
-       path="/profile"
-       element={
-        <ProtectedRoute>
-        <Profile />
-       </ProtectedRoute>
-       }
-       />    
-          
-          
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+      />
 
       {/* 404 Route */}
       <Route
