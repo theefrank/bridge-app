@@ -1,20 +1,25 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
-  const handleLogin = (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
-    login({
-      id: 1,
-      name: "Test User",
-      role: "user",
-    });
 
-    navigate("/dashboard");
-  };
+    try {
+      await login(formData);
+      navigate("/dashboard");
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
  
 
@@ -24,22 +29,26 @@ export default function Login() {
         <h1 className="text-3xl font-bold text-center mb-2">
           Welcome Back
         </h1>
-
-        <p className="text-center text-gray-600 mb-8">
+        <p className="text-center text-gray-600 mb-6">
           Sign in to your Bridge account.
         </p>
 
-        <form onSubmit={handleLogin}>
+        
+        <form onSubmit={handleSubmit}>
           <input
             type="email"
             placeholder="Email"
             className="bridge-input mb-4"
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           />
 
           <input
             type="password"
             placeholder="Password"
             className="bridge-input mb-4"
+            value={formData.password}
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
           />
 
           <button
@@ -49,8 +58,7 @@ export default function Login() {
             Login
           </button>
         </form>
-
-        <div className="mt-6 text-center">
+        <div className="text-center mt-6">
           <Link
             to="/forgot-password"
             className="text-[#D08C60]"
@@ -58,17 +66,16 @@ export default function Login() {
             Forgot Password?
           </Link>
         </div>
-
-        <p className="mt-4 text-center text-gray-600">
-          Don't have an account?{" "}
-          <Link
-            to="/register"
-            className="text-[#D08C60] font-medium"
-          >
-            Register
-          </Link>
-        </p>
+        <p className="text-center text-gray-600 mt-4">
+            Don't have an account?{" "}
+            <Link
+              to="/register"
+              className="text-[#D08C60] font-medium"
+            >
+              Register
+            </Link>
+          </p>
+        </div>
       </div>
-    </div>
   );
 }
