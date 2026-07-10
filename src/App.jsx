@@ -5,6 +5,7 @@ import Home from "./pages/public/Home";
 import About from "./pages/public/About";
 import Login from "./pages/public/Login";
 import Register from "./pages/public/Register";
+import ForgotPassword from "./pages/public/ForgotPassword";
 
 // Dashboards
 import UserDashboard from "./pages/user/UserDashboard";
@@ -63,6 +64,16 @@ function App() {
           </h1>
         }
       />
+      <Route path="/login" element={<Login />} />
+
+<Route path="/register" element={<Register />} />
+
+<Route
+  path="/forgot-password"
+  element={<ForgotPassword />}
+/>
+
+<Route path="/about" element={<About />} />
     </Routes>
      
   );
