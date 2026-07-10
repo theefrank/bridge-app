@@ -1,5 +1,5 @@
- import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 export default function Register() {
@@ -24,11 +24,14 @@ export default function Register() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center bg-[#FAF7F2] px-6">
       <div className="bridge-card w-full max-w-md">
-        <h1 className="text-3xl font-bold mb-6 text-center">
-          Register
+        <h1 className="text-3xl font-bold text-center mb-2">
+          Join Bridge
         </h1>
+        <p className="text-center text-gray-600 mb-8">
+          Create your account and start making an impact.
+        </p>
 
         <form onSubmit={handleSubmit}>
           <input
@@ -59,7 +62,14 @@ export default function Register() {
             Create Account
           </button>
         </form>
+        <p className="text-center text-gray-600 mt-6">
+          Already have an account?{" "}
+          <Link to="/login" className="text-[#D08C60] font-medium">
+            Login
+          </Link>
+        </p>
       </div>
     </div>
   );
 }
+      
