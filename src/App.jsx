@@ -14,6 +14,10 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 // Protected Route
 import ProtectedRoute from "./routes/ProtectedRoute";
 
+import Opportunities from "./pages/volunteer/Opportunities";
+import Profile from "./pages/profile/Profile";
+
+
 function App() {
   return (
     <Routes>
@@ -53,6 +57,25 @@ function App() {
           </ProtectedRoute>
         }
       />
+      <Route
+  path="/opportunities"
+  element={
+    <ProtectedRoute>
+      <Opportunities />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/profile"
+  element={
+    <ProtectedRoute>
+      <Profile />
+    </ProtectedRoute>
+  }
+/>    
+          
+          
 
       {/* 404 Route */}
       <Route

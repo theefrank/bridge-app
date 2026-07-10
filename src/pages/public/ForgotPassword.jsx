@@ -1,38 +1,26 @@
 import { Link } from "react-router-dom";
 
-export default function Register() {
+export default function ForgotPassword() {
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert("Registration functionality coming soon!");
+    alert("Password reset functionality coming soon!");
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#FAF7F2] px-6">
       <div className="bridge-card w-full max-w-md">
         <h1 className="text-3xl font-bold text-center mb-2">
-          Join Bridge
+          Forgot Password
         </h1>
 
         <p className="text-center text-gray-600 mb-8">
-          Create your account and start making an impact.
+          Enter your email and we'll send reset instructions.
         </p>
 
         <form onSubmit={handleSubmit}>
           <input
-            type="text"
-            placeholder="Full Name"
-            className="bridge-input mb-4"
-          />
-
-          <input
             type="email"
-            placeholder="Email"
-            className="bridge-input mb-4"
-          />
-
-          <input
-            type="password"
-            placeholder="Password"
+            placeholder="Email Address"
             className="bridge-input mb-6"
           />
 
@@ -40,19 +28,18 @@ export default function Register() {
             type="submit"
             className="btn-primary w-full"
           >
-            Create Account
+            Send Reset Link
           </button>
         </form>
 
-        <p className="mt-6 text-center text-gray-600">
-          Already have an account?{" "}
+        <div className="mt-6 text-center">
           <Link
             to="/login"
-            className="text-[#D08C60] font-medium"
+            className="text-[#D08C60]"
           >
-            Login
+            Back to Login
           </Link>
-        </p>
+        </div>
       </div>
     </div>
   );
