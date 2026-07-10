@@ -58,22 +58,22 @@ function App() {
         }
       />
       <Route
-  path="/opportunities"
-  element={
-    <ProtectedRoute>
-      <Opportunities />
-    </ProtectedRoute>
-  }
-/>
+        path="/opportunities"
+        element={
+         <ProtectedRoute>
+         <Opportunities />
+        </ProtectedRoute>
+       }
+      />
 
-<Route
-  path="/profile"
-  element={
-    <ProtectedRoute>
-      <Profile />
-    </ProtectedRoute>
-  }
-/>    
+      <Route
+       path="/profile"
+       element={
+        <ProtectedRoute>
+        <Profile />
+       </ProtectedRoute>
+       }
+       />    
           
           
 
@@ -86,6 +86,18 @@ function App() {
           </h1>
         }
       />
+          
+        <Route path="/requests" element={<Requests />} />
+
+        <Route
+        path="/requests/new"
+        element={<CreateRequest />}
+        />
+
+        <Route
+        path="/requests/:id"
+        element={<RequestDetails />}
+        />
     </Routes>
      
   );
