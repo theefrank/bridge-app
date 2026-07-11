@@ -42,15 +42,20 @@ export default function Navbar() {
   </Link>
 </div>
 
-        
-        <div className="hidden md:flex items-center gap-4">
-          <button className="btn-outline">
-            Login
-          </button>
+<div className="hidden md:flex items-center gap-4">
+<Link
+  to="/login"
+  className="btn-outline"
+>
+  Login
+</Link>
 
-          <button className="btn-primary">
-            Sign Up
-          </button>
+<Link
+  to="/register"
+  className="btn-primary"
+>
+  Sign Up
+</Link>    
         </div>
 
         <button className="md:hidden text-2xl">
