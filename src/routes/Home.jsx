@@ -17,6 +17,7 @@ export default function Home() {
 
         <section className="max-w-7xl mx-auto px-6 py-16">
           <div className="grid lg:grid-cols-2 gap-8 items-start">
+            
             <HowItWorks />
             <Categories />
           </div>
