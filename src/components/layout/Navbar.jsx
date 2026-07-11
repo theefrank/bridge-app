@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { HeartHandshake } from "lucide-react";
 export default function Navbar() {
   return (
@@ -12,35 +13,36 @@ export default function Navbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-8">
-          <a
-            href="#"
-            className="text-gray-600 hover:text-(--color-sage-500) transition-colors duration-300" 
-          >
-            Home
-          </a>
+  <Link
+    to="/"
+    className="text-gray-600 hover:text-(--color-sage-500)"
+  >
+    Home
+  </Link>
 
-          <a
-            href="#"
-            className="text-gray-600 hover:text-(--color-sage-500) transition-colors duration-300" 
-          >
-            About
-          </a>
+  <Link
+    to="/about"
+    className="text-gray-600 hover:text-(--color-sage-500)"
+  >
+    About
+  </Link>
 
-          <a
-            href="#"
-            className="text-gray-600 hover:text-(--color-sage-500) transition-colors duration-300" 
-          >
-            Browse Requests
-          </a>
+  <Link
+    to="/requests"
+    className="text-gray-600 hover:text-(--color-sage-500)"
+  >
+    Browse Requests
+  </Link>
 
-          <a
-            href="#"
-            className="text-gray-600 hover:text-(--color-sage-500) transition-colors duration-300" 
-          >
-            Volunteer
-          </a>
-        </div>
+  <Link
+    to="/opportunities"
+    className="text-gray-600 hover:text-(--color-sage-500)"
+  >
+    Volunteer
+  </Link>
+</div>
 
+        
         <div className="hidden md:flex items-center gap-4">
           <button className="btn-outline">
             Login

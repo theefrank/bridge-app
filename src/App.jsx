@@ -1,8 +1,11 @@
-import {Routes, Route } from "react-router";
-import Home from "./pages/public/Home";
-import About from "./pages/public/About";
-import Login from "./pages/public/Login";
-import Register from "./pages/public/Register";
+import { Routes, Route } from "react-router-dom";
+import Home from "./routes/Home";
+import About from "./routes/About";
+import Login from "./routes/Login";
+import Register from "./routes/Register";
+import Requests from "./pages/requests/Requests";
+import CreateRequest from "./pages/requests/CreateRequest";
+import RequestDetails from "./pages/requests/RequestDetails";
 
 // Dashboards
 import UserDashboard from "./pages/user/UserDashboard";
@@ -13,8 +16,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 import Opportunities from "./pages/volunteer/Opportunities";
-import Profile from "./pages/profile/Profile";
-
+// import Profile from "./pages/profile/Profile";
 
 function App() {
   return (
@@ -58,46 +60,35 @@ function App() {
       <Route
         path="/opportunities"
         element={
-         <ProtectedRoute>
-         <Opportunities />
-        </ProtectedRoute>
-       }
+          <ProtectedRoute>
+            <Opportunities />
+          </ProtectedRoute>
+        }
       />
 
-      <Route
-       path="/profile"
-       element={
-        <ProtectedRoute>
-        <Profile />
-       </ProtectedRoute>
-       }
-       />    
-          
-          
+      {/* <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+      /> */}
 
       {/* 404 Route */}
       <Route
         path="*"
         element={
-          <h1 className="text-center text-3xl mt-20">
-            404 - Page Not Found
-          </h1>
+          <h1 className="text-center text-3xl mt-20">404 - Page Not Found</h1>
         }
       />
-          
-        <Route path="/requests" element={<Requests />} />
 
-        <Route
-        path="/requests/new"
-        element={<CreateRequest />}
-        />
+      <Route path="/requests" element={<Requests />} />
 
-        <Route
-        path="/requests/:id"
-        element={<RequestDetails />}
-        />
+      <Route path="/requests/new" element={<CreateRequest />} />
+
+      <Route path="/requests/:id" element={<RequestDetails />} />
     </Routes>
-     
   );
 }
 export default App;
