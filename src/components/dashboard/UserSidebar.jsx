@@ -6,7 +6,7 @@ import {
   Settings,
   LogOut,
   HeartHandshake,
-  HandHeart,
+  HandHelping,
 } from "lucide-react";
 
 import { NavLink } from "react-router-dom";
@@ -71,7 +71,7 @@ export default function UserSidebar() {
             }`
         }
         >
-        <HandHeart size={20} />
+        <HandHelping size={20} />
         Volunteer Dashboard
         </NavLink>        
           <NavLink

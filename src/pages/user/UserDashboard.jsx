@@ -4,7 +4,7 @@ import {
   Users,
   Plus,
   Search,
-  HandHeart,
+  HandHelping,
 } from "lucide-react";
 
 import { Link } from "react-router-dom";
@@ -22,7 +22,7 @@ export default function UserDashboard() {
       id: 2,
       title: "Volunteer Activities",
       value: 2,
-      icon: HandHeart,
+      icon: HandHelping,
     },
     {
       id: 3,
@@ -143,7 +143,7 @@ export default function UserDashboard() {
                 to="/volunteer-dashboard"
                 className="flex items-center justify-center gap-2 btn-outline w-full"
               >
-                <HandHeart size={18} />
+                <HandHelping size={18} />
                 Volunteer Now
               </Link>
             </div>

@@ -1,5 +1,5 @@
 
-import { HandHelping, Users, Heart } from "lucide-react";
+import { HandHelping, Users, Heart, FileText } from "lucide-react";
 
 export default function VolunteerDashboard() {
   return (
@@ -10,7 +10,7 @@ export default function VolunteerDashboard() {
 
       <div className="grid md:grid-cols-3 gap-6">
         <div className="bridge-card text-center">
-          <HandHelping
+          <FileText
             size={40}
             className="mx-auto text-[#D08C60] mb-4"
           />
