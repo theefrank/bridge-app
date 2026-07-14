@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
@@ -5,8 +6,42 @@ export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [errors, setErrors] = useState({});
+
   const handleLogin = (e) => {
     e.preventDefault();
+
+    const newErrors = {};
+
+    if (!formData.email) {
+      newErrors.email = "Email is required";
+    } else if (
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+    ) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    if (!formData.password) {
+       newErrors.password = "Password is required";
+    } else if (
+      !/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&.#_-]).{8,}$/.test(
+      formData.password
+    )
+    ) {
+      newErrors.password = "Use at least 8 characters with a letter, number, and special character";
+    }
+    
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
+      return;
+    }
+
     login({
       id: 1,
       name: "Test User",
@@ -15,8 +50,6 @@ export default function Login() {
 
     navigate("/dashboard");
   };
-
- 
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#FAF7F2] px-6">
@@ -33,18 +66,54 @@ export default function Login() {
           <input
             type="email"
             placeholder="Email"
-            className="bridge-input mb-4"
+            value={formData.email}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                email: e.target.value,
+              })
+            }
+            className={`bridge-input mb-1 ${
+              errors.email
+                ? "border-red-500"
+                : ""
+            }`}
           />
+
+          {errors.email && (
+            <p className="text-red-500 text-sm mb-4">
+              {errors.email}
+            </p>
+          )}
 
           <input
             type="password"
             placeholder="Password"
-            className="bridge-input mb-4"
+            value={formData.password}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                password: e.target.value,
+              })
+            }
+            className={`bridge-input mb-1 ${
+              errors.password
+                ? "border-red-500"
+                : ""
+            }`}
           />
+
+          
+
+          {errors.password && (
+            <p className="text-red-500 text-sm mb-4">
+              {errors.password}
+            </p>
+          )}
 
           <button
             type="submit"
-            className="btn-primary w-full"
+            className="btn-primary w-full mt-2"
           >
             Login
           </button>
