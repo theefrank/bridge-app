@@ -12,11 +12,16 @@ import UserDashboard from "./pages/user/UserDashboard";
 import VolunteerDashboard from "./pages/volunteer/VolunteerDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 
+import Opportunities from "./pages/volunteer/Opportunities";
+import Profile from "./pages/profile/Profile";
+import CreateRequest from "./pages/user/CreateRequest";
+import MyRequests from "./pages/user/MyRequests";
+import RequestDetails from "./pages/user/RequestDetails";
+
 // Protected Route
 import ProtectedRoute from "./routes/ProtectedRoute";
 
-import Opportunities from "./pages/volunteer/Opportunities";
-// import Profile from "./pages/profile/Profile";
+
 
 function App() {
   return (
@@ -66,14 +71,33 @@ function App() {
         }
       />
 
-      {/* <Route
-        path="/profile"
+      <Route
+       path="/my-requests"
+       element={
+         <ProtectedRoute>
+          <MyRequests />
+         </ProtectedRoute>
+       }
+      />
+
+       <Route
+        path="/requests/new"
         element={
           <ProtectedRoute>
-            <Profile />
+           <CreateRequest />
           </ProtectedRoute>
+         }
+        />
+
+
+      <Route
+       path="/profile"
+       element={
+         <ProtectedRoute>
+          <Profile />
+         </ProtectedRoute>
         }
-      /> */}
+       />
 
       {/* 404 Route */}
       <Route
@@ -83,6 +107,7 @@ function App() {
         }
       />
 
+      
       <Route path="/requests" element={<Requests />} />
 
       <Route path="/requests/new" element={<CreateRequest />} />
