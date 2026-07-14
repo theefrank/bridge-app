@@ -1,9 +1,71 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function Register() {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [errors, setErrors] = useState({});
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert("Registration functionality coming soon!");
+
+    const newErrors = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = "Full name is required";
+    }
+
+    if (!formData.email) {
+      newErrors.email = "Email is required";
+    } else if (
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+    ) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    if (!formData.password) {
+      newErrors.password = "Password is required";
+    } else if (
+      !/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&.#_-]).{8,}$/.test(
+        formData.password
+      )
+    ) {
+      newErrors.password =
+        "Use at least 8 characters with a letter, number, and special character";
+    }
+
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword =
+        "Please confirm your password";
+    } else if (
+      formData.password !== formData.confirmPassword
+    ) {
+      newErrors.confirmPassword =
+        "Passwords do not match";
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
+      return;
+    }
+
+    login({
+      id: 1,
+      name: formData.name,
+      role: "user",
+    });
+
+    navigate("/dashboard");
   };
 
   return (
@@ -21,24 +83,92 @@ export default function Register() {
           <input
             type="text"
             placeholder="Full Name"
-            className="bridge-input mb-4"
+            value={formData.name}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                name: e.target.value,
+              })
+            }
+            className={`bridge-input mb-1 ${
+              errors.name ? "border-red-500" : ""
+            }`}
           />
+
+          {errors.name && (
+            <p className="text-red-500 text-sm mb-4">
+              {errors.name}
+            </p>
+          )}
 
           <input
             type="email"
             placeholder="Email"
-            className="bridge-input mb-4"
+            value={formData.email}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                email: e.target.value,
+              })
+            }
+            className={`bridge-input mb-1 ${
+              errors.email ? "border-red-500" : ""
+            }`}
           />
+
+          {errors.email && (
+            <p className="text-red-500 text-sm mb-4">
+              {errors.email}
+            </p>
+          )}
 
           <input
             type="password"
             placeholder="Password"
-            className="bridge-input mb-6"
+            value={formData.password}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                password: e.target.value,
+              })
+            }
+            className={`bridge-input mb-1 ${
+              errors.password ? "border-red-500" : ""
+            }`}
           />
+
+          {errors.password && (
+            <p className="text-red-500 text-sm mb-4">
+              {errors.password}
+            </p>
+          )}
+
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            value={formData.confirmPassword}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                confirmPassword: e.target.value,
+              })
+            }
+            className={`bridge-input mb-1 ${
+              errors.confirmPassword
+                ? "border-red-500"
+                : ""
+            }`}
+          />
+
+          {errors.confirmPassword && (
+            <p className="text-red-500 text-sm mb-4">
+              {errors.confirmPassword}
+            </p>
+          )}
 
           <button
             type="submit"
-            className="btn-primary w-full"
+            className="btn-primary w-full mt-2"
           >
             Create Account
           </button>
