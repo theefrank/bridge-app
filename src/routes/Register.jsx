@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -12,6 +13,8 @@ export default function Register() {
     password: "",
     confirmPassword: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [errors, setErrors] = useState({});
 
@@ -122,43 +125,71 @@ export default function Register() {
             </p>
           )}
 
-          <input
-            type="password"
+          <div className="relative mb-1">
+            <input
+            type={showPassword ? "text" : "password"}
             placeholder="Password"
             value={formData.password}
             onChange={(e) =>
-              setFormData({
-                ...formData,
-                password: e.target.value,
-              })
+            setFormData({
+            ...formData,
+            password: e.target.value,
+            })
             }
-            className={`bridge-input mb-1 ${
-              errors.password ? "border-red-500" : ""
+            className={`bridge-input pr-12 ${
+            errors.password ? "border-red-500" : ""
             }`}
-          />
+            />
+
+            <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+            >
+            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </div>
 
           {errors.password && (
             <p className="text-red-500 text-sm mb-4">
               {errors.password}
             </p>
           )}
-
+          
+        <div className="relative mb-1">
           <input
-            type="password"
-            placeholder="Confirm Password"
-            value={formData.confirmPassword}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                confirmPassword: e.target.value,
-              })
-            }
-            className={`bridge-input mb-1 ${
-              errors.confirmPassword
-                ? "border-red-500"
-                : ""
-            }`}
-          />
+          type={showConfirmPassword ? "text" : "password"}
+          placeholder="Confirm Password"
+          value={formData.confirmPassword}
+          onChange={(e) =>
+          setFormData({
+          ...formData,
+          confirmPassword: e.target.value,
+          })
+          }
+          className={`bridge-input pr-12 ${
+          errors.confirmPassword
+          ? "border-red-500"
+          : ""
+          }`}
+         />
+
+         <button
+         type="button"
+         onClick={() =>
+         setShowConfirmPassword(
+         !showConfirmPassword
+         )
+         }
+         className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+         >
+         {showConfirmPassword ? (
+         <EyeOff size={20} />
+         ) : (
+         <Eye size={20} />
+         )}
+         </button>
+        </div>
 
           {errors.confirmPassword && (
             <p className="text-red-500 text-sm mb-4">

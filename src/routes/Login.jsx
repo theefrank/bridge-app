@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function Login() {
   const { login } = useAuth();
@@ -10,6 +11,8 @@ export default function Login() {
     email: "",
     password: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [errors, setErrors] = useState({});
 
@@ -86,24 +89,30 @@ export default function Login() {
             </p>
           )}
 
-          <input
-            type="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                password: e.target.value,
-              })
-            }
-            className={`bridge-input mb-1 ${
-              errors.password
-                ? "border-red-500"
-                : ""
-            }`}
-          />
+          <div className="relative mb-1">
+           <input
+           type={showPassword ? "text" : "password"}
+           placeholder="Password"
+           value={formData.password}
+           onChange={(e) =>
+           setFormData({
+           ...formData,
+           password: e.target.value,
+           })
+           }
+           className={`bridge-input pr-12 ${
+           errors.password ? "border-red-500" : ""
+           }`}
+           />
 
-          
+           <button
+           type="button"
+           onClick={() => setShowPassword(!showPassword)}
+           className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+           >
+           {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+           </button>
+          </div>
 
           {errors.password && (
             <p className="text-red-500 text-sm mb-4">
