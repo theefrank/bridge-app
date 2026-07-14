@@ -14,9 +14,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 
 import Opportunities from "./pages/volunteer/Opportunities";
 import Profile from "./pages/profile/Profile";
-import CreateRequest from "./pages/user/CreateRequest";
 import MyRequests from "./pages/user/MyRequests";
-import RequestDetails from "./pages/user/RequestDetails";
 
 // Protected Route
 import ProtectedRoute from "./routes/ProtectedRoute";
