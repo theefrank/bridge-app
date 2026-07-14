@@ -15,7 +15,8 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import Opportunities from "./pages/volunteer/Opportunities";
 import Profile from "./pages/profile/Profile";
 import MyRequests from "./pages/user/MyRequests";
-
+import MyActivity from "./pages/user/MyActivity";
+import Settings from "./pages/user/Settings";
 // Protected Route
 import ProtectedRoute from "./routes/ProtectedRoute";
 
@@ -97,6 +98,24 @@ function App() {
         }
        />
 
+      <Route
+        path="/activity"
+        element={
+          <ProtectedRoute>
+            <MyActivity />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute>
+            <Settings />
+          </ProtectedRoute>
+        }
+      />
+      
       {/* 404 Route */}
       <Route
         path="*"
