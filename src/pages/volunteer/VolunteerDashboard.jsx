@@ -1,8 +1,9 @@
-
+import DashboardLayout from "../../components/dashboard/DashboardLayout";
 import { HandHelping, Users, Heart, FileText } from "lucide-react";
 
 export default function VolunteerDashboard() {
   return (
+    <DashboardLayout>
     <div className="max-w-7xl mx-auto px-6 py-12">
       <h1 className="text-4xl font-bold mb-10">
         Volunteer Dashboard
@@ -55,5 +56,6 @@ export default function VolunteerDashboard() {
         </div>
       </div>
     </div>
+    </DashboardLayout>
   );
 }

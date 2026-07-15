@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 
 import { Link } from "react-router-dom";
-import UserSidebar from "../../components/dashboard/UserSidebar";
+import DashboardLayout from "../../components/dashboard/DashboardLayout";
 
 export default function UserDashboard() {
   const stats = [
@@ -72,8 +72,8 @@ export default function UserDashboard() {
   ];
 
   return (
+    <DashboardLayout>
     <div className="flex min-h-screen bg-[#FAF7F2]">
-      <UserSidebar />
 
       <main className="flex-1 p-8 overflow-y-auto">
         {/* Hero Section */}
@@ -212,5 +212,6 @@ export default function UserDashboard() {
         </div>
       </main>
     </div>
+  </DashboardLayout>
   );
 }

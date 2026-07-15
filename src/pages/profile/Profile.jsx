@@ -1,5 +1,8 @@
+import DashboardLayout from "../../components/dashboard/DashboardLayout";
+
 export default function Profile() {
   return (
+    <DashboardLayout>
     <div className="min-h-screen bg-[#FAF7F2] p-8">
       <div className="max-w-3xl mx-auto bridge-card">
         <h1 className="text-3xl font-bold mb-6">
@@ -44,5 +47,6 @@ export default function Profile() {
         </div>
       </div>
     </div>
+    </DashboardLayout>
   );
 }
