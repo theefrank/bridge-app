@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import AdminSidebar from "../../components/admin/AdminSidebar";
 import FilterRequests from "../../components/admin/FilterRequests";
-import SearchUsers from "../../components/admin/SearchUsers";
+import SearchBar from "../../components/common/SearchBar";
 import RequestTable from "../../components/admin/RequestTable";
 
 export default function ManageRequests() {
@@ -86,8 +86,9 @@ export default function ManageRequests() {
         </div>
 
         <div className="flex flex-col md:flex-row gap-4 mb-8">
-
-          <SearchUsers
+          
+          <SearchBar
+            placeholder="Search requests..."
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
           />
