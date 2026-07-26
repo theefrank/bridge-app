@@ -18,7 +18,9 @@ const categories = [
 
 export default function Categories() {
   return (
-    <div className="bridge-card">
+    <div
+    id="categories"
+    className="bridge-card">
       <h2 className="text-3xl font-bold mb-8">
         Popular Categories
       </h2>
