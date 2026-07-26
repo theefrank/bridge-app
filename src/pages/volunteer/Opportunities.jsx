@@ -1,4 +1,5 @@
 import OpportunityCard from "../../components/volunteer/OpportunityCard";
+import DashboardLayout from "../../components/dashboard/DashboardLayout";
 
 const opportunities = [
   {
@@ -23,6 +24,7 @@ const opportunities = [
 
 export default function Opportunities() {
   return (
+    <DashboardLayout>
     <div className="max-w-7xl mx-auto px-6 py-12">
       <h1 className="text-4xl font-bold mb-8">
         Volunteer Opportunities
@@ -37,5 +39,6 @@ export default function Opportunities() {
         ))}
       </div>
     </div>
+    </DashboardLayout>
   );
 }

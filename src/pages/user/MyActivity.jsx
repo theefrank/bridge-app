@@ -1,14 +1,14 @@
-import DashboardLayout from "../../components/dashboard/DashboardLayout";
-import RequestForm from "../../components/requests/RequestForm";
 
-export default function CreateRequest() {
+import DashboardLayout from "../../components/dashboard/DashboardLayout";
+
+export default function MyActivity() {
   return (
     <DashboardLayout>
+
       <h1 className="text-4xl font-bold mb-8">
-        Create Request
+        My Activity
       </h1>
 
-      <RequestForm />
     </DashboardLayout>
   );
 }

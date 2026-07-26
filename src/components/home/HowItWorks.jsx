@@ -2,7 +2,9 @@ import { FileText, Users, Sparkles } from "lucide-react";
 
 export default function HowItWorks() {
   return (
-    <div className="bridge-card">
+    <div
+    id="how-it-works"
+     className="bridge-card">
       <h2 className="text-3xl font-bold mb-8">
         How Bridge Works
       </h2>
