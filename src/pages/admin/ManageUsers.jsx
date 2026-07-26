@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import AdminSidebar from "../../components/admin/AdminSidebar";
-import SearchUsers from "../../components/admin/SearchUsers";
+import SearchBar from "../../components/common/SearchBar";
 import UserTable from "../../components/admin/UserTable";
 
 export default function ManageUsers() {
@@ -75,10 +75,11 @@ export default function ManageUsers() {
 
         <div className="mb-8">
 
-          <SearchUsers
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-          />
+        <SearchBar
+        placeholder="Search users..."
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        />
 
         </div>
 
