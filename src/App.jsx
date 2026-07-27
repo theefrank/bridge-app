@@ -21,6 +21,8 @@ import Requests from "./pages/requests/Requests";
 import CreateRequest from "./pages/requests/CreateRequest";
 import RequestDetails from "./pages/requests/RequestDetails";
 
+import UsersManagement from "./pages/admin/UsersManagement";
+import CategoriesManagement from "./pages/admin/CategoriesManagement";
 
 function App() {
   return (
@@ -36,7 +38,23 @@ function App() {
         
       <Route path="/forgot-password" element={<ForgotPassword />} /> 
         
-       
+      <Route
+       path="/admin/users"
+       element={
+        <ProtectedRoute>
+          <UsersManagement />
+       </ProtectedRoute>
+       }
+     />
+
+      <Route
+       path="/admin/categories"
+       element={
+        <ProtectedRoute>
+         <CategoriesManagement />
+        </ProtectedRoute>
+       }
+      />
 
       {/* Protected Routes */}
       <Route
