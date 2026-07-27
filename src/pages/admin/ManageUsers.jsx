@@ -1,10 +1,44 @@
 import { useState } from "react";
 
+import {
+  Users,
+  UserCheck,
+  UserMinus,
+  UserPlus,
+} from "lucide-react";
 import AdminSidebar from "../../components/admin/AdminSidebar";
 import SearchBar from "../../components/common/SearchBar";
 import UserTable from "../../components/admin/UserTable";
+import AdminStats from "../../components/admin/AdminStats";
 
 export default function ManageUsers() {
+
+  const userStats = [
+  {
+    title: "Total Users",
+    value: 126,
+    icon: <Users size={28} />,
+    color: "bg-[#6B8F71]/10 text-[#6B8F71]",
+  },
+  {
+    title: "Active Users",
+    value: 103,
+    icon: <UserCheck size={28} />,
+    color: "bg-green-100 text-green-700",
+  },
+  {
+    title: "Suspended",
+    value: 6,
+    icon: <UserMinus size={28} />,
+    color: "bg-red-100 text-red-700",
+  },
+  {
+    title: "New This Month",
+    value: 17,
+    icon: <UserPlus size={28} />,
+    color: "bg-[#FAF1EB] text-[#D08C60]",
+  },
+];
 
   const [searchTerm, setSearchTerm] =
     useState("");
@@ -72,6 +106,8 @@ export default function ManageUsers() {
           </p>
 
         </div>
+
+        <AdminStats stats={userStats} />
 
         <div className="mb-8">
 
