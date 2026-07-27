@@ -3,8 +3,8 @@ import { useState } from "react";
 import {
   HandHeart,
   UserCheck,
+  UserMinus,
   Clock3,
-  Timer,
 } from "lucide-react";
 
 import AdminSidebar from "../../components/admin/AdminSidebar";
@@ -16,8 +16,7 @@ export default function ManageVolunteers() {
 
   const [searchTerm, setSearchTerm] =
     useState("");
-
-  const volunteers = [
+  const [volunteers, setVolunteers] = useState([
     {
       id: 1,
       name: "Jane Doe",
@@ -49,34 +48,40 @@ export default function ManageVolunteers() {
       hours: 14,
       status: "Suspended",
     },
-  ];
+  ]);
 
   const volunteerStats = [
-  {
-    title: "Total Volunteers",
-    value: 54,
-    icon: <HandHeart size={28} />,
-    color: "bg-[#6B8F71]/10 text-[#6B8F71]",
-  },
-  {
-    title: "Active",
-    value: 42,
-    icon: <UserCheck size={28} />,
-    color: "bg-green-100 text-green-700",
-  },
-  {
-    title: "Pending Approval",
-    value: 8,
-    icon: <Clock3 size={28} />,
-    color: "bg-yellow-100 text-yellow-700",
-  },
-  {
-    title: "Volunteer Hours",
-    value: "1,286",
-    icon: <Timer size={28} />,
-    color: "bg-[#FAF1EB] text-[#D08C60]",
-  },
-];
+    {
+      title: "Total Volunteers",
+      value: volunteers.length,
+      icon: <HandHeart size={28} />,
+      color: "bg-[#6B8F71]/10 text-[#6B8F71]",
+    },
+    {
+      title: "Active",
+      value: volunteers.filter(
+        (volunteer) => volunteer.status === "Active"
+      ).length,
+      icon: <UserCheck size={28} />,
+      color: "bg-green-100 text-green-700",
+    },
+    {
+      title: "Pending",
+      value: volunteers.filter(
+        (volunteer) => volunteer.status === "Pending"
+      ).length,
+      icon: <Clock3 size={28} />,
+      color: "bg-[#FAF1EB] text-[#D08C60]",
+    },
+    {
+      title: "Suspended",
+      value: volunteers.filter(
+        (volunteer) => volunteer.status === "Suspended"
+      ).length,
+      icon: <UserMinus size={28} />,
+      color: "bg-red-100 text-red-700",
+    },
+  ];  
 
   const filteredVolunteers =
     volunteers.filter((volunteer) =>
@@ -122,6 +127,7 @@ export default function ManageVolunteers() {
 
         <VolunteerTable
           volunteers={filteredVolunteers}
+          setVolunteers={setVolunteers}
         />
 
       </main>
