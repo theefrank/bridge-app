@@ -21,34 +21,7 @@ import {
 } from "../../components/ui/select";
 
 export default function ManageUsers() {
-
-  const userStats = [
-    {
-      title: "Total Users",
-      value: 126,
-      icon: <Users size={28} />,
-      color: "bg-[#6B8F71]/10 text-[#6B8F71]",
-    },
-    {
-      title: "Active Users",
-      value: 103,
-      icon: <UserCheck size={28} />,
-      color: "bg-green-100 text-green-700",
-    },
-    {
-      title: "Suspended",
-      value: 6,
-      icon: <UserMinus size={28} />,
-      color: "bg-red-100 text-red-700",
-    },
-    {
-      title: "New This Month",
-      value: 17,
-      icon: <UserPlus size={28} />,
-      color: "bg-[#FAF1EB] text-[#D08C60]",
-    },
-  ];
-
+    
   const [searchTerm, setSearchTerm] =
     useState("");
 
@@ -88,6 +61,39 @@ export default function ManageUsers() {
       status: "Active",
     },
   ]);
+  const userStats = [
+        {
+          title: "Total Users",
+          value: users.length,
+          icon: <Users size={28} />,
+          color: "bg-[#6B8F71]/10 text-[#6B8F71]",
+        },
+        {
+          title: "Active Users",
+          value: users.filter(
+            (user) => user.status === "Active"
+          ).length,
+          icon: <UserCheck size={28} />,
+          color: "bg-green-100 text-green-700",
+        },
+        {
+          title: "Pending Users",
+          value: users.filter(
+            (user) => user.status === "Pending"
+          ).length,
+          icon: <UserPlus size={28} />,
+          color: "bg-[#FAF1EB] text-[#D08C60]",
+        },
+        {
+          title: "Suspended Users",
+          value: users.filter(
+            (user) => user.status === "Suspended"
+          ).length,
+          icon: <UserMinus size={28} />,
+          color: "bg-red-100 text-red-700",
+        },
+      ];
+    
 
   const filteredUsers = useMemo(() => {
 
