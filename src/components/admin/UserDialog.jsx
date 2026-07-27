@@ -3,7 +3,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "../../components/ui/dialog";
+} from "../ui/dialog";
 
 import StatusBadge from "./StatusBadge";
 
@@ -12,21 +12,18 @@ export default function UserDialog({
   open,
   onOpenChange,
 }) {
-
   if (!user) return null;
 
   return (
-
     <Dialog
       open={open}
       onOpenChange={onOpenChange}
     >
-
       <DialogContent className="sm:max-w-lg">
 
         <DialogHeader>
 
-          <DialogTitle>
+          <DialogTitle className="text-2xl">
 
             User Details
 
@@ -34,7 +31,7 @@ export default function UserDialog({
 
         </DialogHeader>
 
-        <div className="space-y-6 mt-4">
+        <div className="space-y-6">
 
           <div>
 
@@ -42,11 +39,9 @@ export default function UserDialog({
               Full Name
             </p>
 
-            <h3 className="text-lg font-semibold">
-
+            <p className="font-semibold text-lg">
               {user.name}
-
-            </h3>
+            </p>
 
           </div>
 
@@ -56,11 +51,7 @@ export default function UserDialog({
               Email
             </p>
 
-            <p>
-
-              {user.email}
-
-            </p>
+            <p>{user.email}</p>
 
           </div>
 
@@ -71,9 +62,7 @@ export default function UserDialog({
             </p>
 
             <p className="capitalize">
-
               {user.role}
-
             </p>
 
           </div>
@@ -84,18 +73,13 @@ export default function UserDialog({
               Status
             </p>
 
-            <StatusBadge
-              status={user.status}
-            />
+            <StatusBadge status={user.status} />
 
           </div>
 
         </div>
 
       </DialogContent>
-
     </Dialog>
-
   );
-
 }
