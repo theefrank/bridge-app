@@ -1,58 +1,33 @@
-import { HandHelping, Users, Heart } from "lucide-react";
+import DashboardLayout from "../../components/dashboard/DashboardLayout";
+import VolunteerStats from "../../components/volunteer/VolunteerStats";
+import RecommendationSection from "../../components/volunteer/RecommendationSection";
 
 export default function VolunteerDashboard() {
   return (
-    <div className="max-w-7xl mx-auto px-6 py-12">
-      <h1 className="text-4xl font-bold mb-10">
-        Volunteer Dashboard
-      </h1>
+    <DashboardLayout>
 
-      <div className="grid md:grid-cols-3 gap-6">
-        <div className="bridge-card text-center">
-          <HandHelping
-            size={40}
-            className="mx-auto text-[#D08C60] mb-4"
-          />
+      <div className="space-y-10">
 
-          <h2 className="text-2xl font-bold">
-            12
-          </h2>
+        <div>
 
-          <p className="text-gray-600">
-            Requests Helped
+          <h1 className="text-4xl font-bold">
+            Volunteer Dashboard
+          </h1>
+
+          <p className="text-gray-600 mt-2">
+            Discover opportunities, monitor your
+            applications and continue making a
+            difference in your community.
           </p>
+
         </div>
 
-        <div className="bridge-card text-center">
-          <Users
-            size={40}
-            className="mx-auto text-[#D08C60] mb-4"
-          />
+        <VolunteerStats />
 
-          <h2 className="text-2xl font-bold">
-            5
-          </h2>
+        <RecommendationSection />
 
-          <p className="text-gray-600">
-            Communities
-          </p>
-        </div>
-
-        <div className="bridge-card text-center">
-          <Heart
-            size={40}
-            className="mx-auto text-[#D08C60] mb-4"
-          />
-
-          <h2 className="text-2xl font-bold">
-            20
-          </h2>
-
-          <p className="text-gray-600">
-            Volunteer Hours
-          </p>
-        </div>
       </div>
-    </div>
+
+    </DashboardLayout>
   );
 }
