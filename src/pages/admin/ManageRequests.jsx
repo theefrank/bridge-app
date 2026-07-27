@@ -12,18 +12,35 @@ import AdminStats from "../../components/admin/AdminStats";
 import SearchBar from "../../components/common/SearchBar";
 import FilterRequests from "../../components/admin/FilterRequests";
 import RequestTable from "../../components/admin/RequestTable";
+import RequestDetailsModal from "../../components/admin/RequestDetailsModal";
+import DeleteConfirmationModal from "../../components/admin/DeleteConfirmationModal";
 
 export default function ManageRequests() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState("All");
+  const [selectedStatus, setSelectedStatus] =
+    useState("All");
 
-  const requests = [
+  const [selectedRequest, setSelectedRequest] =
+    useState(null);
+
+  const [showDetails, setShowDetails] =
+    useState(false);
+
+  const [showDelete, setShowDelete] =
+    useState(false);
+
+  const [requestToDelete, setRequestToDelete] =
+    useState(null);
+
+  const [requests, setRequests] = useState([
     {
       id: 1,
       title: "Need Mathematics Tutor",
       category: "Education",
       user: "Jane Doe",
       status: "Pending",
+      description:
+        "Looking for a volunteer to help with high school mathematics twice a week.",
     },
     {
       id: 2,
@@ -31,6 +48,8 @@ export default function ManageRequests() {
       category: "Community",
       user: "Kevin Otieno",
       status: "Approved",
+      description:
+        "Need volunteers for a neighbourhood cleanup exercise this Saturday.",
     },
     {
       id: 3,
@@ -38,6 +57,8 @@ export default function ManageRequests() {
       category: "Career",
       user: "Mercy Wanjiku",
       status: "Pending",
+      description:
+        "Seeking mentorship on software engineering career paths.",
     },
     {
       id: 4,
@@ -45,6 +66,8 @@ export default function ManageRequests() {
       category: "Technology",
       user: "John Mwangi",
       status: "Rejected",
+      description:
+        "Need help diagnosing and repairing a faulty laptop.",
     },
     {
       id: 5,
@@ -52,6 +75,8 @@ export default function ManageRequests() {
       category: "Community",
       user: "Alice Kimani",
       status: "Approved",
+      description:
+        "Requesting volunteers to assist with food distribution.",
     },
     {
       id: 6,
@@ -59,8 +84,10 @@ export default function ManageRequests() {
       category: "Career",
       user: "Brian Otieno",
       status: "Pending",
+      description:
+        "Looking for professionals to review my CV.",
     },
-  ];
+  ]);
 
   const requestStats = [
     {
@@ -95,33 +122,84 @@ export default function ManageRequests() {
     },
   ];
 
-  const filteredRequests = requests.filter((request) => {
-    const matchesSearch =
-      request.title
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      request.user
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      request.category
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase());
+  const filteredRequests = requests.filter(
+    (request) => {
+      const matchesSearch =
+        request.title
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        request.user
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        request.category
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase());
 
-    const matchesStatus =
-      selectedStatus === "All" ||
-      request.status === selectedStatus;
+      const matchesStatus =
+        selectedStatus === "All" ||
+        request.status === selectedStatus;
 
-    return matchesSearch && matchesStatus;
-  });
+      return matchesSearch && matchesStatus;
+    }
+  );
+
+  function handleView(request) {
+    setSelectedRequest(request);
+    setShowDetails(true);
+  }
+
+  function handleApprove(id) {
+    setRequests((prev) =>
+      prev.map((request) =>
+        request.id === id
+          ? {
+              ...request,
+              status: "Approved",
+            }
+          : request
+      )
+    );
+  }
+
+  function handleReject(id) {
+    setRequests((prev) =>
+      prev.map((request) =>
+        request.id === id
+          ? {
+              ...request,
+              status: "Rejected",
+            }
+          : request
+      )
+    );
+  }
+
+  function handleDelete(request) {
+    setRequestToDelete(request);
+    setShowDelete(true);
+  }
+
+  function confirmDelete() {
+    setRequests((prev) =>
+      prev.filter(
+        (request) =>
+          request.id !== requestToDelete.id
+      )
+    );
+
+    setShowDelete(false);
+    setRequestToDelete(null);
+  }
 
   return (
     <div className="flex min-h-screen bg-[#FAF7F2]">
+
       <AdminSidebar />
 
       <main className="flex-1 p-10">
-        {/* Page Header */}
 
         <div className="mb-10">
+
           <h1 className="text-4xl font-bold">
             Manage Requests
           </h1>
@@ -130,35 +208,53 @@ export default function ManageRequests() {
             Review, approve or reject
             community assistance requests.
           </p>
-        </div>
 
-        {/* Statistics */}
+        </div>
 
         <AdminStats stats={requestStats} />
 
-        {/* Search & Filter */}
-
         <div className="flex flex-col lg:flex-row gap-4 my-8">
+
           <div className="flex-1">
+
             <SearchBar
               placeholder="Search requests..."
               searchTerm={searchTerm}
               setSearchTerm={setSearchTerm}
             />
+
           </div>
 
           <FilterRequests
             selectedStatus={selectedStatus}
             setSelectedStatus={setSelectedStatus}
           />
-        </div>
 
-        {/* Table */}
+        </div>
 
         <RequestTable
           requests={filteredRequests}
+          onView={handleView}
+          onApprove={handleApprove}
+          onReject={handleReject}
+          onDelete={handleDelete}
         />
+
+        <RequestDetailsModal
+          request={selectedRequest}
+          isOpen={showDetails}
+          onClose={() => setShowDetails(false)}
+        />
+
+        <DeleteConfirmationModal
+          isOpen={showDelete}
+          onClose={() => setShowDelete(false)}
+          onConfirm={confirmDelete}
+        />
+
       </main>
+
     </div>
   );
 }
+
