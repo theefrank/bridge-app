@@ -10,6 +10,7 @@ import {
 
 import StatusBadge from "./StatusBadge";
 import UserDialog from "./UserDialog";
+import DeleteUserDialog from "./DeleteUserDialog";
 
 export default function UserTable({
   users,
@@ -20,6 +21,12 @@ export default function UserTable({
 
   const [dialogOpen, setDialogOpen] =
     useState(false);
+
+  const [deleteDialogOpen, setDeleteDialogOpen] =
+  useState(false);
+
+  const [userToDelete, setUserToDelete] =
+    useState(null);  
 
   function handleView(user) {
     setSelectedUser(user);
@@ -42,18 +49,27 @@ export default function UserTable({
     );
   }
 
-  function handleDelete(userId) {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this user?"
-    );
+  function handleDelete(user) {
 
-    if (!confirmed) return;
+  setUserToDelete(user);
+
+  setDeleteDialogOpen(true);
+
+}
+
+  function confirmDelete() {
 
     setUsers((previousUsers) =>
       previousUsers.filter(
-        (user) => user.id !== userId
+        (user) =>
+          user.id !== userToDelete.id
       )
     );
+
+    setDeleteDialogOpen(false);
+
+    setUserToDelete(null);
+
   }
 
   return (
@@ -205,9 +221,9 @@ export default function UserTable({
                       </button>
 
                       <button
-                        onClick={() =>
-                          handleDelete(user.id)
-                        }
+                      onClick={() =>
+                      handleDelete(user)
+                    }                    
                         className="p-2 rounded-lg hover:bg-red-100"
                         title="Delete User"
                       >
@@ -240,6 +256,13 @@ export default function UserTable({
         open={dialogOpen}
         onOpenChange={setDialogOpen}
       />
+
+      <DeleteUserDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        user={userToDelete}
+        onDelete={confirmDelete}
+      />      
 
     </>
   );
