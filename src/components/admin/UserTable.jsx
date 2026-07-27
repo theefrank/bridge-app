@@ -1,7 +1,79 @@
-import { Eye, Pencil, Trash2 } from "lucide-react";
+import {
+  Eye,
+  Pencil,
+  Trash2,
+  UserMinus,
+  UserCheck,
+} from "lucide-react";
+
 import StatusBadge from "./StatusBadge";
 
-export default function UserTable({ users }) {
+export default function UserTable({
+  users,
+  setUsers,
+}) {
+  function handleView(user) {
+    alert(
+      `Name: ${user.name}
+
+Email: ${user.email}
+
+Role: ${user.role}
+
+Status: ${user.status}`
+    );
+  }
+
+  function handleSuspend(userId) {
+    setUsers((previousUsers) =>
+      previousUsers.map((user) =>
+        user.id === userId
+          ? {
+              ...user,
+              status:
+                user.status === "Suspended"
+                  ? "Active"
+                  : "Suspended",
+            }
+          : user
+      )
+    );
+  }
+
+  function handleDelete(userId) {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this user?"
+    );
+
+    if (!confirmed) return;
+
+    setUsers((previousUsers) =>
+      previousUsers.filter(
+        (user) => user.id !== userId
+      )
+    );
+  }
+
+  if (users.length === 0) {
+    return (
+      <div className="bridge-card text-center py-20">
+
+        <h2 className="text-2xl font-semibold">
+
+          No users found
+
+        </h2>
+
+        <p className="text-gray-500 mt-3">
+
+          Try changing your search or filters.
+
+        </p>
+
+      </div>
+    );
+  }
+
   return (
     <div className="bridge-card overflow-x-auto">
 
@@ -11,13 +83,21 @@ export default function UserTable({ users }) {
 
           <tr className="border-b">
 
-            <th className="text-left py-4">Name</th>
+            <th className="text-left py-4">
+              Name
+            </th>
 
-            <th className="text-left">Email</th>
+            <th className="text-left">
+              Email
+            </th>
 
-            <th className="text-left">Role</th>
+            <th className="text-left">
+              Role
+            </th>
 
-            <th className="text-left">Status</th>
+            <th className="text-left">
+              Status
+            </th>
 
             <th className="text-center">
               Actions
@@ -33,30 +113,48 @@ export default function UserTable({ users }) {
 
             <tr
               key={user.id}
-              className="border-b hover:bg-gray-50 transition"
+              className="border-b"
             >
 
               <td className="py-5 font-medium">
+
                 {user.name}
-              </td>
 
-              <td>{user.email}</td>
-
-              <td className="capitalize">
-                {user.role}
               </td>
 
               <td>
+
+                {user.email}
+
+              </td>
+
+              <td className="capitalize">
+
+                {user.role}
+
+              </td>
+
+              <td>
+
                 <StatusBadge
                   status={user.status}
                 />
+
               </td>
 
               <td>
 
-                <div className="flex justify-center gap-3">
+                <div className="flex justify-center gap-2">
 
-                  <button className="p-2 rounded-lg hover:bg-[#FAF1EB]">
+                  {/* View */}
+
+                  <button
+                    onClick={() =>
+                      handleView(user)
+                    }
+                    className="p-2 rounded-lg hover:bg-[#FAF1EB]"
+                    title="View User"
+                  >
 
                     <Eye
                       size={18}
@@ -65,7 +163,17 @@ export default function UserTable({ users }) {
 
                   </button>
 
-                  <button className="p-2 rounded-lg hover:bg-[#FAF1EB]">
+                  {/* Edit */}
+
+                  <button
+                    onClick={() =>
+                      alert(
+                        "Edit feature coming soon."
+                      )
+                    }
+                    className="p-2 rounded-lg hover:bg-[#FAF1EB]"
+                    title="Edit User"
+                  >
 
                     <Pencil
                       size={18}
@@ -74,7 +182,49 @@ export default function UserTable({ users }) {
 
                   </button>
 
-                  <button className="p-2 rounded-lg hover:bg-red-100">
+                  {/* Suspend / Activate */}
+
+                  <button
+                    onClick={() =>
+                      handleSuspend(user.id)
+                    }
+                    className="p-2 rounded-lg hover:bg-yellow-100"
+                    title={
+                      user.status ===
+                      "Suspended"
+                        ? "Activate User"
+                        : "Suspend User"
+                    }
+                  >
+
+                    {user.status ===
+                    "Suspended" ? (
+
+                      <UserCheck
+                        size={18}
+                        className="text-green-600"
+                      />
+
+                    ) : (
+
+                      <UserMinus
+                        size={18}
+                        className="text-yellow-600"
+                      />
+
+                    )}
+
+                  </button>
+
+                  {/* Delete */}
+
+                  <button
+                    onClick={() =>
+                      handleDelete(user.id)
+                    }
+                    className="p-2 rounded-lg hover:bg-red-100"
+                    title="Delete User"
+                  >
 
                     <Trash2
                       size={18}
