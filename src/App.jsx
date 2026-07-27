@@ -5,7 +5,7 @@ import Home from "./pages/public/Home";
 import About from "./pages/public/About";
 import Login from "./pages/public/Login";
 import Register from "./pages/public/Register";
-import ForgotPassword from "./pages/public/ForgotPassword";
+import ForgotPassword from "./pages/user/ForgotPassword";
 
 // Dashboards
 import UserDashboard from "./pages/user/UserDashboard";
@@ -16,7 +16,10 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 import Opportunities from "./pages/volunteer/Opportunities";
-import Profile from "./pages/profile/Profile";
+import Profile from "./pages/user/Profile";
+import EditProfile from "./pages/user/EditProfile";
+import Settings from "./pages/user/Settings";
+import MyActivity from "./pages/user/MyActivity";
 import Requests from "./pages/requests/Requests";
 import CreateRequest from "./pages/requests/CreateRequest";
 import RequestDetails from "./pages/requests/RequestDetails";
@@ -79,6 +82,33 @@ function App() {
         element={
           <ProtectedRoute>
             <Profile />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/edit-profile"
+        element={
+          <ProtectedRoute>
+            <EditProfile />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute>
+            <Settings />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/my-activity"
+        element={
+          <ProtectedRoute>
+            <MyActivity />
           </ProtectedRoute>
         }
       />
