@@ -10,6 +10,7 @@ import {
 
 import StatusBadge from "./StatusBadge";
 import UserDialog from "./UserDialog";
+import EditUserDialog from "./EditUserDialog";
 import DeleteUserDialog from "./DeleteUserDialog";
 
 export default function UserTable({
@@ -22,6 +23,12 @@ export default function UserTable({
   const [dialogOpen, setDialogOpen] =
     useState(false);
 
+  const [editDialogOpen, setEditDialogOpen] =
+    useState(false);
+
+  const [editingUser, setEditingUser] =
+    useState(null);
+
   const [deleteDialogOpen, setDeleteDialogOpen] =
   useState(false);
 
@@ -31,6 +38,14 @@ export default function UserTable({
   function handleView(user) {
     setSelectedUser(user);
     setDialogOpen(true);
+  }
+
+  function handleEdit(user) {
+
+  setEditingUser(user);
+
+  setEditDialogOpen(true);
+
   }
 
   function handleSuspend(userId) {
@@ -55,7 +70,7 @@ export default function UserTable({
 
   setDeleteDialogOpen(true);
 
-}
+ }
 
   function confirmDelete() {
 
@@ -71,6 +86,18 @@ export default function UserTable({
     setUserToDelete(null);
 
   }
+
+  function handleSave(updatedUser) {
+
+    setUsers((previousUsers) =>
+      previousUsers.map((user) =>
+        user.id === updatedUser.id
+          ? updatedUser
+          : user
+      )
+    );
+
+  }  
 
   return (
     <>
@@ -173,9 +200,7 @@ export default function UserTable({
 
                       <button
                         onClick={() =>
-                          alert(
-                            "Edit feature coming soon."
-                          )
+                          handleEdit(user)
                         }
                         className="p-2 rounded-lg hover:bg-[#FAF1EB]"
                         title="Edit User"
@@ -256,6 +281,13 @@ export default function UserTable({
         open={dialogOpen}
         onOpenChange={setDialogOpen}
       />
+
+      <EditUserDialog
+        open={editDialogOpen}
+        onOpenChange={setEditDialogOpen}
+        user={editingUser}
+        onSave={handleSave}
+      />      
 
       <DeleteUserDialog
         open={deleteDialogOpen}
