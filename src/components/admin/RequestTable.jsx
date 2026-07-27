@@ -9,16 +9,17 @@ import StatusBadge from "./StatusBadge";
 
 export default function RequestTable({
   requests,
+  onView,
+  onApprove,
+  onReject,
+  onDelete,
 }) {
   return (
     <div className="bridge-card overflow-x-auto">
-
       <table className="w-full">
 
         <thead>
-
           <tr className="border-b">
-
             <th className="text-left py-4">
               Title
             </th>
@@ -38,92 +39,126 @@ export default function RequestTable({
             <th className="text-center">
               Actions
             </th>
-
           </tr>
-
         </thead>
 
         <tbody>
 
-          {requests.map((request) => (
+          {requests.length > 0 ? (
 
-            <tr
-              key={request.id}
-              className="border-b hover:bg-gray-50"
-            >
+            requests.map((request) => (
 
-              <td className="py-5 font-medium">
-                {request.title}
-              </td>
+              <tr
+                key={request.id}
+                className="border-b hover:bg-gray-50"
+              >
 
-              <td>
-                {request.category}
-              </td>
+                <td className="py-5 font-medium">
+                  {request.title}
+                </td>
 
-              <td>
-                {request.user}
-              </td>
+                <td>
+                  {request.category}
+                </td>
 
-              <td>
+                <td>
+                  {request.user}
+                </td>
 
-                <StatusBadge
-                  status={request.status}
-                />
+                <td>
+                  <StatusBadge
+                    status={request.status}
+                  />
+                </td>
 
-              </td>
+                <td>
 
-              <td>
+                  <div className="flex justify-center gap-2">
 
-                <div className="flex justify-center gap-2">
+                    {/* View */}
 
-                  <button className="p-2 rounded-lg hover:bg-gray-100">
+                    <button
+                      onClick={() => onView(request)}
+                      className="p-2 rounded-lg hover:bg-gray-100"
+                      title="View Request"
+                    >
+                      <Eye
+                        size={18}
+                        className="text-[#6B8F71]"
+                      />
+                    </button>
 
-                    <Eye
-                      size={18}
-                      className="text-[#6B8F71]"
-                    />
+                    {/* Approve */}
 
-                  </button>
+                    <button
+                      onClick={() =>
+                        onApprove(request.id)
+                      }
+                      className="p-2 rounded-lg hover:bg-green-100"
+                      title="Approve"
+                    >
+                      <CheckCircle
+                        size={18}
+                        className="text-green-600"
+                      />
+                    </button>
 
-                  <button className="p-2 rounded-lg hover:bg-green-100">
+                    {/* Reject */}
 
-                    <CheckCircle
-                      size={18}
-                      className="text-green-600"
-                    />
+                    <button
+                      onClick={() =>
+                        onReject(request.id)
+                      }
+                      className="p-2 rounded-lg hover:bg-yellow-100"
+                      title="Reject"
+                    >
+                      <XCircle
+                        size={18}
+                        className="text-yellow-600"
+                      />
+                    </button>
 
-                  </button>
+                    {/* Delete */}
 
-                  <button className="p-2 rounded-lg hover:bg-yellow-100">
+                    <button
+                      onClick={() =>
+                        onDelete(request)
+                      }
+                      className="p-2 rounded-lg hover:bg-red-100"
+                      title="Delete"
+                    >
+                      <Trash2
+                        size={18}
+                        className="text-red-600"
+                      />
+                    </button>
 
-                    <XCircle
-                      size={18}
-                      className="text-yellow-600"
-                    />
+                  </div>
 
-                  </button>
+                </td>
 
-                  <button className="p-2 rounded-lg hover:bg-red-100">
+              </tr>
 
-                    <Trash2
-                      size={18}
-                      className="text-red-600"
-                    />
+            ))
 
-                  </button>
+          ) : (
 
-                </div>
+            <tr>
 
+              <td
+                colSpan="5"
+                className="py-10 text-center text-gray-500"
+              >
+                No requests found.
               </td>
 
             </tr>
 
-          ))}
+          )}
 
         </tbody>
 
       </table>
-
     </div>
   );
 }
