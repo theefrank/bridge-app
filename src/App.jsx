@@ -26,6 +26,8 @@ import RequestDetails from "./pages/requests/RequestDetails";
 
 import EditProfile from "./pages/user/EditProfile";
 
+import ForgotPassword from "./pages/auth/ForgotPassword";
+
 function App() {
   return (
     <Routes>
@@ -132,7 +134,12 @@ function App() {
           </ProtectedRoute>
         }
       />
-
+      <Route
+         path="/forgot-password"
+          element={
+           <ForgotPassword />
+          }
+      />
 
           
         <Route path="/requests" element={<Requests />} />
