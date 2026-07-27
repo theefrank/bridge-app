@@ -24,6 +24,7 @@ import Requests from "./pages/requests/Requests";
 import CreateRequest from "./pages/requests/CreateRequest";
 import RequestDetails from "./pages/requests/RequestDetails";
 
+import EditProfile from "./pages/user/EditProfile";
 
 function App() {
   return (
@@ -122,8 +123,15 @@ function App() {
           </h1>
         }
       />
- 
-
+           
+      <Route
+        path="/profile/edit"
+        element={
+          <ProtectedRoute>
+           <EditProfile />
+          </ProtectedRoute>
+        }
+      />
 
 
           
