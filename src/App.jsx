@@ -3,6 +3,7 @@ import Home from "./routes/Home";
 import About from "./routes/About";
 import Login from "./routes/Login";
 import Register from "./routes/Register";
+import ForgotPassword from "./routes/ForgotPassword";
 import Requests from "./pages/requests/Requests";
 import CreateRequest from "./pages/requests/CreateRequest";
 import RequestDetails from "./pages/requests/RequestDetails";
