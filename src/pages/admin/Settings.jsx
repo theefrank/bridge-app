@@ -57,7 +57,7 @@ export default function Settings() {
 
       <AdminSidebar />
 
-      <main className="flex-1 p-10">
+      <main className="flex-1 ml-72 p-10">
 
         <div className="mb-10">
 

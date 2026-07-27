@@ -139,7 +139,7 @@ export default function Reports() {
     <div className="flex min-h-screen bg-[#FAF7F2]">
       <AdminSidebar />
 
-      <main className="flex-1 p-10">
+      <main className="flex-1 ml-72 p-10">
 
         {/* Header */}
 
