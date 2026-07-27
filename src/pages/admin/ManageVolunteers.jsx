@@ -44,6 +44,33 @@ export default function ManageVolunteers() {
     },
   ];
 
+  const volunteerStats = [
+  {
+    title: "Total Volunteers",
+    value: 54,
+    icon: <HandHeart size={28} />,
+    color: "bg-[#6B8F71]/10 text-[#6B8F71]",
+  },
+  {
+    title: "Active",
+    value: 42,
+    icon: <UserCheck size={28} />,
+    color: "bg-green-100 text-green-700",
+  },
+  {
+    title: "Pending Approval",
+    value: 8,
+    icon: <Clock3 size={28} />,
+    color: "bg-yellow-100 text-yellow-700",
+  },
+  {
+    title: "Volunteer Hours",
+    value: "1,286",
+    icon: <Timer size={28} />,
+    color: "bg-[#FAF1EB] text-[#D08C60]",
+  },
+];
+
   const filteredVolunteers =
     volunteers.filter((volunteer) =>
       volunteer.name
@@ -74,7 +101,7 @@ export default function ManageVolunteers() {
 
         {/* Summary */}
 
-        <AdminStats />
+        <AdminStats stats={volunteerStats} />
 
         <div className="my-8">
 
