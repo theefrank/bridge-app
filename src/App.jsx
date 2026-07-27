@@ -1,37 +1,47 @@
 import { Routes, Route } from "react-router-dom";
+
+// Public Pages
 import Home from "./routes/Home";
 import About from "./routes/About";
 import Login from "./routes/Login";
 import Register from "./routes/Register";
 import ForgotPassword from "./routes/ForgotPassword";
+
+// Requests
 import Requests from "./pages/requests/Requests";
 import CreateRequest from "./pages/requests/CreateRequest";
 import RequestDetails from "./pages/requests/RequestDetails";
 
-// Dashboards
+// User Pages
 import UserDashboard from "./pages/user/UserDashboard";
-import VolunteerDashboard from "./pages/volunteer/VolunteerDashboard";
-import AdminDashboard from "./pages/admin/AdminDashboard";
-
-import Opportunities from "./pages/volunteer/Opportunities";
-import Profile from "./pages/profile/Profile";
 import MyRequests from "./pages/user/MyRequests";
 import MyActivity from "./pages/user/MyActivity";
 import Settings from "./pages/user/Settings";
 
+// Volunteer Pages
+import VolunteerDashboard from "./pages/volunteer/VolunteerDashboard";
+import Opportunities from "./pages/volunteer/Opportunities";
+
+// Shared Pages
+import Profile from "./pages/profile/Profile";
+
+// Admin Pages
+import AdminDashboard from "./pages/admin/AdminDashboard";
 import ManageUsers from "./pages/admin/ManageUsers";
 import ManageRequests from "./pages/admin/ManageRequests";
 import ManageVolunteers from "./pages/admin/ManageVolunteers";
+import Reports from "./pages/admin/Reports";
+import AdminSettings from "./pages/admin/Settings";
 
-// Protected Route
+// Route Protection
 import ProtectedRoute from "./routes/ProtectedRoute";
-
-
 
 function App() {
   return (
     <Routes>
-      {/* Public Routes */}
+
+      {/* Public Routes             */}
+
       <Route path="/" element={<Home />} />
 
       <Route path="/about" element={<About />} />
@@ -39,12 +49,24 @@ function App() {
       <Route path="/login" element={<Login />} />
 
       <Route path="/register" element={<Register />} />
-        
-      <Route path="/forgot-password" element={<ForgotPassword />} /> 
-        
-       
 
-      {/* Protected Routes */}
+      <Route
+        path="/forgot-password"
+        element={<ForgotPassword />}
+      />
+
+      <Route
+        path="/requests"
+        element={<Requests />}
+      />
+
+      <Route
+        path="/requests/:id"
+        element={<RequestDetails />}
+      />
+
+      {/* User Routes               */}
+
       <Route
         path="/dashboard"
         element={
@@ -55,64 +77,37 @@ function App() {
       />
 
       <Route
-        path="/volunteer-dashboard"
+        path="/my-requests"
         element={
           <ProtectedRoute>
-            <VolunteerDashboard />
+            <MyRequests />
           </ProtectedRoute>
         }
       />
 
       <Route
-        path="/admin-dashboard"
-        element={
-          <ProtectedRoute>
-            <AdminDashboard />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/opportunities"
-        element={
-          <ProtectedRoute>
-            <Opportunities />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-       path="/my-requests"
-       element={
-         <ProtectedRoute>
-          <MyRequests />
-         </ProtectedRoute>
-       }
-      />
-
-       <Route
         path="/requests/new"
         element={
           <ProtectedRoute>
-           <CreateRequest />
+            <CreateRequest />
           </ProtectedRoute>
-         }
-        />
-
-
-      <Route
-       path="/profile"
-       element={
-         <ProtectedRoute>
-          <Profile />
-         </ProtectedRoute>
         }
-       />
+      />
 
       <Route
         path="/activity"
         element={
           <ProtectedRoute>
             <MyActivity />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
           </ProtectedRoute>
         }
       />
@@ -126,6 +121,37 @@ function App() {
         }
       />
 
+      {/* Volunteer Routes          */}
+
+      <Route
+        path="/volunteer/dashboard"
+        element={
+          <ProtectedRoute>
+            <VolunteerDashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/opportunities"
+        element={
+          <ProtectedRoute>
+            <Opportunities />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Admin Routes              */}
+
+      <Route
+        path="/admin/dashboard"
+        element={
+          <ProtectedRoute>
+            <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
+
       <Route
         path="/admin/users"
         element={
@@ -133,7 +159,7 @@ function App() {
             <ManageUsers />
           </ProtectedRoute>
         }
-      />      
+      />
 
       <Route
         path="/admin/requests"
@@ -142,7 +168,7 @@ function App() {
             <ManageRequests />
           </ProtectedRoute>
         }
-       />
+      />
 
       <Route
         path="/admin/volunteers"
@@ -151,23 +177,39 @@ function App() {
             <ManageVolunteers />
           </ProtectedRoute>
         }
-      />    
-             
-      {/* 404 Route */}
+      />
+
       <Route
-        path="*"
+        path="/admin/reports"
         element={
-          <h1 className="text-center text-3xl mt-20">404 - Page Not Found</h1>
+          <ProtectedRoute>
+            <Reports />
+          </ProtectedRoute>
         }
       />
 
-      
-      <Route path="/requests" element={<Requests />} />
+      <Route
+        path="/admin/settings"
+        element={
+          <ProtectedRoute>
+            <AdminSettings />
+          </ProtectedRoute>
+        }
+      />
 
-      <Route path="/requests/new" element={<CreateRequest />} />
+      {/* 404                       */}
 
-      <Route path="/requests/:id" element={<RequestDetails />} />
+      <Route
+        path="*"
+        element={
+          <h1 className="text-center text-3xl mt-20">
+            404 - Page Not Found
+          </h1>
+        }
+      />
+
     </Routes>
   );
 }
+
 export default App;

@@ -22,30 +22,37 @@ export default function AuthProvider({ children }) {
   }, []);
 
   function login(email, password) {
-    // Mock admin account
-    if (
-      email === "admin@bridge.com" &&
-      password === "admin123"
-    ) {
-      const admin = {
-        id: 1,
-        name: "Bridge Admin",
-        email,
-        role: "admin",
-      };
 
-      localStorage.setItem(
-        "bridgeUser",
-        JSON.stringify(admin)
-      );
+  // Admin Login
+  if (
+    email === "admin@bridge.com" &&
+    password === "Admin@123"
+  ) {
 
-      setUser(admin);
+    const admin = {
+      id: 1,
+      name: "Bridge Admin",
+      email,
+      role: "admin",
+    };
 
-      return admin;
-    }
+    localStorage.setItem(
+      "bridgeUser",
+      JSON.stringify(admin)
+    );
 
-    // Mock user account
-    const normalUser = {
+    setUser(admin);
+
+    return admin;
+  }
+
+  // User Login
+  if (
+    email === "user@bridge.com" &&
+    password === "User@123"
+  ) {
+
+    const user = {
       id: 2,
       name: "Bridge User",
       email,
@@ -54,13 +61,16 @@ export default function AuthProvider({ children }) {
 
     localStorage.setItem(
       "bridgeUser",
-      JSON.stringify(normalUser)
+      JSON.stringify(user)
     );
 
-    setUser(normalUser);
+    setUser(user);
 
-    return normalUser;
+    return user;
   }
+
+  throw new Error("Invalid email or password.");
+}
 
   function register(userData) {
     const newUser = {
