@@ -17,8 +17,10 @@ import Profile from "./pages/profile/Profile";
 import MyRequests from "./pages/user/MyRequests";
 import MyActivity from "./pages/user/MyActivity";
 import Settings from "./pages/user/Settings";
+
 import ManageUsers from "./pages/admin/ManageUsers";
 import ManageRequests from "./pages/admin/ManageRequests";
+import ManageVolunteers from "./pages/admin/ManageVolunteers";
 
 // Protected Route
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -139,7 +141,17 @@ function App() {
             <ManageRequests />
           </ProtectedRoute>
         }
-       />    
+       />
+
+      <Route
+        path="/admin/volunteers"
+        element={
+          <ProtectedRoute>
+            <ManageVolunteers />
+          </ProtectedRoute>
+        }
+      />    
+             
       {/* 404 Route */}
       <Route
         path="*"
