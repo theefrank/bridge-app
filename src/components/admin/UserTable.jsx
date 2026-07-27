@@ -4,11 +4,16 @@ import {
   Eye,
   Pencil,
   Trash2,
-  UserMinus,
-  UserCheck,
 } from "lucide-react";
 
-import StatusBadge from "./StatusBadge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+
 import UserDialog from "./UserDialog";
 import EditUserDialog from "./EditUserDialog";
 import DeleteUserDialog from "./DeleteUserDialog";
@@ -23,17 +28,17 @@ export default function UserTable({
   const [dialogOpen, setDialogOpen] =
     useState(false);
 
-  const [editDialogOpen, setEditDialogOpen] =
-    useState(false);
-
   const [editingUser, setEditingUser] =
     useState(null);
 
+  const [editDialogOpen, setEditDialogOpen] =
+    useState(false);
+
   const [deleteDialogOpen, setDeleteDialogOpen] =
-  useState(false);
+    useState(false);
 
   const [userToDelete, setUserToDelete] =
-    useState(null);  
+    useState(null);
 
   function handleView(user) {
     setSelectedUser(user);
@@ -41,39 +46,26 @@ export default function UserTable({
   }
 
   function handleEdit(user) {
-
-  setEditingUser(user);
-
-  setEditDialogOpen(true);
-
+    setEditingUser(user);
+    setEditDialogOpen(true);
   }
 
-  function handleSuspend(userId) {
+  function handleSave(updatedUser) {
     setUsers((previousUsers) =>
       previousUsers.map((user) =>
-        user.id === userId
-          ? {
-              ...user,
-              status:
-                user.status === "Suspended"
-                  ? "Active"
-                  : "Suspended",
-            }
+        user.id === updatedUser.id
+          ? updatedUser
           : user
       )
     );
   }
 
   function handleDelete(user) {
-
-  setUserToDelete(user);
-
-  setDeleteDialogOpen(true);
-
- }
+    setUserToDelete(user);
+    setDeleteDialogOpen(true);
+  }
 
   function confirmDelete() {
-
     setUsers((previousUsers) =>
       previousUsers.filter(
         (user) =>
@@ -82,22 +74,24 @@ export default function UserTable({
     );
 
     setDeleteDialogOpen(false);
-
     setUserToDelete(null);
-
   }
 
-  function handleSave(updatedUser) {
-
+  function handleStatusChange(
+    userId,
+    newStatus
+  ) {
     setUsers((previousUsers) =>
       previousUsers.map((user) =>
-        user.id === updatedUser.id
-          ? updatedUser
+        user.id === userId
+          ? {
+              ...user,
+              status: newStatus,
+            }
           : user
       )
     );
-
-  }  
+  }
 
   return (
     <>
@@ -111,7 +105,7 @@ export default function UserTable({
           </h2>
 
           <p className="text-gray-500 mt-3">
-            Try changing your search or filters.
+            Try changing your search.
           </p>
 
         </div>
@@ -173,15 +167,58 @@ export default function UserTable({
 
                   <td>
 
-                    <StatusBadge
-                      status={user.status}
-                    />
+                    <Select
+                      value={user.status}
+                      onValueChange={(value) =>
+                        handleStatusChange(
+                          user.id,
+                          value
+                        )
+                      }
+                    >
+
+                      <SelectTrigger
+                        className={`w-36 h-9 border-0 shadow-none
+
+                        ${
+                          user.status === "Active"
+                            ? "bg-green-100 text-green-700"
+
+                            : user.status === "Pending"
+                            ? "bg-[#FAF1EB] text-[#D08C60]"
+
+                            : "bg-red-100 text-red-700"
+                        }
+                        `}
+                      >
+
+                        <SelectValue />
+
+                      </SelectTrigger>
+
+                      <SelectContent>
+
+                        <SelectItem value="Active">
+                          Active
+                        </SelectItem>
+
+                        <SelectItem value="Pending">
+                          Pending
+                        </SelectItem>
+
+                        <SelectItem value="Suspended">
+                          Suspended
+                        </SelectItem>
+
+                      </SelectContent>
+
+                    </Select>
 
                   </td>
 
                   <td>
 
-                    <div className="flex justify-center gap-2">
+                    <div className="flex justify-center items-center gap-3">
 
                       <button
                         onClick={() =>
@@ -215,40 +252,8 @@ export default function UserTable({
 
                       <button
                         onClick={() =>
-                          handleSuspend(user.id)
+                          handleDelete(user)
                         }
-                        className="p-2 rounded-lg hover:bg-yellow-100"
-                        title={
-                          user.status ===
-                          "Suspended"
-                            ? "Activate User"
-                            : "Suspend User"
-                        }
-                      >
-
-                        {user.status ===
-                        "Suspended" ? (
-
-                          <UserCheck
-                            size={18}
-                            className="text-green-600"
-                          />
-
-                        ) : (
-
-                          <UserMinus
-                            size={18}
-                            className="text-yellow-600"
-                          />
-
-                        )}
-
-                      </button>
-
-                      <button
-                      onClick={() =>
-                      handleDelete(user)
-                    }                    
                         className="p-2 rounded-lg hover:bg-red-100"
                         title="Delete User"
                       >
@@ -287,14 +292,14 @@ export default function UserTable({
         onOpenChange={setEditDialogOpen}
         user={editingUser}
         onSave={handleSave}
-      />      
+      />
 
       <DeleteUserDialog
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}
         user={userToDelete}
         onDelete={confirmDelete}
-      />      
+      />
 
     </>
   );
