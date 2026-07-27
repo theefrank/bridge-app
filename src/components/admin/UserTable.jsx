@@ -14,9 +14,9 @@ import {
   SelectValue,
 } from "../ui/select";
 
-import UserDialog from "./UserDialog";
-import EditUserDialog from "./EditUserDialog";
-import DeleteUserDialog from "./DeleteUserDialog";
+import UserDialog from "./DetailsDialog";
+import EditUserDialog from "./EditMemberDialog";
+import DeleteUserDialog from "./DeleteConfirmationDialog";
 
 export default function UserTable({
   users,

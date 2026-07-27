@@ -1,129 +1,339 @@
+import { useState } from "react";
+
 import {
   Eye,
-  CheckCircle,
-  PauseCircle,
+  Pencil,
   Trash2,
 } from "lucide-react";
 
-import StatusBadge from "./StatusBadge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+
+import UserDialog from "./DetailsDialog";
+import EditUserDialog from "./EditMemberDialog";
+import DeleteUserDialog from "./DeleteConfirmationDialog";
 
 export default function VolunteerTable({
   volunteers,
+  setVolunteers,
 }) {
+
+  const [selectedVolunteer, setSelectedVolunteer] =
+    useState(null);
+
+  const [dialogOpen, setDialogOpen] =
+    useState(false);
+
+  const [editingVolunteer, setEditingVolunteer] =
+    useState(null);
+
+  const [editDialogOpen, setEditDialogOpen] =
+    useState(false);
+
+  const [deleteDialogOpen, setDeleteDialogOpen] =
+    useState(false);
+
+  const [volunteerToDelete, setVolunteerToDelete] =
+    useState(null);
+
+  function handleView(volunteer) {
+    setSelectedVolunteer(volunteer);
+    setDialogOpen(true);
+  }
+
+  function handleEdit(volunteer) {
+    setEditingVolunteer(volunteer);
+    setEditDialogOpen(true);
+  }
+
+  function handleSave(updatedVolunteer) {
+
+    setVolunteers((previous) =>
+      previous.map((volunteer) =>
+        volunteer.id === updatedVolunteer.id
+          ? updatedVolunteer
+          : volunteer
+      )
+    );
+
+  }
+
+  function handleDelete(volunteer) {
+
+    setVolunteerToDelete(volunteer);
+
+    setDeleteDialogOpen(true);
+
+  }
+
+  function confirmDelete() {
+
+    setVolunteers((previous) =>
+      previous.filter(
+        (volunteer) =>
+          volunteer.id !==
+          volunteerToDelete.id
+      )
+    );
+
+    setDeleteDialogOpen(false);
+
+    setVolunteerToDelete(null);
+
+  }
+
+  function handleStatusChange(
+    volunteerId,
+    newStatus
+  ) {
+
+    setVolunteers((previous) =>
+      previous.map((volunteer) =>
+        volunteer.id === volunteerId
+          ? {
+              ...volunteer,
+              status: newStatus,
+            }
+          : volunteer
+      )
+    );
+
+  }
+
   return (
-    <div className="bridge-card overflow-x-auto">
+    <>
 
-      <table className="w-full">
+      {volunteers.length === 0 ? (
 
-        <thead>
+        <div className="bridge-card text-center py-20">
 
-          <tr className="border-b">
+          <h2 className="text-2xl font-semibold">
 
-            <th className="text-left py-4">
-              Name
-            </th>
+            No volunteers found
 
-            <th className="text-left">
-              Skills
-            </th>
+          </h2>
 
-            <th className="text-left">
-              Hours
-            </th>
+          <p className="text-gray-500 mt-3">
 
-            <th className="text-left">
-              Status
-            </th>
+            Try changing your search.
 
-            <th className="text-center">
-              Actions
-            </th>
+          </p>
 
-          </tr>
+        </div>
 
-        </thead>
+      ) : (
 
-        <tbody>
+        <div className="bridge-card overflow-x-auto">
 
-          {volunteers.map((volunteer) => (
+          <table className="w-full">
 
-            <tr
-              key={volunteer.id}
-              className="border-b"
-            >
+            <thead>
 
-              <td className="py-5 font-medium">
-                {volunteer.name}
-              </td>
+              <tr className="border-b">
 
-              <td>
-                {volunteer.skill}
-              </td>
+                <th className="text-left py-4">
+                  Name
+                </th>
 
-              <td>
-                {volunteer.hours} hrs
-              </td>
+                <th className="text-left">
+                  Skill
+                </th>
 
-              <td>
+                <th className="text-left">
+                  Hours
+                </th>
 
-                <StatusBadge
-                  status={volunteer.status}
-                />
+                <th className="text-left">
+                  Status
+                </th>
 
-              </td>
+                <th className="text-center">
+                  Actions
+                </th>
 
-              <td>
+              </tr>
 
-                <div className="flex justify-center gap-2">
+            </thead>
 
-                  <button className="p-2 rounded-lg hover:bg-gray-100">
+            <tbody>
 
-                    <Eye
-                      size={18}
-                      className="text-[#6B8F71]"
-                    />
+              {volunteers.map(
+                (volunteer) => (
 
-                  </button>
+                  <tr
+                    key={volunteer.id}
+                    className="border-b"
+                  >
 
-                  <button className="p-2 rounded-lg hover:bg-green-100">
+                    <td className="py-5 font-medium">
+                      {volunteer.name}
+                    </td>
 
-                    <CheckCircle
-                      size={18}
-                      className="text-green-600"
-                    />
+                    <td>
+                      {volunteer.skill}
+                    </td>
 
-                  </button>
+                    <td>
+                      {volunteer.hours} hrs
+                    </td>
 
-                  <button className="p-2 rounded-lg hover:bg-yellow-100">
+                    <td>
 
-                    <PauseCircle
-                      size={18}
-                      className="text-yellow-600"
-                    />
+                      <Select
+                        value={
+                          volunteer.status
+                        }
+                        onValueChange={(
+                          value
+                        ) =>
+                          handleStatusChange(
+                            volunteer.id,
+                            value
+                          )
+                        }
+                      >
 
-                  </button>
+                        <SelectTrigger
+                          className={`w-36 h-9 border-0 shadow-none
 
-                  <button className="p-2 rounded-lg hover:bg-red-100">
+                          ${
+                            volunteer.status ===
+                            "Active"
+                              ? "bg-green-100 text-green-700"
 
-                    <Trash2
-                      size={18}
-                      className="text-red-600"
-                    />
+                              : volunteer.status ===
+                                "Pending"
+                              ? "bg-[#FAF1EB] text-[#D08C60]"
 
-                  </button>
+                              : "bg-red-100 text-red-700"
+                          }
+                          `}
+                        >
 
-                </div>
+                          <SelectValue />
 
-              </td>
+                        </SelectTrigger>
 
-            </tr>
+                        <SelectContent>
 
-          ))}
+                          <SelectItem value="Active">
 
-        </tbody>
+                            Active
 
-      </table>
+                          </SelectItem>
 
-    </div>
+                          <SelectItem value="Pending">
+
+                            Pending
+
+                          </SelectItem>
+
+                          <SelectItem value="Suspended">
+
+                            Suspended
+
+                          </SelectItem>
+
+                        </SelectContent>
+
+                      </Select>
+
+                    </td>
+
+                    <td>
+
+                      <div className="flex justify-center gap-3">
+
+                        <button
+                          onClick={() =>
+                            handleView(
+                              volunteer
+                            )
+                          }
+                          className="p-2 rounded-lg hover:bg-[#FAF1EB]"
+                        >
+
+                          <Eye
+                            size={18}
+                            className="text-[#6B8F71]"
+                          />
+
+                        </button>
+
+                        <button
+                          onClick={() =>
+                            handleEdit(
+                              volunteer
+                            )
+                          }
+                          className="p-2 rounded-lg hover:bg-[#FAF1EB]"
+                        >
+
+                          <Pencil
+                            size={18}
+                            className="text-[#D08C60]"
+                          />
+
+                        </button>
+
+                        <button
+                          onClick={() =>
+                            handleDelete(
+                              volunteer
+                            )
+                          }
+                          className="p-2 rounded-lg hover:bg-red-100"
+                        >
+
+                          <Trash2
+                            size={18}
+                            className="text-red-600"
+                          />
+
+                        </button>
+
+                      </div>
+
+                    </td>
+
+                  </tr>
+
+                )
+              )}
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      )}
+
+      <UserDialog
+        user={selectedVolunteer}
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+      />
+
+      <EditUserDialog
+        user={editingVolunteer}
+        open={editDialogOpen}
+        onOpenChange={setEditDialogOpen}
+        onSave={handleSave}
+      />
+
+      <DeleteUserDialog
+        user={volunteerToDelete}
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        onDelete={confirmDelete}
+      />
+
+    </>
   );
 }

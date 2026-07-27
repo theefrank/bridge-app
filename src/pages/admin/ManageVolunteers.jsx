@@ -20,6 +20,8 @@ export default function ManageVolunteers() {
     {
       id: 1,
       name: "Jane Doe",
+      email: "jane@example.com",
+      role: "Volunteer",
       skill: "Education",
       hours: 56,
       status: "Active",
@@ -28,6 +30,8 @@ export default function ManageVolunteers() {
     {
       id: 2,
       name: "Kevin Otieno",
+      email: "kevin@example.com",
+      role: "Volunteer",
       skill: "Technology",
       hours: 31,
       status: "Pending",
@@ -36,6 +40,8 @@ export default function ManageVolunteers() {
     {
       id: 3,
       name: "Mercy Wanjiku",
+      email: "mercy@example.com",
+      role: "Volunteer",
       skill: "Career",
       hours: 22,
       status: "Active",
@@ -44,6 +50,8 @@ export default function ManageVolunteers() {
     {
       id: 4,
       name: "John Mwangi",
+      email: "john@example.com",
+      role: "Volunteer",
       skill: "Community",
       hours: 14,
       status: "Suspended",
