@@ -7,19 +7,15 @@ import {
   XCircle,
 } from "lucide-react";
 
-import AdminStats from "../../components/admin/AdminStats";
 import AdminSidebar from "../../components/admin/AdminSidebar";
-import FilterRequests from "../../components/admin/FilterRequests";
+import AdminStats from "../../components/admin/AdminStats";
 import SearchBar from "../../components/common/SearchBar";
+import FilterRequests from "../../components/admin/FilterRequests";
 import RequestTable from "../../components/admin/RequestTable";
 
 export default function ManageRequests() {
-
-  const [searchTerm, setSearchTerm] =
-    useState("");
-
-  const [selectedStatus, setSelectedStatus] =
-    useState("All");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("All");
 
   const requests = [
     {
@@ -29,7 +25,6 @@ export default function ManageRequests() {
       user: "Jane Doe",
       status: "Pending",
     },
-
     {
       id: 2,
       title: "Community Cleanup",
@@ -37,15 +32,13 @@ export default function ManageRequests() {
       user: "Kevin Otieno",
       status: "Approved",
     },
-
     {
       id: 3,
       title: "Career Mentor",
-      category: "Mentorship",
+      category: "Career",
       user: "Mercy Wanjiku",
       status: "Pending",
     },
-
     {
       id: 4,
       title: "Laptop Repair",
@@ -53,98 +46,119 @@ export default function ManageRequests() {
       user: "John Mwangi",
       status: "Rejected",
     },
+    {
+      id: 5,
+      title: "Food Donation",
+      category: "Community",
+      user: "Alice Kimani",
+      status: "Approved",
+    },
+    {
+      id: 6,
+      title: "CV Review",
+      category: "Career",
+      user: "Brian Otieno",
+      status: "Pending",
+    },
   ];
 
   const requestStats = [
-  {
-    title: "Total Requests",
-    value: 82,
-    icon: <ClipboardList size={28} />,
-    color: "bg-[#6B8F71]/10 text-[#6B8F71]",
-  },
-  {
-    title: "Pending",
-    value: 18,
-    icon: <Clock3 size={28} />,
-    color: "bg-yellow-100 text-yellow-700",
-  },
-  {
-    title: "Approved",
-    value: 49,
-    icon: <CheckCircle size={28} />,
-    color: "bg-green-100 text-green-700",
-  },
-  {
-    title: "Rejected",
-    value: 15,
-    icon: <XCircle size={28} />,
-    color: "bg-red-100 text-red-700",
-  },
-];
+    {
+      title: "Total Requests",
+      value: requests.length,
+      icon: <ClipboardList size={28} />,
+      color: "bg-[#6B8F71]/10 text-[#6B8F71]",
+    },
+    {
+      title: "Pending",
+      value: requests.filter(
+        (request) => request.status === "Pending"
+      ).length,
+      icon: <Clock3 size={28} />,
+      color: "bg-yellow-100 text-yellow-700",
+    },
+    {
+      title: "Approved",
+      value: requests.filter(
+        (request) => request.status === "Approved"
+      ).length,
+      icon: <CheckCircle size={28} />,
+      color: "bg-green-100 text-green-700",
+    },
+    {
+      title: "Rejected",
+      value: requests.filter(
+        (request) => request.status === "Rejected"
+      ).length,
+      icon: <XCircle size={28} />,
+      color: "bg-red-100 text-red-700",
+    },
+  ];
 
-  const filteredRequests =
-    requests.filter((request) => {
+  const filteredRequests = requests.filter((request) => {
+    const matchesSearch =
+      request.title
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      request.user
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      request.category
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
 
-      const matchesSearch =
-        request.title
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase());
+    const matchesStatus =
+      selectedStatus === "All" ||
+      request.status === selectedStatus;
 
-      const matchesStatus =
-        selectedStatus === "All" ||
-        request.status === selectedStatus;
-
-      return (
-        matchesSearch &&
-        matchesStatus
-      );
-    });
+    return matchesSearch && matchesStatus;
+  });
 
   return (
     <div className="flex min-h-screen bg-[#FAF7F2]">
-
       <AdminSidebar />
 
       <main className="flex-1 p-10">
+        {/* Page Header */}
 
-        <div className="mb-8">
-
+        <div className="mb-10">
           <h1 className="text-4xl font-bold">
             Manage Requests
           </h1>
 
           <p className="text-gray-600 mt-2">
-            Review and moderate
-            community requests.
+            Review, approve or reject
+            community assistance requests.
           </p>
-
         </div>
 
-        <div className="flex flex-col md:flex-row gap-4 mb-8">
-          
-          <SearchBar
-            placeholder="Search requests..."
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-          />
+        {/* Statistics */}
 
-          <AdminStats stats={requestStats} />
+        <AdminStats stats={requestStats} />
+
+        {/* Search & Filter */}
+
+        <div className="flex flex-col lg:flex-row gap-4 my-8">
+          <div className="flex-1">
+            <SearchBar
+              placeholder="Search requests..."
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+            />
+          </div>
 
           <FilterRequests
             selectedStatus={selectedStatus}
-            setSelectedStatus={
-              setSelectedStatus
-            }
+            setSelectedStatus={setSelectedStatus}
           />
-
         </div>
+
+        {/* Table */}
 
         <RequestTable
           requests={filteredRequests}
         />
-
       </main>
-
     </div>
   );
 }
