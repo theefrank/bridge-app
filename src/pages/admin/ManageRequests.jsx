@@ -1,5 +1,13 @@
 import { useState } from "react";
 
+import {
+  ClipboardList,
+  Clock3,
+  CheckCircle,
+  XCircle,
+} from "lucide-react";
+
+import AdminStats from "../../components/admin/AdminStats";
 import AdminSidebar from "../../components/admin/AdminSidebar";
 import FilterRequests from "../../components/admin/FilterRequests";
 import SearchBar from "../../components/common/SearchBar";
@@ -47,6 +55,33 @@ export default function ManageRequests() {
     },
   ];
 
+  const requestStats = [
+  {
+    title: "Total Requests",
+    value: 82,
+    icon: <ClipboardList size={28} />,
+    color: "bg-[#6B8F71]/10 text-[#6B8F71]",
+  },
+  {
+    title: "Pending",
+    value: 18,
+    icon: <Clock3 size={28} />,
+    color: "bg-yellow-100 text-yellow-700",
+  },
+  {
+    title: "Approved",
+    value: 49,
+    icon: <CheckCircle size={28} />,
+    color: "bg-green-100 text-green-700",
+  },
+  {
+    title: "Rejected",
+    value: 15,
+    icon: <XCircle size={28} />,
+    color: "bg-red-100 text-red-700",
+  },
+];
+
   const filteredRequests =
     requests.filter((request) => {
 
@@ -92,6 +127,8 @@ export default function ManageRequests() {
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
           />
+
+          <AdminStats stats={requestStats} />
 
           <FilterRequests
             selectedStatus={selectedStatus}
