@@ -10,13 +10,17 @@ import {
   DialogTitle,
   DialogDescription,
 } from "../../ui/dialog";
+import { downloadCSV } from "../../../utils/reportUtils";
+import { downloadPDF } from "../../../utils/pdfReport";
 
 export default function GenerateReportDialog({
   open,
   onOpenChange,
-  onGeneratePDF,
-  onGenerateCSV,
+  users,
+  volunteers,
+  requests,
 }) {
+
   return (
     <Dialog
       open={open}
@@ -39,7 +43,14 @@ export default function GenerateReportDialog({
         <div className="space-y-4 mt-6">
 
           <button
-            onClick={onGeneratePDF}
+            onClick={() =>
+            downloadPDF(
+                users,
+                volunteers,
+                requests
+            )
+            }            
+            
             className="w-full flex items-center gap-4 rounded-xl border p-5 hover:bg-[#FAF7F2] transition"
           >
             <FileText
@@ -61,7 +72,7 @@ export default function GenerateReportDialog({
           </button>
 
           <button
-            onClick={onGenerateCSV}
+            onClick={() => downloadCSV(users, volunteers, requests)}
             className="w-full flex items-center gap-4 rounded-xl border p-5 hover:bg-[#FAF7F2] transition"
           >
             <Table

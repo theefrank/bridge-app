@@ -25,6 +25,7 @@ import RequestStatusChart from "../../components/admin/dashboard/RequestStatusCh
 import DashboardHeader from "../../components/admin/dashboard/DashboardHeader";
 import TopVolunteers from "../../components/admin/dashboard/TopVolunteers";
 import PlatformInsights from "../../components/admin/dashboard/PlatformInsights";
+import GenerateReportDialog from "../../components/admin/dashboard/GenerateReportDialog";
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -82,7 +83,9 @@ export default function AdminDashboard() {
 
         {/* Header */}
 
-        <DashboardHeader />
+        <DashboardHeader 
+        onOpenReport={() => setReportOpen(true)}
+        />
 
         {/* Statistics */}
 
@@ -342,9 +345,15 @@ export default function AdminDashboard() {
         />
 
       </section>
-      
-
-        
+      <GenerateReportDialog
+          open={reportOpen}
+          onOpenChange={setReportOpen}
+          users={users}
+          volunteers={volunteers}
+          requests={requests}
+      />
+          
+            
       </main>
 
     </div>

@@ -1,9 +1,8 @@
-import { useState } from "react";
-
 import { FileText } from "lucide-react";
-import GenerateReportDialog from "./GenerateReportDialog";
 
-export default function DashboardHeader() {
+export default function DashboardHeader({
+  onOpenReport,
+}) {
   const hour = new Date().getHours();
 
   let greeting = "Good Evening";
@@ -13,17 +12,6 @@ export default function DashboardHeader() {
   } else if (hour < 18) {
     greeting = "Good Afternoon";
   }
-
-  const [dialogOpen, setDialogOpen] =
-  useState(false);
-
-  function generatePDF() {
-  alert("PDF generation coming next.");
-  }
-
-  function generateCSV() {
-  alert("CSV generation coming next.");
- }
 
   return (
     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-10">
@@ -39,34 +27,15 @@ export default function DashboardHeader() {
         </p>
 
       </div>
-    <button
-    onClick={() =>
-        setDialogOpen(true)
-    }
-    className="
-        inline-flex items-center gap-2
-        px-5 py-3
-        rounded-xl
-        bg-[#6B8F71]
-        text-white
-        font-medium
-        shadow-sm
-        hover:bg-[#5C7B62]
-        transition
-    "
-    >
-    <FileText size={18} />
-    Generate Report
-    </button>
-    
-    <GenerateReportDialog
-    open={dialogOpen}
-    onOpenChange={setDialogOpen}
-    onGeneratePDF={generatePDF}
-    onGenerateCSV={generateCSV}
-    />     
+
+      <button
+        onClick={onOpenReport}
+        className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#6B8F71] text-white font-medium shadow-sm hover:bg-[#5C7B62] transition"
+      >
+        <FileText size={18} />
+        Generate Report
+      </button>
 
     </div>
-    
   );
 }
