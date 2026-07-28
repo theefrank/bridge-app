@@ -10,12 +10,14 @@ import {
 import AdminSidebar from "../../components/admin/AdminSidebar";
 import AdminStats from "../../components/admin/AdminStats";
 import SearchBar from "../../components/common/SearchBar";
+import FilterVolunteers from "../../components/admin/FilterVolunteers";
 import VolunteerTable from "../../components/admin/VolunteerTable";
 
 export default function ManageVolunteers() {
 
   const [searchTerm, setSearchTerm] =
     useState("");
+  const [selectedStatus, setSelectedStatus] = useState("All");
   const [volunteers, setVolunteers] = useState([
     {
       id: 1,
@@ -86,13 +88,24 @@ export default function ManageVolunteers() {
       color: "bg-red-100 text-red-700",
     },
   ];  
-
-  const filteredVolunteers =
-    volunteers.filter((volunteer) =>
+  const filteredVolunteers = volunteers.filter((volunteer) => {
+    const matchesSearch =
       volunteer.name
         .toLowerCase()
-        .includes(searchTerm.toLowerCase())
-    );
+        .includes(searchTerm.toLowerCase()) ||
+      volunteer.email
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      volunteer.skill
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+
+    const matchesStatus =
+      selectedStatus === "All" ||
+      volunteer.status.trim() === selectedStatus;
+
+    return matchesSearch && matchesStatus;
+  });
 
   return (
     <div className="flex min-h-screen bg-[#FAF7F2]">
@@ -119,7 +132,11 @@ export default function ManageVolunteers() {
 
         <AdminStats stats={volunteerStats} />
 
-        <div className="my-8">
+      <div className="flex flex-col lg:flex-row items-end gap-6 my-8">
+
+        {/* Search */}
+
+        <div className="flex-1">
 
           <SearchBar
             placeholder="Search volunteers..."
@@ -128,6 +145,24 @@ export default function ManageVolunteers() {
           />
 
         </div>
+
+        {/* Filter */}
+
+        <div className="w-full lg:w-64 space-y-2">
+
+          <label className="text-sm font-medium text-gray-600">
+            Filter Status
+          </label>
+
+          <FilterVolunteers
+            selectedStatus={selectedStatus}
+            setSelectedStatus={setSelectedStatus}
+          />
+
+        </div>
+
+      </div>
+        
 
         <VolunteerTable
           volunteers={filteredVolunteers}
