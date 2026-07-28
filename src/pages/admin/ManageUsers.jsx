@@ -11,6 +11,8 @@ import AdminSidebar from "../../components/admin/AdminSidebar";
 import SearchBar from "../../components/common/SearchBar";
 import UserTable from "../../components/admin/users/UserTable";
 import AdminStats from "../../components/admin/AdminStats";
+import { users as initialUsers } from "../../data/adminData";
+
 
 import {
   Select,
@@ -31,36 +33,9 @@ export default function ManageUsers() {
   const [statusFilter, setStatusFilter] =
     useState("all");
 
-  const [users, setUsers] = useState([
-    {
-      id: 1,
-      name: "Jane Doe",
-      email: "jane@example.com",
-      role: "user",
-      status: "Active",
-    },
-    {
-      id: 2,
-      name: "John Mwangi",
-      email: "john@example.com",
-      role: "volunteer",
-      status: "Pending",
-    },
-    {
-      id: 3,
-      name: "Mercy Wanjiku",
-      email: "mercy@example.com",
-      role: "user",
-      status: "Suspended",
-    },
-    {
-      id: 4,
-      name: "Kevin Otieno",
-      email: "kevin@example.com",
-      role: "volunteer",
-      status: "Active",
-    },
-  ]);
+
+const [users, setUsers] = useState(initialUsers);
+
   const userStats = [
         {
           title: "Total Users",

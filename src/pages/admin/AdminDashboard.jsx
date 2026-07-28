@@ -13,6 +13,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import AdminSidebar from "../../components/admin/AdminSidebar";
 import AdminStats from "../../components/admin/AdminStats";
+import DashboardHeader from "../../components/admin/dashboard/DashboardHeader";
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -107,23 +108,7 @@ export default function AdminDashboard() {
 
         {/* Header */}
 
-        <section className="mb-10">
-
-          <p className="text-[#6B8F71] font-semibold mb-2">
-            Bridge Administration
-          </p>
-
-          <h1 className="text-4xl font-bold">
-            Welcome back, Bridge Admin 👋
-          </h1>
-
-          <p className="text-gray-600 mt-3 max-w-3xl leading-7">
-            Monitor platform activity, manage users,
-            oversee volunteers and review community
-            requests from one place.
-          </p>
-
-        </section>
+        <DashboardHeader />
 
         {/* Statistics */}
 

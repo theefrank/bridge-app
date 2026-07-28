@@ -12,50 +12,16 @@ import AdminStats from "../../components/admin/AdminStats";
 import SearchBar from "../../components/common/SearchBar";
 import FilterVolunteers from "../../components/admin/volunteers/FilterVolunteers";
 import VolunteerTable from "../../components/admin/volunteers/VolunteerTable";
+import { volunteers as initialVolunteers } from "../../data/adminData";
+
 
 export default function ManageVolunteers() {
 
   const [searchTerm, setSearchTerm] =
     useState("");
   const [selectedStatus, setSelectedStatus] = useState("All");
-  const [volunteers, setVolunteers] = useState([
-    {
-      id: 1,
-      name: "Jane Doe",
-      email: "jane@example.com",
-      skill: "Education",
-      hours: 56,
-      status: "Active",
-    },
 
-    {
-      id: 2,
-      name: "Kevin Otieno",
-      email: "kevin@example.com",
-      skill: "Technology",
-      hours: 31,
-      status: "Pending",
-    },
-
-    {
-      id: 3,
-      name: "Mercy Wanjiku",
-      email: "mercy@example.com",
-      skill: "Career",
-      hours: 22,
-      status: "Active",
-    },
-
-    {
-      id: 4,
-      name: "John Mwangi",
-      email: "john@example.com",
-      skill: "Community",
-      hours: 14,
-      status: "Suspended",
-    },
-  ]);
-
+  const [volunteers, setVolunteers] = useState(initialVolunteers);
   const volunteerStats = [
     {
       title: "Total Volunteers",
