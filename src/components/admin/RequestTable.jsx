@@ -3,16 +3,19 @@ import { useState } from "react";
 import {
   Eye,
   Pencil,
+  CheckCircle2,
+  XCircle,
   Trash2,
 } from "lucide-react";
 
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
+
+import StatusBadge from "./StatusBadge";
 
 import RequestDialog from "./RequestDialog";
 import EditRequestDialog from "./EditRequestDialog";
@@ -22,7 +25,6 @@ export default function RequestTable({
   requests,
   setRequests,
 }) {
-
   const [selectedRequest, setSelectedRequest] =
     useState(null);
 
@@ -32,14 +34,14 @@ export default function RequestTable({
   const [editingRequest, setEditingRequest] =
     useState(null);
 
-  const [editDialogOpen, setEditDialogOpen] =
+  const [editOpen, setEditOpen] =
     useState(false);
 
-  const [deleteDialogOpen, setDeleteDialogOpen] =
-    useState(false);
-
-  const [requestToDelete, setRequestToDelete] =
+  const [deleteRequest, setDeleteRequest] =
     useState(null);
+
+  const [deleteOpen, setDeleteOpen] =
+    useState(false);
 
   function handleView(request) {
     setSelectedRequest(request);
@@ -48,106 +50,78 @@ export default function RequestTable({
 
   function handleEdit(request) {
     setEditingRequest(request);
-    setEditDialogOpen(true);
+    setEditOpen(true);
   }
 
   function handleSave(updatedRequest) {
-
-    setRequests((previous) =>
-      previous.map((request) =>
+    setRequests((prev) =>
+      prev.map((request) =>
         request.id === updatedRequest.id
           ? updatedRequest
           : request
       )
     );
-
   }
 
   function handleDelete(request) {
-
-    setRequestToDelete(request);
-
-    setDeleteDialogOpen(true);
-
+    setDeleteRequest(request);
+    setDeleteOpen(true);
   }
 
   function confirmDelete() {
-
-    setRequests((previous) =>
-      previous.filter(
+    setRequests((prev) =>
+      prev.filter(
         (request) =>
-          request.id !== requestToDelete.id
+          request.id !== deleteRequest.id
       )
     );
 
-    setDeleteDialogOpen(false);
-
-    setRequestToDelete(null);
-
+    setDeleteOpen(false);
   }
 
-  function handleStatusChange(
-    requestId,
-    newStatus
-  ) {
-
-    setRequests((previous) =>
-      previous.map((request) =>
-        request.id === requestId
+  function updateStatus(id, status) {
+    setRequests((prev) =>
+      prev.map((request) =>
+        request.id === id
           ? {
               ...request,
-              status: newStatus,
+              status,
             }
           : request
       )
     );
-
   }
 
   return (
+     <TooltipProvider>
     <>
+      <div className="bridge-card overflow-hidden">
 
-      {requests.length === 0 ? (
-
-        <div className="bridge-card text-center py-20">
-
-          <h2 className="text-2xl font-semibold">
-            No requests found
-          </h2>
-
-          <p className="text-gray-500 mt-3">
-            Try changing your search.
-          </p>
-
-        </div>
-
-      ) : (
-
-        <div className="bridge-card overflow-x-auto">
+        <div className="overflow-x-auto max-h-150">
 
           <table className="w-full">
 
-            <thead>
+            <thead className="sticky top-0 bg-white border-b z-10">
 
-              <tr className="border-b">
+              <tr>
 
-                <th className="text-left py-4">
-                  Title
+                <th className="w-[32%] text-left py-4 px-6">
+                  Request
                 </th>
 
-                <th className="text-left">
+                <th className="w-[15%] text-left">
                   Category
                 </th>
 
-                <th className="text-left">
+                <th className="w-[20%] text-left">
                   Requested By
                 </th>
 
-                <th className="text-left">
+                <th className="w-[13%] text-left">
                   Status
                 </th>
 
-                <th className="text-center">
+                <th className="w-[20%] text-center">
                   Actions
                 </th>
 
@@ -157,129 +131,226 @@ export default function RequestTable({
 
             <tbody>
 
-              {requests.map((request) => (
+              {requests.length === 0 ? (
 
-                <tr
-                  key={request.id}
-                  className="border-b"
-                >
+                <tr>
 
-                  <td className="py-5 font-medium">
-                    {request.title}
-                  </td>
+                  <td
+                    colSpan="5"
+                    className="py-14 text-center text-gray-500"
+                  >
 
-                  <td>
-                    {request.category}
-                  </td>
+                    <h3 className="text-lg font-semibold">
+                      No requests found
+                    </h3>
 
-                  <td>
-                    {request.user}
-                  </td>
-
-                  <td>
-
-                    <Select
-                      value={request.status}
-                      onValueChange={(value) =>
-                        handleStatusChange(
-                          request.id,
-                          value
-                        )
-                      }
-                    >
-
-                      <SelectTrigger
-                        className={`w-36 h-9 border-0 shadow-none
-
-                        ${
-                          request.status === "Approved"
-                            ? "bg-green-100 text-green-700"
-
-                          : request.status === "Pending"
-                            ? "bg-[#FAF1EB] text-[#D08C60]"
-
-                            : "bg-red-100 text-red-700"
-                        }
-                        `}
-                      >
-
-                        <SelectValue />
-
-                      </SelectTrigger>
-
-                      <SelectContent>
-
-                        <SelectItem value="Pending">
-                          Pending
-                        </SelectItem>
-
-                        <SelectItem value="Approved">
-                          Approved
-                        </SelectItem>
-
-                        <SelectItem value="Rejected">
-                          Rejected
-                        </SelectItem>
-
-                      </SelectContent>
-
-                    </Select>
-
-                  </td>
-
-                  <td>
-
-                    <div className="flex justify-center gap-3">
-
-                      <button
-                        onClick={() =>
-                          handleView(request)
-                        }
-                        className="p-2 rounded-lg hover:bg-[#FAF1EB]"
-                      >
-
-                        <Eye
-                          size={18}
-                          className="text-[#6B8F71]"
-                        />
-
-                      </button>
-
-                      <button
-                        onClick={() =>
-                          handleEdit(request)
-                        }
-                        className="p-2 rounded-lg hover:bg-[#FAF1EB]"
-                      >
-
-                        <Pencil
-                          size={18}
-                          className="text-[#D08C60]"
-                        />
-
-                      </button>
-
-                      <button
-                        onClick={() =>
-                          handleDelete(request)
-                        }
-                        className="p-2 rounded-lg hover:bg-red-100"
-                      >
-
-                        <Trash2
-                          size={18}
-                          className="text-red-600"
-                        />
-
-                      </button>
-
-                    </div>
+                    <p className="text-sm mt-2">
+                      Try another search or filter.
+                    </p>
 
                   </td>
 
                 </tr>
 
-              ))}
+              ) : (
+
+                requests.map((request, index) => (
+
+                  <tr
+                    key={request.id}
+                    className={`
+                      border-b transition hover:bg-[#F8F4EF]
+
+                      ${
+                        index % 2 === 0
+                          ? "bg-white"
+                          : "bg-gray-50/50"
+                      }
+                    `}
+                  >
+
+                    {/* Request */}
+
+                    <td className="px-6 py-5">
+
+                      <div>
+
+                        <p className="font-semibold">
+                          {request.title}
+                        </p>
+
+                        <p className="text-sm text-gray-500">
+                          Request #{request.id}
+                        </p>
+
+                      </div>
+
+                    </td>
+
+                    {/* Category */}
+
+                    <td>
+
+                      <span className="font-medium">
+                        {request.category}
+                      </span>
+
+                    </td>
+
+                    {/* User */}
+
+                    <td>{request.user}</td>
+
+                    {/* Status */}
+
+                    <td>
+
+                      <StatusBadge
+                        status={request.status}
+                      />
+
+                    </td>
+
+                    {/* Actions */}
+
+                    <td>
+
+                      <div className="flex justify-center gap-2">
+                      <Tooltip>
+
+                        <TooltipTrigger asChild>
+
+                          <button
+                            onClick={() => handleView(request)}
+                            className="h-9 w-9 rounded-full hover:bg-[#FAF1EB] transition flex items-center justify-center"
+                          >
+                            <Eye
+                              size={18}
+                              className="text-[#6B8F71]"
+                            />
+                          </button>
+
+                        </TooltipTrigger>
+
+                        <TooltipContent>
+
+                          <p>View Request</p>
+
+                        </TooltipContent>
+
+                      </Tooltip>
+
+                        <Tooltip>
+
+                          <TooltipTrigger asChild>
+
+                            <button
+                              onClick={() => handleEdit(request)}
+                              className="h-9 w-9 rounded-full hover:bg-[#FAF1EB] transition flex items-center justify-center"
+                            >
+                              <Pencil
+                                size={18}
+                                className="text-[#D08C60]"
+                              />
+                            </button>
+
+                          </TooltipTrigger>
+
+                          <TooltipContent>
+
+                            <p>Edit Request</p>
+
+                          </TooltipContent>
+
+                        </Tooltip>
+
+                        <Tooltip>
+
+                          <TooltipTrigger asChild>
+
+                            <button
+                              onClick={() =>
+                                updateStatus(request.id, "Approved")
+                              }
+                              className="h-9 w-9 rounded-full hover:bg-green-100 transition flex items-center justify-center"
+                            >
+                              <CheckCircle2
+                                size={18}
+                                className="text-green-600"
+                              />
+                            </button>
+
+                          </TooltipTrigger>
+
+                          <TooltipContent>
+
+                            <p>Approve Request</p>
+
+                          </TooltipContent>
+
+                        </Tooltip>
+
+                        <Tooltip>
+
+                          <TooltipTrigger asChild>
+
+                            <button
+                              onClick={() =>
+                                updateStatus(request.id, "Rejected")
+                              }
+                              className="h-9 w-9 rounded-full hover:bg-red-100 transition flex items-center justify-center"
+                            >
+                              <XCircle
+                                size={18}
+                                className="text-red-600"
+                              />
+                            </button>
+
+                          </TooltipTrigger>
+
+                          <TooltipContent>
+
+                            <p>Reject Request</p>
+
+                          </TooltipContent>
+
+                        </Tooltip>                        
+
+                        <Tooltip>
+
+                          <TooltipTrigger asChild>
+
+                            <button
+                              onClick={() =>
+                                handleDelete(request)
+                              }
+                              className="h-9 w-9 rounded-full hover:bg-red-100 transition flex items-center justify-center"
+                            >
+                              <Trash2
+                                size={18}
+                                className="text-red-600"
+                              />
+                            </button>
+
+                          </TooltipTrigger>
+
+                          <TooltipContent>
+
+                            <p>Delete Request</p>
+
+                          </TooltipContent>
+
+                        </Tooltip>                        
+
+                      </div>
+
+                    </td>
+
+                  </tr>
+
+                ))
+
+              )}
 
             </tbody>
 
@@ -287,7 +358,7 @@ export default function RequestTable({
 
         </div>
 
-      )}
+      </div>
 
       <RequestDialog
         request={selectedRequest}
@@ -297,19 +368,19 @@ export default function RequestTable({
 
       <EditRequestDialog
         request={editingRequest}
-        open={editDialogOpen}
-        onOpenChange={setEditDialogOpen}
+        open={editOpen}
+        onOpenChange={setEditOpen}
         onSave={handleSave}
       />
 
       <DeleteConfirmationDialog
-        open={deleteDialogOpen}
-        onOpenChange={setDeleteDialogOpen}
+        open={deleteOpen}
+        onOpenChange={setDeleteOpen}
         onDelete={confirmDelete}
-        itemName={requestToDelete?.title}
+        itemName={deleteRequest?.title}
         itemType="Request"
       />
-     
     </>
+    </TooltipProvider>
   );
 }
