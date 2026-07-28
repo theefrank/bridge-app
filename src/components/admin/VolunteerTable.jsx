@@ -15,7 +15,7 @@ import {
 } from "../ui/select";
 
 import VolunteerDialog from "./VolunteerDialog";
-import EditUserDialog from "./EditMemberDialog";
+import EditVolunteerDialog from "./EditVolunteerDialog";
 import DeleteUserDialog from "./DeleteConfirmationDialog";
 
 export default function VolunteerTable({
@@ -320,8 +320,8 @@ export default function VolunteerTable({
         onOpenChange={setDialogOpen}
       />
 
-      <EditUserDialog
-        user={editingVolunteer}
+      <EditVolunteerDialog
+        volunteer={editingVolunteer}
         open={editDialogOpen}
         onOpenChange={setEditDialogOpen}
         onSave={handleSave}
