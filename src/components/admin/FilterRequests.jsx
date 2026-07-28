@@ -1,30 +1,46 @@
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "../ui/select";
+
 export default function FilterRequests({
   selectedStatus,
   setSelectedStatus,
 }) {
-  const statuses = [
-    "All",
-    "Pending",
-    "Approved",
-    "Rejected",
-  ];
-
   return (
-    <select
+    <Select
       value={selectedStatus}
-      onChange={(e) =>
-        setSelectedStatus(e.target.value)
-      }
-      className="bridge-input md:w-60"
+      onValueChange={setSelectedStatus}
     >
-      {statuses.map((status) => (
-        <option
-          key={status}
-          value={status}
-        >
-          {status}
-        </option>
-      ))}
-    </select>
+      <SelectTrigger className="w-full h-11 rounded-xl border-gray-200 bg-white shadow-sm hover:border-[#D08C60] focus:ring-[#D08C60]">
+
+        <SelectValue />
+
+      </SelectTrigger>
+
+      <SelectContent>
+
+        <SelectItem value="All">
+          All Requests
+        </SelectItem>
+
+        <SelectItem value="Pending">
+          Pending
+        </SelectItem>
+
+        <SelectItem value="Approved">
+          Approved
+        </SelectItem>
+
+        <SelectItem value="Rejected">
+          Rejected
+        </SelectItem>
+
+      </SelectContent>
+
+    </Select>
   );
 }

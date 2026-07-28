@@ -213,7 +213,9 @@ export default function ManageRequests() {
 
         <AdminStats stats={requestStats} />
 
-        <div className="flex flex-col lg:flex-row gap-4 my-8">
+        <div className="flex flex-col lg:flex-row items-end gap-6 my-8">
+
+          {/* Search */}
 
           <div className="flex-1">
 
@@ -225,10 +227,20 @@ export default function ManageRequests() {
 
           </div>
 
-          <FilterRequests
-            selectedStatus={selectedStatus}
-            setSelectedStatus={setSelectedStatus}
-          />
+          {/* Filter */}
+
+          <div className="w-full lg:w-64 space-y-2">
+
+            <label className="text-sm font-medium text-gray-600">
+              Filter Status
+            </label>
+
+            <FilterRequests
+              selectedStatus={selectedStatus}
+              setSelectedStatus={setSelectedStatus}
+            />
+
+          </div>
 
         </div>
 
