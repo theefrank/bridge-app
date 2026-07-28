@@ -6,13 +6,7 @@ import {
   Trash2,
 } from "lucide-react";
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import StatusBadge from "./StatusBadge";
 
 import UserDialog from "./UserDialog";
 import EditUserDialog from "./EditUserDialog";
@@ -22,6 +16,7 @@ export default function UserTable({
   users,
   setUsers,
 }) {
+
   const [selectedUser, setSelectedUser] =
     useState(null);
 
@@ -34,11 +29,11 @@ export default function UserTable({
   const [editDialogOpen, setEditDialogOpen] =
     useState(false);
 
+  const [deleteUser, setDeleteUser] =
+    useState(null);
+
   const [deleteDialogOpen, setDeleteDialogOpen] =
     useState(false);
-
-  const [userToDelete, setUserToDelete] =
-    useState(null);
 
   function handleView(user) {
     setSelectedUser(user);
@@ -50,9 +45,14 @@ export default function UserTable({
     setEditDialogOpen(true);
   }
 
+  function handleDelete(user) {
+    setDeleteUser(user);
+    setDeleteDialogOpen(true);
+  }
+
   function handleSave(updatedUser) {
-    setUsers((previousUsers) =>
-      previousUsers.map((user) =>
+    setUsers((prev) =>
+      prev.map((user) =>
         user.id === updatedUser.id
           ? updatedUser
           : user
@@ -60,68 +60,31 @@ export default function UserTable({
     );
   }
 
-  function handleDelete(user) {
-    setUserToDelete(user);
-    setDeleteDialogOpen(true);
-  }
-
   function confirmDelete() {
-    setUsers((previousUsers) =>
-      previousUsers.filter(
+    setUsers((prev) =>
+      prev.filter(
         (user) =>
-          user.id !== userToDelete.id
+          user.id !== deleteUser.id
       )
     );
 
     setDeleteDialogOpen(false);
-    setUserToDelete(null);
-  }
-
-  function handleStatusChange(
-    userId,
-    newStatus
-  ) {
-    setUsers((previousUsers) =>
-      previousUsers.map((user) =>
-        user.id === userId
-          ? {
-              ...user,
-              status: newStatus,
-            }
-          : user
-      )
-    );
   }
 
   return (
     <>
+      <div className="bridge-card overflow-hidden">
 
-      {users.length === 0 ? (
-
-        <div className="bridge-card text-center py-20">
-
-          <h2 className="text-2xl font-semibold">
-            No users found
-          </h2>
-
-          <p className="text-gray-500 mt-3">
-            Try changing your search.
-          </p>
-
-        </div>
-
-      ) : (
-
-        <div className="bridge-card overflow-x-auto">
+        <div className="overflow-x-auto max-h-150">
 
           <table className="w-full">
 
-            <thead>
+            <thead className="sticky top-0 bg-white z-10 border-b">
 
-              <tr className="border-b">
+              <tr>
 
-                <th className="text-left py-4">
-                  Name
+                <th className="text-left py-4 px-6">
+                  User
                 </th>
 
                 <th className="text-left">
@@ -146,132 +109,149 @@ export default function UserTable({
 
             <tbody>
 
-              {users.map((user) => (
+              {users.length === 0 ? (
 
-                <tr
-                  key={user.id}
-                  className="border-b"
-                >
+                <tr>
 
-                  <td className="py-5 font-medium">
-                    {user.name}
-                  </td>
+                  <td
+                    colSpan="5"
+                    className="py-14 text-center text-gray-500"
+                  >
 
-                  <td>
-                    {user.email}
-                  </td>
+                    <p className="text-lg font-medium">
+                      No users found
+                    </p>
 
-                  <td className="capitalize">
-                    {user.role}
-                  </td>
-
-                  <td>
-
-                    <Select
-                      value={user.status}
-                      onValueChange={(value) =>
-                        handleStatusChange(
-                          user.id,
-                          value
-                        )
-                      }
-                    >
-
-                      <SelectTrigger
-                        className={`w-36 h-9 border-0 shadow-none
-
-                        ${
-                          user.status === "Active"
-                            ? "bg-green-100 text-green-700"
-
-                            : user.status === "Pending"
-                            ? "bg-[#FAF1EB] text-[#D08C60]"
-
-                            : "bg-red-100 text-red-700"
-                        }
-                        `}
-                      >
-
-                        <SelectValue />
-
-                      </SelectTrigger>
-
-                      <SelectContent>
-
-                        <SelectItem value="Active">
-                          Active
-                        </SelectItem>
-
-                        <SelectItem value="Pending">
-                          Pending
-                        </SelectItem>
-
-                        <SelectItem value="Suspended">
-                          Suspended
-                        </SelectItem>
-
-                      </SelectContent>
-
-                    </Select>
-
-                  </td>
-
-                  <td>
-
-                    <div className="flex justify-center items-center gap-3">
-
-                      <button
-                        onClick={() =>
-                          handleView(user)
-                        }
-                        className="p-2 rounded-lg hover:bg-[#FAF1EB]"
-                        title="View User"
-                      >
-
-                        <Eye
-                          size={18}
-                          className="text-[#6B8F71]"
-                        />
-
-                      </button>
-
-                      <button
-                        onClick={() =>
-                          handleEdit(user)
-                        }
-                        className="p-2 rounded-lg hover:bg-[#FAF1EB]"
-                        title="Edit User"
-                      >
-
-                        <Pencil
-                          size={18}
-                          className="text-[#D08C60]"
-                        />
-
-                      </button>
-
-                      <button
-                        onClick={() =>
-                          handleDelete(user)
-                        }
-                        className="p-2 rounded-lg hover:bg-red-100"
-                        title="Delete User"
-                      >
-
-                        <Trash2
-                          size={18}
-                          className="text-red-600"
-                        />
-
-                      </button>
-
-                    </div>
+                    <p className="text-sm mt-1">
+                      Try adjusting your search or filters.
+                    </p>
 
                   </td>
 
                 </tr>
 
-              ))}
+              ) : (
+
+                users.map((user, index) => (
+
+                  <tr
+                    key={user.id}
+                    className={`
+                      transition-colors
+                      hover:bg-[#F8F4EF]
+                      border-b
+
+                      ${
+                        index % 2 === 0
+                          ? "bg-white"
+                          : "bg-gray-50/50"
+                      }
+                    `}
+                  >
+
+                    {/* User */}
+
+                    <td className="px-6 py-5">
+
+                      <div className="flex items-center gap-4">
+
+                        <div className="h-10 w-10 rounded-full bg-[#6B8F71]/15 text-[#6B8F71] flex items-center justify-center font-semibold">
+
+                          {user.name
+                            .split(" ")
+                            .map((word) => word[0])
+                            .join("")
+                            .slice(0, 2)}
+
+                        </div>
+
+                        <span className="font-medium">
+                          {user.name}
+                        </span>
+
+                      </div>
+
+                    </td>
+
+                    {/* Email */}
+
+                    <td className="text-gray-600">
+                      {user.email}
+                    </td>
+
+                    {/* Role */}
+
+                    <td className="capitalize">
+                      {user.role}
+                    </td>
+
+                    {/* Status */}
+
+                    <td>
+
+                      <StatusBadge
+                        status={user.status}
+                      />
+
+                    </td>
+
+                    {/* Actions */}
+
+                    <td>
+
+                      <div className="flex justify-center gap-2">
+
+                        <button
+                          onClick={() =>
+                            handleView(user)
+                          }
+                          className="h-9 w-9 rounded-full hover:bg-[#FAF1EB] transition flex items-center justify-center"
+                        >
+
+                          <Eye
+                            size={18}
+                            className="text-[#6B8F71]"
+                          />
+
+                        </button>
+
+                        <button
+                          onClick={() =>
+                            handleEdit(user)
+                          }
+                          className="h-9 w-9 rounded-full hover:bg-[#FAF1EB] transition flex items-center justify-center"
+                        >
+
+                          <Pencil
+                            size={18}
+                            className="text-[#D08C60]"
+                          />
+
+                        </button>
+
+                        <button
+                          onClick={() =>
+                            handleDelete(user)
+                          }
+                          className="h-9 w-9 rounded-full hover:bg-red-100 transition flex items-center justify-center"
+                        >
+
+                          <Trash2
+                            size={18}
+                            className="text-red-600"
+                          />
+
+                        </button>
+
+                      </div>
+
+                    </td>
+
+                  </tr>
+
+                ))
+
+              )}
 
             </tbody>
 
@@ -279,7 +259,7 @@ export default function UserTable({
 
         </div>
 
-      )}
+      </div>
 
       <UserDialog
         user={selectedUser}
@@ -288,9 +268,9 @@ export default function UserTable({
       />
 
       <EditUserDialog
+        user={editingUser}
         open={editDialogOpen}
         onOpenChange={setEditDialogOpen}
-        user={editingUser}
         onSave={handleSave}
       />
 
@@ -298,10 +278,9 @@ export default function UserTable({
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}
         onDelete={confirmDelete}
-        itemName={userToDelete?.name}
+        itemName={deleteUser?.name}
         itemType="User"
       />
-
     </>
   );
 }
