@@ -5,40 +5,41 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
 } from "../ui/dialog";
-
-import { Button } from "../ui/button";
 
 import { Input } from "../ui/input";
 
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "../ui/select";
+
 export default function EditUserDialog({
+  user,
   open,
   onOpenChange,
-  user,
   onSave,
 }) {
   const [formData, setFormData] = useState({
+    id: "",
     name: "",
     email: "",
+    role: "",
+    status: "",
   });
 
   useEffect(() => {
     if (user) {
-      setFormData({
-        name: user.name,
-        email: user.email,
-      });
+      setFormData(user);
     }
   }, [user]);
 
-  function handleSubmit(e) {
-    e.preventDefault();
-
-    onSave({
-      ...user,
-      ...formData,
-    });
-
+  function handleSave() {
+    onSave(formData);
     onOpenChange(false);
   }
 
@@ -49,29 +50,28 @@ export default function EditUserDialog({
       open={open}
       onOpenChange={onOpenChange}
     >
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="sm:max-w-lg rounded-2xl">
 
         <DialogHeader>
 
-          <DialogTitle>
-
+          <DialogTitle className="text-2xl">
             Edit User
-
           </DialogTitle>
+
+          <p className="text-gray-500 text-sm">
+            Update this user's information.
+          </p>
 
         </DialogHeader>
 
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-5 mt-4"
-        >
+        <div className="space-y-5 py-4">
+
+          {/* Name */}
 
           <div>
 
-            <label className="text-sm font-medium">
-
+            <label className="text-sm font-medium mb-2 block">
               Name
-
             </label>
 
             <Input
@@ -86,16 +86,15 @@ export default function EditUserDialog({
 
           </div>
 
+          {/* Email */}
+
           <div>
 
-            <label className="text-sm font-medium">
-
+            <label className="text-sm font-medium mb-2 block">
               Email
-
             </label>
 
             <Input
-              type="email"
               value={formData.email}
               onChange={(e) =>
                 setFormData({
@@ -107,28 +106,113 @@ export default function EditUserDialog({
 
           </div>
 
-          <div className="flex justify-end gap-3">
+          {/* Role */}
 
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() =>
-                onOpenChange(false)
+          <div>
+
+            <label className="text-sm font-medium mb-2 block">
+              Role
+            </label>
+
+            <Select
+              value={formData.role}
+              onValueChange={(value) =>
+                setFormData({
+                  ...formData,
+                  role: value,
+                })
               }
             >
-              Cancel
-            </Button>
 
-            <Button
-              type="submit"
-              className="bg-[#6B8F71] hover:bg-[#5A7A60]"
-            >
-              Save Changes
-            </Button>
+              <SelectTrigger className="w-full">
+
+                <SelectValue />
+
+              </SelectTrigger>
+
+              <SelectContent>
+
+                <SelectItem value="user">
+                  User
+                </SelectItem>
+
+                <SelectItem value="volunteer">
+                  Volunteer
+                </SelectItem>
+
+                <SelectItem value="admin">
+                  Admin
+                </SelectItem>
+
+              </SelectContent>
+
+            </Select>
 
           </div>
 
-        </form>
+          {/* Status */}
+
+          <div>
+
+            <label className="text-sm font-medium mb-2 block">
+              Status
+            </label>
+
+            <Select
+              value={formData.status}
+              onValueChange={(value) =>
+                setFormData({
+                  ...formData,
+                  status: value,
+                })
+              }
+            >
+
+              <SelectTrigger className="w-full">
+
+                <SelectValue />
+
+              </SelectTrigger>
+
+              <SelectContent>
+
+                <SelectItem value="Active">
+                  Active
+                </SelectItem>
+
+                <SelectItem value="Pending">
+                  Pending
+                </SelectItem>
+
+                <SelectItem value="Suspended">
+                  Suspended
+                </SelectItem>
+
+              </SelectContent>
+
+            </Select>
+
+          </div>
+
+        </div>
+
+        <DialogFooter className="border-t pt-4">
+
+          <button
+            onClick={() => onOpenChange(false)}
+            className="px-5 py-2 rounded-lg border hover:bg-gray-100 transition"
+          >
+            Cancel
+          </button>
+
+          <button
+            onClick={handleSave}
+            className="px-5 py-2 rounded-lg bg-[#D08C60] text-white hover:bg-[#b9774e] transition"
+          >
+            Save Changes
+          </button>
+
+        </DialogFooter>
 
       </DialogContent>
     </Dialog>
