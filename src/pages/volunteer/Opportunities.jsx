@@ -1,5 +1,6 @@
 import OpportunityCard from "../../components/volunteer/OpportunityCard";
 
+
 const opportunities = [
   {
     id: 1,
