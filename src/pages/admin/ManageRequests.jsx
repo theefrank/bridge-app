@@ -234,6 +234,7 @@ export default function ManageRequests() {
 
         <RequestTable
           requests={filteredRequests}
+          setRequests={setRequests}
           onView={handleView}
           onApprove={handleApprove}
           onReject={handleReject}

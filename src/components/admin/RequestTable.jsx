@@ -1,164 +1,314 @@
+import { useState } from "react";
+
 import {
-  CheckCircle,
   Eye,
+  Pencil,
   Trash2,
-  XCircle,
 } from "lucide-react";
 
-import StatusBadge from "./StatusBadge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+
+import RequestDialog from "./RequestDialog";
+import EditRequestDialog from "./EditRequestDialog";
+import DeleteConfirmationDialog from "./DeleteConfirmationDialog";
 
 export default function RequestTable({
   requests,
-  onView,
-  onApprove,
-  onReject,
-  onDelete,
+  setRequests,
 }) {
+
+  const [selectedRequest, setSelectedRequest] =
+    useState(null);
+
+  const [dialogOpen, setDialogOpen] =
+    useState(false);
+
+  const [editingRequest, setEditingRequest] =
+    useState(null);
+
+  const [editDialogOpen, setEditDialogOpen] =
+    useState(false);
+
+  const [deleteDialogOpen, setDeleteDialogOpen] =
+    useState(false);
+
+  const [requestToDelete, setRequestToDelete] =
+    useState(null);
+
+  function handleView(request) {
+    setSelectedRequest(request);
+    setDialogOpen(true);
+  }
+
+  function handleEdit(request) {
+    setEditingRequest(request);
+    setEditDialogOpen(true);
+  }
+
+  function handleSave(updatedRequest) {
+
+    setRequests((previous) =>
+      previous.map((request) =>
+        request.id === updatedRequest.id
+          ? updatedRequest
+          : request
+      )
+    );
+
+  }
+
+  function handleDelete(request) {
+
+    setRequestToDelete(request);
+
+    setDeleteDialogOpen(true);
+
+  }
+
+  function confirmDelete() {
+
+    setRequests((previous) =>
+      previous.filter(
+        (request) =>
+          request.id !== requestToDelete.id
+      )
+    );
+
+    setDeleteDialogOpen(false);
+
+    setRequestToDelete(null);
+
+  }
+
+  function handleStatusChange(
+    requestId,
+    newStatus
+  ) {
+
+    setRequests((previous) =>
+      previous.map((request) =>
+        request.id === requestId
+          ? {
+              ...request,
+              status: newStatus,
+            }
+          : request
+      )
+    );
+
+  }
+
   return (
-    <div className="bridge-card overflow-x-auto">
-      <table className="w-full">
+    <>
 
-        <thead>
-          <tr className="border-b">
-            <th className="text-left py-4">
-              Title
-            </th>
+      {requests.length === 0 ? (
 
-            <th className="text-left">
-              Category
-            </th>
+        <div className="bridge-card text-center py-20">
 
-            <th className="text-left">
-              Requested By
-            </th>
+          <h2 className="text-2xl font-semibold">
+            No requests found
+          </h2>
 
-            <th className="text-left">
-              Status
-            </th>
+          <p className="text-gray-500 mt-3">
+            Try changing your search.
+          </p>
 
-            <th className="text-center">
-              Actions
-            </th>
-          </tr>
-        </thead>
+        </div>
 
-        <tbody>
+      ) : (
 
-          {requests.length > 0 ? (
+        <div className="bridge-card overflow-x-auto">
 
-            requests.map((request) => (
+          <table className="w-full">
 
-              <tr
-                key={request.id}
-                className="border-b hover:bg-gray-50"
-              >
+            <thead>
 
-                <td className="py-5 font-medium">
-                  {request.title}
-                </td>
+              <tr className="border-b">
 
-                <td>
-                  {request.category}
-                </td>
+                <th className="text-left py-4">
+                  Title
+                </th>
 
-                <td>
-                  {request.user}
-                </td>
+                <th className="text-left">
+                  Category
+                </th>
 
-                <td>
-                  <StatusBadge
-                    status={request.status}
-                  />
-                </td>
+                <th className="text-left">
+                  Requested By
+                </th>
 
-                <td>
+                <th className="text-left">
+                  Status
+                </th>
 
-                  <div className="flex justify-center gap-2">
-
-                    {/* View */}
-
-                    <button
-                      onClick={() => onView(request)}
-                      className="p-2 rounded-lg hover:bg-gray-100"
-                      title="View Request"
-                    >
-                      <Eye
-                        size={18}
-                        className="text-[#6B8F71]"
-                      />
-                    </button>
-
-                    {/* Approve */}
-
-                    <button
-                      onClick={() =>
-                        onApprove(request.id)
-                      }
-                      className="p-2 rounded-lg hover:bg-green-100"
-                      title="Approve"
-                    >
-                      <CheckCircle
-                        size={18}
-                        className="text-green-600"
-                      />
-                    </button>
-
-                    {/* Reject */}
-
-                    <button
-                      onClick={() =>
-                        onReject(request.id)
-                      }
-                      className="p-2 rounded-lg hover:bg-yellow-100"
-                      title="Reject"
-                    >
-                      <XCircle
-                        size={18}
-                        className="text-yellow-600"
-                      />
-                    </button>
-
-                    {/* Delete */}
-
-                    <button
-                      onClick={() =>
-                        onDelete(request)
-                      }
-                      className="p-2 rounded-lg hover:bg-red-100"
-                      title="Delete"
-                    >
-                      <Trash2
-                        size={18}
-                        className="text-red-600"
-                      />
-                    </button>
-
-                  </div>
-
-                </td>
+                <th className="text-center">
+                  Actions
+                </th>
 
               </tr>
 
-            ))
+            </thead>
 
-          ) : (
+            <tbody>
 
-            <tr>
+              {requests.map((request) => (
 
-              <td
-                colSpan="5"
-                className="py-10 text-center text-gray-500"
-              >
-                No requests found.
-              </td>
+                <tr
+                  key={request.id}
+                  className="border-b"
+                >
 
-            </tr>
+                  <td className="py-5 font-medium">
+                    {request.title}
+                  </td>
 
-          )}
+                  <td>
+                    {request.category}
+                  </td>
 
-        </tbody>
+                  <td>
+                    {request.user}
+                  </td>
 
-      </table>
-    </div>
+                  <td>
+
+                    <Select
+                      value={request.status}
+                      onValueChange={(value) =>
+                        handleStatusChange(
+                          request.id,
+                          value
+                        )
+                      }
+                    >
+
+                      <SelectTrigger
+                        className={`w-36 h-9 border-0 shadow-none
+
+                        ${
+                          request.status === "Approved"
+                            ? "bg-green-100 text-green-700"
+
+                          : request.status === "Pending"
+                            ? "bg-[#FAF1EB] text-[#D08C60]"
+
+                            : "bg-red-100 text-red-700"
+                        }
+                        `}
+                      >
+
+                        <SelectValue />
+
+                      </SelectTrigger>
+
+                      <SelectContent>
+
+                        <SelectItem value="Pending">
+                          Pending
+                        </SelectItem>
+
+                        <SelectItem value="Approved">
+                          Approved
+                        </SelectItem>
+
+                        <SelectItem value="Rejected">
+                          Rejected
+                        </SelectItem>
+
+                      </SelectContent>
+
+                    </Select>
+
+                  </td>
+
+                  <td>
+
+                    <div className="flex justify-center gap-3">
+
+                      <button
+                        onClick={() =>
+                          handleView(request)
+                        }
+                        className="p-2 rounded-lg hover:bg-[#FAF1EB]"
+                      >
+
+                        <Eye
+                          size={18}
+                          className="text-[#6B8F71]"
+                        />
+
+                      </button>
+
+                      <button
+                        onClick={() =>
+                          handleEdit(request)
+                        }
+                        className="p-2 rounded-lg hover:bg-[#FAF1EB]"
+                      >
+
+                        <Pencil
+                          size={18}
+                          className="text-[#D08C60]"
+                        />
+
+                      </button>
+
+                      <button
+                        onClick={() =>
+                          handleDelete(request)
+                        }
+                        className="p-2 rounded-lg hover:bg-red-100"
+                      >
+
+                        <Trash2
+                          size={18}
+                          className="text-red-600"
+                        />
+
+                      </button>
+
+                    </div>
+
+                  </td>
+
+                </tr>
+
+              ))}
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      )}
+
+      <RequestDialog
+        request={selectedRequest}
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+      />
+
+      <EditRequestDialog
+        request={editingRequest}
+        open={editDialogOpen}
+        onOpenChange={setEditDialogOpen}
+        onSave={handleSave}
+      />
+
+      <DeleteConfirmationDialog
+        user={requestToDelete}
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        onDelete={confirmDelete}
+      />
+
+    </>
   );
 }
