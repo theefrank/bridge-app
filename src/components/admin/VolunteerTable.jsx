@@ -7,9 +7,17 @@ import {
 } from "lucide-react";
 
 import StatusBadge from "./StatusBadge";
+
 import VolunteerDialog from "./VolunteerDialog";
 import EditVolunteerDialog from "./EditVolunteerDialog";
 import DeleteConfirmationDialog from "./DeleteConfirmationDialog";
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 
 export default function VolunteerTable({
   volunteers,
@@ -43,11 +51,6 @@ export default function VolunteerTable({
     setEditOpen(true);
   }
 
-  function handleDelete(volunteer) {
-    setDeleteVolunteer(volunteer);
-    setDeleteOpen(true);
-  }
-
   function handleSave(updatedVolunteer) {
     setVolunteers((prev) =>
       prev.map((volunteer) =>
@@ -56,6 +59,11 @@ export default function VolunteerTable({
           : volunteer
       )
     );
+  }
+
+  function handleDelete(volunteer) {
+    setDeleteVolunteer(volunteer);
+    setDeleteOpen(true);
   }
 
   function confirmDelete() {
@@ -67,226 +75,272 @@ export default function VolunteerTable({
     );
 
     setDeleteOpen(false);
+    setDeleteVolunteer(null);
+  }
+
+  function updateStatus(id, status) {
+    setVolunteers((prev) =>
+      prev.map((volunteer) =>
+        volunteer.id === id
+          ? {
+              ...volunteer,
+              status,
+            }
+          : volunteer
+      )
+    );
   }
 
   return (
-    <>
-      <div className="bridge-card overflow-hidden">
+    <TooltipProvider>
+      <>
+        <div className="bridge-card overflow-hidden">
 
-        <div className="overflow-x-auto max-h-150">
+          <div className="overflow-x-auto max-h-150">
 
-          <table className="w-full">
+            <table className="w-full">
 
-            <thead className="sticky top-0 bg-white z-10 border-b">
-
-              <tr>
-
-                <th className="text-left py-4 px-6 w-[28%]">
-                  Volunteer
-                </th>
-
-                <th className="text-left w-[22%] ">
-                  Email
-                </th>
-
-                <th className="text-left w-[10%]">
-                  Skill
-                </th>
-
-                <th className="text-left w-[10%]">
-                  Hours
-                </th>
-
-                <th className="text-left w-[10%]">
-                  Status
-                </th>
-
-                <th className="text-center w-[10%]">
-                  Actions
-                </th>
-
-              </tr>
-
-            </thead>
-
-            <tbody>
-
-              {volunteers.length === 0 ? (
+              <thead className="sticky top-0 bg-white border-b z-10">
 
                 <tr>
 
-                  <td
-                    colSpan="6"
-                    className="py-14 text-center text-gray-500"
-                  >
+                  <th className="w-[25%] text-left py-4 px-6">
+                    Volunteer
+                  </th>
 
-                    <p className="text-lg font-medium">
-                      No volunteers found
-                    </p>
+                  <th className="w-[25%] text-left">
+                    Email
+                  </th>
 
-                    <p className="text-sm mt-1">
-                      Try adjusting your search or filters.
-                    </p>
+                  <th className="w-[15%] text-left">
+                    Skill
+                  </th>
 
-                  </td>
+                  <th className="w-[10%] text-left">
+                    Hours
+                  </th>
+
+                  <th className="w-[15%] text-left">
+                    Status
+                  </th>
+
+                  <th className="w-[20%] text-center">
+                    Actions
+                  </th>
 
                 </tr>
 
-              ) : (
+              </thead>
 
-                volunteers.map((volunteer, index) => (
+              <tbody>
 
-                  <tr
-                    key={volunteer.id}
-                    className={`
-                      border-b
-                      transition
-                      hover:bg-[#F8F4EF]
+                {volunteers.length === 0 ? (
 
-                      ${
-                        index % 2 === 0
-                          ? "bg-white"
-                          : "bg-gray-50/50"
-                      }
-                    `}
-                  >
+                  <tr>
 
-                    {/* Volunteer */}
+                    <td
+                      colSpan="6"
+                      className="py-14 text-center text-gray-500"
+                    >
 
-                    <td className="px-6 py-5">
+                      <h3 className="text-lg font-semibold">
+                        No volunteers found
+                      </h3>
 
-                      <div className="flex items-center gap-4">
-
-                        <div className="h-10 w-10 rounded-full bg-[#6B8F71]/15 text-[#6B8F71] flex items-center justify-center font-semibold">
-
-                          {volunteer.name
-                            .split(" ")
-                            .map((word) => word[0])
-                            .join("")
-                            .slice(0, 2)}
-
-                        </div>
-
-                        <span className="font-medium">
-                          {volunteer.name}
-                        </span>
-
-                      </div>
-
-                    </td>
-
-                    {/* Email */}
-
-                    <td className="text-gray-600">
-                      {volunteer.email}
-                    </td>
-
-                    {/* Skill */}
-
-                    <td>
-                      {volunteer.skill}
-                    </td>
-
-                    {/* Hours */}
-
-                    <td>
-                      {volunteer.hours} hrs
-                    </td>
-
-                    {/* Status */}
-
-                    <td>
-                      <StatusBadge
-                        status={volunteer.status}
-                      />
-                    </td>
-
-                    {/* Actions */}
-
-                    <td>
-
-                      <div className="flex justify-center gap-2">
-
-                        <button
-                          onClick={() =>
-                            handleView(volunteer)
-                          }
-                          className="h-9 w-9 rounded-full hover:bg-[#FAF1EB] transition flex items-center justify-center"
-                        >
-
-                          <Eye
-                            size={18}
-                            className="text-[#6B8F71]"
-                          />
-
-                        </button>
-
-                        <button
-                          onClick={() =>
-                            handleEdit(volunteer)
-                          }
-                          className="h-9 w-9 rounded-full hover:bg-[#FAF1EB] transition flex items-center justify-center"
-                        >
-
-                          <Pencil
-                            size={18}
-                            className="text-[#D08C60]"
-                          />
-
-                        </button>
-
-                        <button
-                          onClick={() =>
-                            handleDelete(volunteer)
-                          }
-                          className="h-9 w-9 rounded-full hover:bg-red-100 transition flex items-center justify-center"
-                        >
-
-                          <Trash2
-                            size={18}
-                            className="text-red-600"
-                          />
-
-                        </button>
-
-                      </div>
+                      <p className="text-sm mt-2">
+                        Try another search or filter.
+                      </p>
 
                     </td>
 
                   </tr>
 
-                ))
+                ) : (
 
-              )}
+                  volunteers.map((volunteer, index) => (
 
-            </tbody>
+                    <tr
+                      key={volunteer.id}
+                      className={`
+                        border-b transition hover:bg-[#F8F4EF]
 
-          </table>
+                        ${
+                          index % 2 === 0
+                            ? "bg-white"
+                            : "bg-gray-50/50"
+                        }
+                      `}
+                    >
+
+                      <td className="px-6 py-5">
+
+                        <div>
+
+                          <p className="font-semibold">
+                            {volunteer.name}
+                          </p>
+
+                          <p className="text-sm text-gray-500">
+                            Volunteer #{volunteer.id}
+                          </p>
+
+                        </div>
+
+                      </td>
+
+                      <td>
+                        {volunteer.email}
+                      </td>
+
+                      <td>
+                        {volunteer.skill}
+                      </td>
+
+                      <td>
+                        {volunteer.hours} hrs
+                      </td>
+
+                      <td>
+
+                        <StatusBadge
+                          status={volunteer.status}
+                          onStatusChange={(status) =>
+                            updateStatus(
+                              volunteer.id,
+                              status
+                            )
+                          }
+                        />
+
+                      </td>
+
+                      <td>
+
+                        <div className="flex justify-center gap-2">
+
+                          <Tooltip>
+
+                            <TooltipTrigger asChild>
+
+                              <button
+                                onClick={() =>
+                                  handleView(
+                                    volunteer
+                                  )
+                                }
+                                className="h-9 w-9 rounded-full hover:bg-[#FAF1EB] transition flex items-center justify-center"
+                              >
+
+                                <Eye
+                                  size={18}
+                                  className="text-[#6B8F71]"
+                                />
+
+                              </button>
+
+                            </TooltipTrigger>
+
+                            <TooltipContent>
+                              View Volunteer
+                            </TooltipContent>
+
+                          </Tooltip>
+
+                          <Tooltip>
+
+                            <TooltipTrigger asChild>
+
+                              <button
+                                onClick={() =>
+                                  handleEdit(
+                                    volunteer
+                                  )
+                                }
+                                className="h-9 w-9 rounded-full hover:bg-[#FAF1EB] transition flex items-center justify-center"
+                              >
+
+                                <Pencil
+                                  size={18}
+                                  className="text-[#D08C60]"
+                                />
+
+                              </button>
+
+                            </TooltipTrigger>
+
+                            <TooltipContent>
+                              Edit Volunteer
+                            </TooltipContent>
+
+                          </Tooltip>
+
+                          <Tooltip>
+
+                            <TooltipTrigger asChild>
+
+                              <button
+                                onClick={() =>
+                                  handleDelete(
+                                    volunteer
+                                  )
+                                }
+                                className="h-9 w-9 rounded-full hover:bg-red-100 transition flex items-center justify-center"
+                              >
+
+                                <Trash2
+                                  size={18}
+                                  className="text-red-600"
+                                />
+
+                              </button>
+
+                            </TooltipTrigger>
+
+                            <TooltipContent>
+                              Delete Volunteer
+                            </TooltipContent>
+
+                          </Tooltip>
+
+                        </div>
+
+                      </td>
+
+                    </tr>
+
+                  ))
+
+                )}
+
+              </tbody>
+
+            </table>
+
+          </div>
 
         </div>
 
-      </div>
+        <VolunteerDialog
+          volunteer={selectedVolunteer}
+          open={dialogOpen}
+          onOpenChange={setDialogOpen}
+        />
 
-      <VolunteerDialog
-        volunteer={selectedVolunteer}
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
-      />
+        <EditVolunteerDialog
+          volunteer={editingVolunteer}
+          open={editOpen}
+          onOpenChange={setEditOpen}
+          onSave={handleSave}
+        />
 
-      <EditVolunteerDialog
-        volunteer={editingVolunteer}
-        open={editOpen}
-        onOpenChange={setEditOpen}
-        onSave={handleSave}
-      />
-
-      <DeleteConfirmationDialog
-        open={deleteOpen}
-        onOpenChange={setDeleteOpen}
-        onDelete={confirmDelete}
-        itemName={deleteVolunteer?.name}
-        itemType="Volunteer"
-      />
-    </>
+        <DeleteConfirmationDialog
+          open={deleteOpen}
+          onOpenChange={setDeleteOpen}
+          onDelete={confirmDelete}
+          itemName={deleteVolunteer?.name}
+          itemType="Volunteer"
+        />
+      </>
+    </TooltipProvider>
   );
 }

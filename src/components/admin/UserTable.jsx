@@ -6,6 +6,13 @@ import {
   Trash2,
 } from "lucide-react";
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
+
 import StatusBadge from "./StatusBadge";
 
 import UserDialog from "./UserDialog";
@@ -72,6 +79,7 @@ export default function UserTable({
   }
 
   return (
+    <TooltipProvider>
     <>
       <div className="bridge-card overflow-hidden">
 
@@ -196,57 +204,92 @@ export default function UserTable({
                     </td>
 
                     {/* Actions */}
-
                     <td>
 
                       <div className="flex justify-center gap-2">
 
-                        <button
-                          onClick={() =>
-                            handleView(user)
-                          }
-                          className="h-9 w-9 rounded-full hover:bg-[#FAF1EB] transition flex items-center justify-center"
-                        >
+                        <Tooltip>
 
-                          <Eye
-                            size={18}
-                            className="text-[#6B8F71]"
-                          />
+                          <TooltipTrigger asChild>
 
-                        </button>
+                            <button
+                              onClick={() => handleView(user)}
+                              className="h-9 w-9 rounded-full hover:bg-[#FAF1EB] transition flex items-center justify-center"
+                            >
 
-                        <button
-                          onClick={() =>
-                            handleEdit(user)
-                          }
-                          className="h-9 w-9 rounded-full hover:bg-[#FAF1EB] transition flex items-center justify-center"
-                        >
+                              <Eye
+                                size={18}
+                                className="text-[#6B8F71]"
+                              />
 
-                          <Pencil
-                            size={18}
-                            className="text-[#D08C60]"
-                          />
+                            </button>
 
-                        </button>
+                          </TooltipTrigger>
 
-                        <button
-                          onClick={() =>
-                            handleDelete(user)
-                          }
-                          className="h-9 w-9 rounded-full hover:bg-red-100 transition flex items-center justify-center"
-                        >
+                          <TooltipContent>
 
-                          <Trash2
-                            size={18}
-                            className="text-red-600"
-                          />
+                            View User
 
-                        </button>
+                          </TooltipContent>
+
+                        </Tooltip>
+
+                        <Tooltip>
+
+                          <TooltipTrigger asChild>
+
+                            <button
+                              onClick={() => handleEdit(user)}
+                              className="h-9 w-9 rounded-full hover:bg-[#FAF1EB] transition flex items-center justify-center"
+                            >
+
+                              <Pencil
+                                size={18}
+                                className="text-[#D08C60]"
+                              />
+
+                            </button>
+
+                          </TooltipTrigger>
+
+                          <TooltipContent>
+
+                            Edit User
+
+                          </TooltipContent>
+
+                        </Tooltip>
+
+                        <Tooltip>
+
+                          <TooltipTrigger asChild>
+
+                            <button
+                              onClick={() => handleDelete(user)}
+                              className="h-9 w-9 rounded-full hover:bg-red-100 transition flex items-center justify-center"
+                            >
+
+                              <Trash2
+                                size={18}
+                                className="text-red-600"
+                              />
+
+                            </button>
+
+                          </TooltipTrigger>
+
+                          <TooltipContent>
+
+                            Delete User
+
+                          </TooltipContent>
+
+                        </Tooltip>
 
                       </div>
 
                     </td>
-
+                    
                   </tr>
 
                 ))
@@ -282,5 +325,6 @@ export default function UserTable({
         itemType="User"
       />
     </>
+    </TooltipProvider>
   );
 }
