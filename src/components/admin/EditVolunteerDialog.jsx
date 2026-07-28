@@ -8,9 +8,7 @@ import {
   DialogFooter,
 } from "../ui/dialog";
 
-import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { Label } from "../ui/label";
 
 import {
   Select,
@@ -27,30 +25,22 @@ export default function EditVolunteerDialog({
   onSave,
 }) {
   const [formData, setFormData] = useState({
+    id: "",
     name: "",
     email: "",
     skill: "",
-    hours: 0,
-    status: "Pending",
+    hours: "",
+    status: "",
   });
 
   useEffect(() => {
     if (volunteer) {
-      setFormData({
-        name: volunteer.name || "",
-        email: volunteer.email || "",
-        skill: volunteer.skill || "",
-        hours: volunteer.hours || 0,
-        status: volunteer.status || "Pending",
-      });
+      setFormData(volunteer);
     }
   }, [volunteer]);
 
-  function handleSubmit(e) {
-    e.preventDefault();
-
+  function handleSave() {
     onSave({
-      ...volunteer,
       ...formData,
       hours: Number(formData.hours),
     });
@@ -58,12 +48,14 @@ export default function EditVolunteerDialog({
     onOpenChange(false);
   }
 
+  if (!volunteer) return null;
+
   return (
     <Dialog
       open={open}
       onOpenChange={onOpenChange}
     >
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="sm:max-w-lg rounded-2xl">
 
         <DialogHeader>
 
@@ -71,16 +63,21 @@ export default function EditVolunteerDialog({
             Edit Volunteer
           </DialogTitle>
 
+          <p className="text-sm text-gray-500">
+            Update volunteer information.
+          </p>
+
         </DialogHeader>
 
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-5"
-        >
+        <div className="space-y-5 py-4">
 
-          <div className="space-y-2">
+          {/* Name */}
 
-            <Label>Name</Label>
+          <div>
+
+            <label className="block mb-2 text-sm font-medium">
+              Name
+            </label>
 
             <Input
               value={formData.name}
@@ -94,12 +91,15 @@ export default function EditVolunteerDialog({
 
           </div>
 
-          <div className="space-y-2">
+          {/* Email */}
 
-            <Label>Email</Label>
+          <div>
+
+            <label className="block mb-2 text-sm font-medium">
+              Email
+            </label>
 
             <Input
-              type="email"
               value={formData.email}
               onChange={(e) =>
                 setFormData({
@@ -111,29 +111,69 @@ export default function EditVolunteerDialog({
 
           </div>
 
-          <div className="space-y-2">
+          {/* Skill */}
 
-            <Label>Skill</Label>
+          <div>
 
-            <Input
+            <label className="block mb-2 text-sm font-medium">
+              Skill
+            </label>
+
+            <Select
               value={formData.skill}
-              onChange={(e) =>
+              onValueChange={(value) =>
                 setFormData({
                   ...formData,
-                  skill: e.target.value,
+                  skill: value,
                 })
               }
-            />
+            >
+
+              <SelectTrigger>
+
+                <SelectValue />
+
+              </SelectTrigger>
+
+              <SelectContent>
+
+                <SelectItem value="Education">
+                  Education
+                </SelectItem>
+
+                <SelectItem value="Technology">
+                  Technology
+                </SelectItem>
+
+                <SelectItem value="Career">
+                  Career
+                </SelectItem>
+
+                <SelectItem value="Community">
+                  Community
+                </SelectItem>
+
+                <SelectItem value="Wellness">
+                  Wellness
+                </SelectItem>
+
+              </SelectContent>
+
+            </Select>
 
           </div>
 
-          <div className="space-y-2">
+          {/* Hours */}
 
-            <Label>Volunteer Hours</Label>
+          <div>
+
+            <label className="block mb-2 text-sm font-medium">
+              Volunteer Hours
+            </label>
 
             <Input
               type="number"
-              min="0"
+              min={0}
               value={formData.hours}
               onChange={(e) =>
                 setFormData({
@@ -145,9 +185,13 @@ export default function EditVolunteerDialog({
 
           </div>
 
-          <div className="space-y-2">
+          {/* Status */}
 
-            <Label>Status</Label>
+          <div>
+
+            <label className="block mb-2 text-sm font-medium">
+              Status
+            </label>
 
             <Select
               value={formData.status}
@@ -185,28 +229,27 @@ export default function EditVolunteerDialog({
 
           </div>
 
-          <DialogFooter>
+        </div>
 
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() =>
-                onOpenChange(false)
-              }
-            >
-              Cancel
-            </Button>
+        <DialogFooter className="border-t pt-4">
 
-            <Button type="submit">
-              Save Changes
-            </Button>
+          <button
+            onClick={() => onOpenChange(false)}
+            className="px-5 py-2 rounded-lg border hover:bg-gray-100 transition"
+          >
+            Cancel
+          </button>
 
-          </DialogFooter>
+          <button
+            onClick={handleSave}
+            className="px-5 py-2 rounded-lg bg-[#D08C60] text-white hover:bg-[#b9774e] transition"
+          >
+            Save Changes
+          </button>
 
-        </form>
+        </DialogFooter>
 
       </DialogContent>
-
     </Dialog>
   );
 }

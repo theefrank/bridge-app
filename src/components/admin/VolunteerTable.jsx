@@ -6,14 +6,7 @@ import {
   Trash2,
 } from "lucide-react";
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
-
+import StatusBadge from "./StatusBadge";
 import VolunteerDialog from "./VolunteerDialog";
 import EditVolunteerDialog from "./EditVolunteerDialog";
 import DeleteConfirmationDialog from "./DeleteConfirmationDialog";
@@ -22,7 +15,6 @@ export default function VolunteerTable({
   volunteers,
   setVolunteers,
 }) {
-
   const [selectedVolunteer, setSelectedVolunteer] =
     useState(null);
 
@@ -32,14 +24,14 @@ export default function VolunteerTable({
   const [editingVolunteer, setEditingVolunteer] =
     useState(null);
 
-  const [editDialogOpen, setEditDialogOpen] =
+  const [editOpen, setEditOpen] =
     useState(false);
 
-  const [deleteDialogOpen, setDeleteDialogOpen] =
-    useState(false);
-
-  const [volunteerToDelete, setVolunteerToDelete] =
+  const [deleteVolunteer, setDeleteVolunteer] =
     useState(null);
+
+  const [deleteOpen, setDeleteOpen] =
+    useState(false);
 
   function handleView(volunteer) {
     setSelectedVolunteer(volunteer);
@@ -48,111 +40,68 @@ export default function VolunteerTable({
 
   function handleEdit(volunteer) {
     setEditingVolunteer(volunteer);
-    setEditDialogOpen(true);
+    setEditOpen(true);
+  }
+
+  function handleDelete(volunteer) {
+    setDeleteVolunteer(volunteer);
+    setDeleteOpen(true);
   }
 
   function handleSave(updatedVolunteer) {
-
-    setVolunteers((previous) =>
-      previous.map((volunteer) =>
+    setVolunteers((prev) =>
+      prev.map((volunteer) =>
         volunteer.id === updatedVolunteer.id
           ? updatedVolunteer
           : volunteer
       )
     );
-
-  }
-
-  function handleDelete(volunteer) {
-
-    setVolunteerToDelete(volunteer);
-
-    setDeleteDialogOpen(true);
-
   }
 
   function confirmDelete() {
-
-    setVolunteers((previous) =>
-      previous.filter(
+    setVolunteers((prev) =>
+      prev.filter(
         (volunteer) =>
-          volunteer.id !==
-          volunteerToDelete.id
+          volunteer.id !== deleteVolunteer.id
       )
     );
 
-    setDeleteDialogOpen(false);
-
-    setVolunteerToDelete(null);
-
-  }
-
-  function handleStatusChange(
-    volunteerId,
-    newStatus
-  ) {
-
-    setVolunteers((previous) =>
-      previous.map((volunteer) =>
-        volunteer.id === volunteerId
-          ? {
-              ...volunteer,
-              status: newStatus,
-            }
-          : volunteer
-      )
-    );
-
+    setDeleteOpen(false);
   }
 
   return (
     <>
+      <div className="bridge-card overflow-hidden">
 
-      {volunteers.length === 0 ? (
-
-        <div className="bridge-card text-center py-20">
-
-          <h2 className="text-2xl font-semibold">
-
-            No volunteers found
-
-          </h2>
-
-          <p className="text-gray-500 mt-3">
-
-            Try changing your search.
-
-          </p>
-
-        </div>
-
-      ) : (
-
-        <div className="bridge-card overflow-x-auto">
+        <div className="overflow-x-auto max-h-150">
 
           <table className="w-full">
 
-            <thead>
+            <thead className="sticky top-0 bg-white z-10 border-b">
 
-              <tr className="border-b">
+              <tr>
 
-                <th className="text-left py-4">
-                  Name
+                <th className="text-left py-4 px-6 w-[28%]">
+                  Volunteer
                 </th>
 
-                <th className="text-left">
+                <th className="text-left w-[22%] ">
+                  Email
+                </th>
+
+                <th className="text-left w-[10%]">
                   Skill
                 </th>
 
-                <th className="text-left">
+                <th className="text-left w-[10%]">
                   Hours
                 </th>
 
-                <th className="text-left">
+                <th className="text-left w-[10%]">
                   Status
                 </th>
 
-                <th className="text-center">
+                <th className="text-center w-[10%]">
                   Actions
                 </th>
 
@@ -162,100 +111,107 @@ export default function VolunteerTable({
 
             <tbody>
 
-              {volunteers.map(
-                (volunteer) => (
+              {volunteers.length === 0 ? (
+
+                <tr>
+
+                  <td
+                    colSpan="6"
+                    className="py-14 text-center text-gray-500"
+                  >
+
+                    <p className="text-lg font-medium">
+                      No volunteers found
+                    </p>
+
+                    <p className="text-sm mt-1">
+                      Try adjusting your search or filters.
+                    </p>
+
+                  </td>
+
+                </tr>
+
+              ) : (
+
+                volunteers.map((volunteer, index) => (
 
                   <tr
                     key={volunteer.id}
-                    className="border-b"
+                    className={`
+                      border-b
+                      transition
+                      hover:bg-[#F8F4EF]
+
+                      ${
+                        index % 2 === 0
+                          ? "bg-white"
+                          : "bg-gray-50/50"
+                      }
+                    `}
                   >
 
-                    <td className="py-5 font-medium">
-                      {volunteer.name}
+                    {/* Volunteer */}
+
+                    <td className="px-6 py-5">
+
+                      <div className="flex items-center gap-4">
+
+                        <div className="h-10 w-10 rounded-full bg-[#6B8F71]/15 text-[#6B8F71] flex items-center justify-center font-semibold">
+
+                          {volunteer.name
+                            .split(" ")
+                            .map((word) => word[0])
+                            .join("")
+                            .slice(0, 2)}
+
+                        </div>
+
+                        <span className="font-medium">
+                          {volunteer.name}
+                        </span>
+
+                      </div>
+
                     </td>
+
+                    {/* Email */}
+
+                    <td className="text-gray-600">
+                      {volunteer.email}
+                    </td>
+
+                    {/* Skill */}
 
                     <td>
                       {volunteer.skill}
                     </td>
 
+                    {/* Hours */}
+
                     <td>
                       {volunteer.hours} hrs
                     </td>
 
+                    {/* Status */}
+
                     <td>
-
-                      <Select
-                        value={
-                          volunteer.status
-                        }
-                        onValueChange={(
-                          value
-                        ) =>
-                          handleStatusChange(
-                            volunteer.id,
-                            value
-                          )
-                        }
-                      >
-
-                        <SelectTrigger
-                          className={`w-36 h-9 border-0 shadow-none
-
-                          ${
-                            volunteer.status ===
-                            "Active"
-                              ? "bg-green-100 text-green-700"
-
-                              : volunteer.status ===
-                                "Pending"
-                              ? "bg-[#FAF1EB] text-[#D08C60]"
-
-                              : "bg-red-100 text-red-700"
-                          }
-                          `}
-                        >
-
-                          <SelectValue />
-
-                        </SelectTrigger>
-
-                        <SelectContent>
-
-                          <SelectItem value="Active">
-
-                            Active
-
-                          </SelectItem>
-
-                          <SelectItem value="Pending">
-
-                            Pending
-
-                          </SelectItem>
-
-                          <SelectItem value="Suspended">
-
-                            Suspended
-
-                          </SelectItem>
-
-                        </SelectContent>
-
-                      </Select>
-
+                      <StatusBadge
+                        status={volunteer.status}
+                      />
                     </td>
 
+                    {/* Actions */}
+
                     <td>
 
-                      <div className="flex justify-center gap-3">
+                      <div className="flex justify-center gap-2">
 
                         <button
                           onClick={() =>
-                            handleView(
-                              volunteer
-                            )
+                            handleView(volunteer)
                           }
-                          className="p-2 rounded-lg hover:bg-[#FAF1EB]"
+                          className="h-9 w-9 rounded-full hover:bg-[#FAF1EB] transition flex items-center justify-center"
                         >
 
                           <Eye
@@ -267,11 +223,9 @@ export default function VolunteerTable({
 
                         <button
                           onClick={() =>
-                            handleEdit(
-                              volunteer
-                            )
+                            handleEdit(volunteer)
                           }
-                          className="p-2 rounded-lg hover:bg-[#FAF1EB]"
+                          className="h-9 w-9 rounded-full hover:bg-[#FAF1EB] transition flex items-center justify-center"
                         >
 
                           <Pencil
@@ -283,11 +237,9 @@ export default function VolunteerTable({
 
                         <button
                           onClick={() =>
-                            handleDelete(
-                              volunteer
-                            )
+                            handleDelete(volunteer)
                           }
-                          className="p-2 rounded-lg hover:bg-red-100"
+                          className="h-9 w-9 rounded-full hover:bg-red-100 transition flex items-center justify-center"
                         >
 
                           <Trash2
@@ -303,7 +255,8 @@ export default function VolunteerTable({
 
                   </tr>
 
-                )
+                ))
+
               )}
 
             </tbody>
@@ -312,7 +265,7 @@ export default function VolunteerTable({
 
         </div>
 
-      )}
+      </div>
 
       <VolunteerDialog
         volunteer={selectedVolunteer}
@@ -322,19 +275,18 @@ export default function VolunteerTable({
 
       <EditVolunteerDialog
         volunteer={editingVolunteer}
-        open={editDialogOpen}
-        onOpenChange={setEditDialogOpen}
+        open={editOpen}
+        onOpenChange={setEditOpen}
         onSave={handleSave}
       />
 
       <DeleteConfirmationDialog
-        open={deleteDialogOpen}
-        onOpenChange={setDeleteDialogOpen}
+        open={deleteOpen}
+        onOpenChange={setDeleteOpen}
         onDelete={confirmDelete}
-        itemName={volunteerToDelete?.name}
+        itemName={deleteVolunteer?.name}
         itemType="Volunteer"
       />
-
     </>
   );
 }
