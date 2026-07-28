@@ -14,7 +14,7 @@ import {
   SelectValue,
 } from "../ui/select";
 
-import UserDialog from "./DetailsDialog";
+import VolunteerDialog from "./VolunteerDialog";
 import EditUserDialog from "./EditMemberDialog";
 import DeleteUserDialog from "./DeleteConfirmationDialog";
 
@@ -314,7 +314,7 @@ export default function VolunteerTable({
 
       )}
 
-      <UserDialog
+      <VolunteerDialog
         user={selectedVolunteer}
         open={dialogOpen}
         onOpenChange={setDialogOpen}
