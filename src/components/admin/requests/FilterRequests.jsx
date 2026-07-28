@@ -4,9 +4,9 @@ import {
   SelectValue,
   SelectContent,
   SelectItem,
-} from "../ui/select";
+} from "../../ui/select";
 
-export default function FilterVolunteers({
+export default function FilterRequests({
   selectedStatus,
   setSelectedStatus,
 }) {
@@ -24,19 +24,19 @@ export default function FilterVolunteers({
       <SelectContent>
 
         <SelectItem value="All">
-          All Volunteers
-        </SelectItem>
-
-        <SelectItem value="Active">
-          Active
+          All Requests
         </SelectItem>
 
         <SelectItem value="Pending">
           Pending
         </SelectItem>
 
-        <SelectItem value="Suspended">
-          Suspended
+        <SelectItem value="Approved">
+          Approved
+        </SelectItem>
+
+        <SelectItem value="Rejected">
+          Rejected
         </SelectItem>
 
       </SelectContent>

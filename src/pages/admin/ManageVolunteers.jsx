@@ -10,8 +10,8 @@ import {
 import AdminSidebar from "../../components/admin/AdminSidebar";
 import AdminStats from "../../components/admin/AdminStats";
 import SearchBar from "../../components/common/SearchBar";
-import FilterVolunteers from "../../components/admin/FilterVolunteers";
-import VolunteerTable from "../../components/admin/VolunteerTable";
+import FilterVolunteers from "../../components/admin/volunteers/FilterVolunteers";
+import VolunteerTable from "../../components/admin/volunteers/VolunteerTable";
 
 export default function ManageVolunteers() {
 

@@ -11,13 +11,13 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../ui/tooltip";
+} from "../../ui/tooltip";
 
-import StatusBadge from "./StatusBadge";
+import StatusBadge from "../common/StatusBadge";
 
 import UserDialog from "./UserDialog";
 import EditUserDialog from "./EditUserDialog";
-import DeleteConfirmationDialog from "./DeleteConfirmationDialog";
+import DeleteConfirmationDialog from "../common/DeleteConfirmationDialog";
 
 export default function UserTable({
   users,

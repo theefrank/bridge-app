@@ -3,16 +3,16 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "../ui/dialog";
+} from "../../ui/dialog";
 
-import StatusBadge from "./StatusBadge";
+import StatusBadge from "../common/StatusBadge";
 
-export default function UserDialog({
-  user,
+export default function VolunteerDialog({
+  volunteer,
   open,
   onOpenChange,
 }) {
-  if (!user) return null;
+  if (!volunteer) return null;
 
   return (
     <Dialog
@@ -24,23 +24,21 @@ export default function UserDialog({
         <DialogHeader>
 
           <DialogTitle className="text-2xl">
-
-            User Details
-
+            Volunteer Details
           </DialogTitle>
 
         </DialogHeader>
 
-        <div className="space-y-6">
+        <div className="space-y-5">
 
           <div>
 
             <p className="text-sm text-gray-500">
-              Full Name
+              Name
             </p>
 
-            <p className="font-semibold text-lg">
-              {user.name}
+            <p className="font-semibold">
+              {volunteer.name}
             </p>
 
           </div>
@@ -51,18 +49,32 @@ export default function UserDialog({
               Email
             </p>
 
-            <p>{user.email}</p>
+            <p>
+              {volunteer.email}
+            </p>
 
           </div>
 
           <div>
 
             <p className="text-sm text-gray-500">
-              Role
+              Skill
             </p>
 
-            <p className="capitalize">
-              {user.role}
+            <p>
+              {volunteer.skill}
+            </p>
+
+          </div>
+
+          <div>
+
+            <p className="text-sm text-gray-500">
+              Volunteer Hours
+            </p>
+
+            <p>
+              {volunteer.hours} hrs
             </p>
 
           </div>
@@ -73,13 +85,16 @@ export default function UserDialog({
               Status
             </p>
 
-            <StatusBadge status={user.status} />
+            <StatusBadge
+              status={volunteer.status}
+            />
 
           </div>
 
         </div>
 
       </DialogContent>
+
     </Dialog>
   );
 }

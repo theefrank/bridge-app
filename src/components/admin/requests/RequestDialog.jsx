@@ -10,9 +10,9 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "../ui/dialog";
+} from "../../ui/dialog";
 
-import StatusBadge from "./StatusBadge";
+import StatusBadge from "../common/StatusBadge";
 
 export default function RequestDialog({
   request,

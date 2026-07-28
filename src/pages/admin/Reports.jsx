@@ -6,10 +6,10 @@ import {
 } from "lucide-react";
 
 import AdminSidebar from "../../components/admin/AdminSidebar";
-import ReportCard from "../../components/admin/ReportCard";
-import PopularCategories from "../../components/admin/PopularCategories";
-import VolunteerLeaderboard from "../../components/admin/VolunteerLeaderboard";
-import RecentActivity from "../../components/admin/RecentActivity";
+import ReportCard from "../../components/admin/reports/ReportCard";
+import PopularCategories from "../../components/admin/reports/PopularCategories";
+import VolunteerLeaderboard from "../../components/admin/reports/VolunteerLeaderboard";
+import RecentActivity from "../../components/admin/reports/RecentActivity";
 
 export default function Reports() {
   const reportStats = [

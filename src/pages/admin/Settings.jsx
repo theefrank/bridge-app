@@ -1,8 +1,8 @@
 import { useState } from "react";
 
 import AdminSidebar from "../../components/admin/AdminSidebar";
-import SettingsSection from "../../components/admin/SettingsSection";
-import SettingsToggle from "../../components/admin/SettingsToggle";
+import SettingsSection from "../../components/admin/settings/SettingsSection";
+import SettingsToggle from "../../components/admin/settings/SettingsToggle";
 
 export default function Settings() {
   const [platformName, setPlatformName] =

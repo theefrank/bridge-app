@@ -6,18 +6,18 @@ import {
   Trash2,
 } from "lucide-react";
 
-import StatusBadge from "./StatusBadge";
+import StatusBadge from "../common/StatusBadge";
 
 import VolunteerDialog from "./VolunteerDialog";
 import EditVolunteerDialog from "./EditVolunteerDialog";
-import DeleteConfirmationDialog from "./DeleteConfirmationDialog";
+import DeleteConfirmationDialog from "../common/DeleteConfirmationDialog";
 
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../ui/tooltip";
+} from "../../ui/tooltip";
 
 export default function VolunteerTable({
   volunteers,

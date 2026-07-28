@@ -1,5 +1,5 @@
-import Modal from "../common/Modal";
-import StatusBadge from "./StatusBadge";
+import Modal from "../../common/Modal";
+import StatusBadge from "../common/StatusBadge";
 
 export default function RequestDetailsModal({
   request,

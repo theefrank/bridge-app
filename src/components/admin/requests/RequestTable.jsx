@@ -13,13 +13,13 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../ui/tooltip";
+} from "../../ui/tooltip";
 
-import StatusBadge from "./StatusBadge";
+import StatusBadge from "../common/StatusBadge";
 
 import RequestDialog from "./RequestDialog";
 import EditRequestDialog from "./EditRequestDialog";
-import DeleteConfirmationDialog from "./DeleteConfirmationDialog";
+import DeleteConfirmationDialog from "../common/DeleteConfirmationDialog";
 
 export default function RequestTable({
   requests,

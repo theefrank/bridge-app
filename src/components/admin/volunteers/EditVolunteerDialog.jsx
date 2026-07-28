@@ -6,9 +6,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from "../ui/dialog";
+} from "../../ui/dialog";
 
-import { Input } from "../ui/input";
+import { Input } from "../../ui/input";
 
 import {
   Select,
@@ -16,7 +16,7 @@ import {
   SelectValue,
   SelectContent,
   SelectItem,
-} from "../ui/select";
+} from "../../ui/select";
 
 export default function EditVolunteerDialog({
   volunteer,

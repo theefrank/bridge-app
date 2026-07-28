@@ -3,16 +3,16 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "../ui/dialog";
+} from "../../ui/dialog";
 
-import StatusBadge from "./StatusBadge";
+import StatusBadge from "../common/StatusBadge";
 
-export default function VolunteerDialog({
-  volunteer,
+export default function UserDialog({
+  user,
   open,
   onOpenChange,
 }) {
-  if (!volunteer) return null;
+  if (!user) return null;
 
   return (
     <Dialog
@@ -24,21 +24,23 @@ export default function VolunteerDialog({
         <DialogHeader>
 
           <DialogTitle className="text-2xl">
-            Volunteer Details
+
+            User Details
+
           </DialogTitle>
 
         </DialogHeader>
 
-        <div className="space-y-5">
+        <div className="space-y-6">
 
           <div>
 
             <p className="text-sm text-gray-500">
-              Name
+              Full Name
             </p>
 
-            <p className="font-semibold">
-              {volunteer.name}
+            <p className="font-semibold text-lg">
+              {user.name}
             </p>
 
           </div>
@@ -49,32 +51,18 @@ export default function VolunteerDialog({
               Email
             </p>
 
-            <p>
-              {volunteer.email}
-            </p>
+            <p>{user.email}</p>
 
           </div>
 
           <div>
 
             <p className="text-sm text-gray-500">
-              Skill
+              Role
             </p>
 
-            <p>
-              {volunteer.skill}
-            </p>
-
-          </div>
-
-          <div>
-
-            <p className="text-sm text-gray-500">
-              Volunteer Hours
-            </p>
-
-            <p>
-              {volunteer.hours} hrs
+            <p className="capitalize">
+              {user.role}
             </p>
 
           </div>
@@ -85,16 +73,13 @@ export default function VolunteerDialog({
               Status
             </p>
 
-            <StatusBadge
-              status={volunteer.status}
-            />
+            <StatusBadge status={user.status} />
 
           </div>
 
         </div>
 
       </DialogContent>
-
     </Dialog>
   );
 }

@@ -6,13 +6,13 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from "../ui/dialog";
+} from "../../ui/dialog";
 
-import { Input } from "../ui/input";
+import { Input } from "../../ui/input";
 
-import { Label } from "../ui/label";
+import { Label } from "../../ui/label";
 
-import { Textarea } from "../ui/textarea";
+import { Textarea } from "../../ui/textarea";
 
 import {
   Select,
@@ -20,9 +20,9 @@ import {
   SelectContent,
   SelectItem,
   SelectValue,
-} from "../ui/select";
+} from "../../ui/select";
 
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 
 export default function EditRequestDialog({
   request,

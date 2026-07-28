@@ -9,7 +9,7 @@ import {
 
 import AdminSidebar from "../../components/admin/AdminSidebar";
 import SearchBar from "../../components/common/SearchBar";
-import UserTable from "../../components/admin/UserTable";
+import UserTable from "../../components/admin/users/UserTable";
 import AdminStats from "../../components/admin/AdminStats";
 
 import {

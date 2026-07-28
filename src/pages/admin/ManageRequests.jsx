@@ -10,10 +10,10 @@ import {
 import AdminSidebar from "../../components/admin/AdminSidebar";
 import AdminStats from "../../components/admin/AdminStats";
 import SearchBar from "../../components/common/SearchBar";
-import FilterRequests from "../../components/admin/FilterRequests";
-import RequestTable from "../../components/admin/RequestTable";
-import RequestDetailsModal from "../../components/admin/RequestDetailsModal";
-import DeleteConfirmationModal from "../../components/admin/DeleteConfirmationModal";
+import FilterRequests from "../../components/admin/requests/FilterRequests";
+import RequestTable from "../../components/admin/requests/RequestTable";
+import RequestDetailsModal from "../../components/admin/requests/RequestDetailsModal";
+import DeleteConfirmationModal from "../../components/admin/common/DeleteConfirmationModal";
 
 export default function ManageRequests() {
   const [searchTerm, setSearchTerm] = useState("");
