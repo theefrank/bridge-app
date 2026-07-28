@@ -14,9 +14,9 @@ import {
   SelectValue,
 } from "../ui/select";
 
-import UserDialog from "./DetailsDialog";
-import EditUserDialog from "./EditMemberDialog";
-import DeleteUserDialog from "./DeleteConfirmationDialog";
+import UserDialog from "./UserDialog";
+import EditUserDialog from "./EditUserDialog";
+import DeleteConfirmationDialog from "./DeleteConfirmationDialog";
 
 export default function UserTable({
   users,
@@ -294,11 +294,12 @@ export default function UserTable({
         onSave={handleSave}
       />
 
-      <DeleteUserDialog
+      <DeleteConfirmationDialog
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}
-        user={userToDelete}
         onDelete={confirmDelete}
+        itemName={userToDelete?.name}
+        itemType="User"
       />
 
     </>

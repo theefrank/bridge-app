@@ -16,7 +16,7 @@ import {
 
 import VolunteerDialog from "./VolunteerDialog";
 import EditVolunteerDialog from "./EditVolunteerDialog";
-import DeleteUserDialog from "./DeleteConfirmationDialog";
+import DeleteConfirmationDialog from "./DeleteConfirmationDialog";
 
 export default function VolunteerTable({
   volunteers,
@@ -315,7 +315,7 @@ export default function VolunteerTable({
       )}
 
       <VolunteerDialog
-        user={selectedVolunteer}
+        volunteer={selectedVolunteer}
         open={dialogOpen}
         onOpenChange={setDialogOpen}
       />
@@ -327,11 +327,12 @@ export default function VolunteerTable({
         onSave={handleSave}
       />
 
-      <DeleteUserDialog
-        user={volunteerToDelete}
+      <DeleteConfirmationDialog
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}
         onDelete={confirmDelete}
+        itemName={volunteerToDelete?.name}
+        itemType="Volunteer"
       />
 
     </>

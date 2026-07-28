@@ -1,61 +1,63 @@
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "../ui/alert-dialog";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "../ui/dialog";
 
-export default function DeleteUserDialog({
+import { Button } from "../ui/button";
+
+export default function DeleteConfirmationDialog({
   open,
   onOpenChange,
-  user,
   onDelete,
+  itemName,
+  itemType,
 }) {
   return (
-    <AlertDialog
+    <Dialog
       open={open}
       onOpenChange={onOpenChange}
     >
-      <AlertDialogContent>
+      <DialogContent className="sm:max-w-md">
 
-        <AlertDialogHeader>
+        <DialogHeader>
 
-          <AlertDialogTitle>
-            Delete User
-          </AlertDialogTitle>
+          <DialogTitle className="text-red-600">
+            Delete {itemType}
+          </DialogTitle>
 
-          <AlertDialogDescription>
-            {user
-              ? `Are you sure you want to delete ${user.name}? This action cannot be undone.`
-              : "Are you sure you want to delete this user?"}
-          </AlertDialogDescription>
+          <DialogDescription>
+            Are you sure you want to delete{" "}
+            <span className="font-semibold">
+              "{itemName}"
+            </span>
+            ? This action cannot be undone.
+          </DialogDescription>
 
-        </AlertDialogHeader>
+        </DialogHeader>
 
-        <AlertDialogFooter>
+        <DialogFooter>
 
-          <AlertDialogCancel>
-
-            Cancel
-
-          </AlertDialogCancel>
-
-          <AlertDialogAction
-            onClick={onDelete}
-            className="bg-red-600 hover:bg-red-700"
+          <Button
+            variant="outline"
+            onClick={() => onOpenChange(false)}
           >
+            Cancel
+          </Button>
 
+          <Button
+            variant="destructive"
+            onClick={onDelete}
+          >
             Delete
+          </Button>
 
-          </AlertDialogAction>
+        </DialogFooter>
 
-        </AlertDialogFooter>
-
-      </AlertDialogContent>
-    </AlertDialog>
+      </DialogContent>
+    </Dialog>
   );
 }

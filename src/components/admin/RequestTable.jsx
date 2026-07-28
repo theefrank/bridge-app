@@ -303,12 +303,13 @@ export default function RequestTable({
       />
 
       <DeleteConfirmationDialog
-        user={requestToDelete}
         open={deleteDialogOpen}
         onOpenChange={setDeleteDialogOpen}
         onDelete={confirmDelete}
+        itemName={requestToDelete?.title}
+        itemType="Request"
       />
-
+     
     </>
   );
 }
