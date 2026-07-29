@@ -21,7 +21,7 @@ import {
   requests as initialRequests,
 } from "../../data/adminData";
 import RecentActivity from "../../components/admin/dashboard/RecentActivity";
-import RequestStatusChart from "../../components/admin/dashboard/RequestStatusChart";
+import RequestStatusChart from "../../components/admin/common/RequestStatusChart";
 import DashboardHeader from "../../components/admin/dashboard/DashboardHeader";
 import TopVolunteers from "../../components/admin/dashboard/TopVolunteers";
 import PlatformInsights from "../../components/admin/dashboard/PlatformInsights";
