@@ -94,3 +94,24 @@ def delete_request(id):
     return jsonify({
         "message": "Request deleted"
     })
+
+@requests_bp.patch(
+    "/requests/<int:id>/accept"
+)
+def accept_request(id):
+
+    request_item = Request.query.get_or_404(id)
+
+    data = request.get_json()
+
+    request_item.status = "Approved"
+
+    request_item.volunteer_id = data[
+        "volunteer_id"
+    ]
+
+    db.session.commit()
+
+    return jsonify(
+        request_item.to_dict()
+    )
