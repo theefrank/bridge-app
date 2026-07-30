@@ -81,3 +81,16 @@ def update_request(id):
     return jsonify(
         request_item.to_dict()
     )
+
+@requests_bp.delete("/requests/<int:id>")
+def delete_request(id):
+
+    request_item = Request.query.get_or_404(id)
+
+    db.session.delete(request_item)
+
+    db.session.commit()
+
+    return jsonify({
+        "message": "Request deleted"
+    })
