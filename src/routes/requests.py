@@ -43,3 +43,41 @@ def create_request():
     return jsonify(
         request_item.to_dict()
     ), 201
+
+@requests_bp.put("/requests/<int:id>")
+def update_request(id):
+
+    request_item = Request.query.get_or_404(id)
+
+    data = request.get_json()
+
+    request_item.title = data.get(
+        "title",
+        request_item.title
+    )
+
+    request_item.description = data.get(
+        "description",
+        request_item.description
+    )
+
+    request_item.category = data.get(
+        "category",
+        request_item.category
+    )
+
+    request_item.location = data.get(
+        "location",
+        request_item.location
+    )
+
+    request_item.status = data.get(
+        "status",
+        request_item.status
+    )
+
+    db.session.commit()
+
+    return jsonify(
+        request_item.to_dict()
+    )
