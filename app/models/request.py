@@ -46,3 +46,18 @@ class Request(db.Model):
         db.ForeignKey("skills.id"),
         nullable=False
     )
+
+    def to_dict(self):
+    return {
+        "id": self.id,
+        "title": self.title,
+        "description": self.description,
+        "category": self.category,
+        "status": self.status,
+        "location": self.location,
+        "user_id": self.user_id,
+        "volunteer_id": self.volunteer_id,
+        "skill_id": self.skill_id,
+        "created_at": self.created_at,
+        "completed_at": self.completed_at,
+    }
