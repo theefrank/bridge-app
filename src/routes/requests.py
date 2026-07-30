@@ -115,3 +115,22 @@ def accept_request(id):
     return jsonify(
         request_item.to_dict()
     )
+
+from datetime import datetime
+
+@requests_bp.patch(
+    "/requests/<int:id>/complete"
+)
+def complete_request(id):
+
+    request_item = Request.query.get_or_404(id)
+
+    request_item.status = "Completed"
+
+    request_item.completed_at = datetime.utcnow()
+
+    db.session.commit()
+
+    return jsonify(
+        request_item.to_dict()
+    )
