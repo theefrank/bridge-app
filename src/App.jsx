@@ -1,104 +1,55 @@
 import { Routes, Route } from "react-router-dom";
 
-// Public Pages
 import Home from "./routes/Home";
 import About from "./routes/About";
 import Login from "./routes/Login";
 import Register from "./routes/Register";
+import ProtectedRoute from "./routes/ProtectedRoute";
 import ForgotPassword from "./routes/ForgotPassword";
 
-// Requests
-import Requests from "./pages/requests/Requests";
-import CreateRequest from "./pages/requests/CreateRequest";
-import RequestDetails from "./pages/requests/RequestDetails";
-
-// User Pages
 import UserDashboard from "./pages/user/UserDashboard";
-import MyRequests from "./pages/user/MyRequests";
 import MyActivity from "./pages/user/MyActivity";
 import Settings from "./pages/user/Settings";
+import Profile from "./pages/user/Profile";
+import EditProfile from "./pages/user/EditProfile";
 
-// Volunteer Pages
 import VolunteerDashboard from "./pages/volunteer/VolunteerDashboard";
 import Opportunities from "./pages/volunteer/Opportunities";
+import OpportunityDetails from "./pages/volunteer/OpportunityDetails";
+import MyApplications from "./pages/volunteer/MyApplications";
+import ApplicationHistory from "./pages/volunteer/ApplicationHistory";
 
-// Shared Pages
-import Profile from "./pages/profile/Profile";
-
-// Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import UsersManagement from "./pages/admin/UsersManagement";
+import CategoriesManagement from "./pages/admin/CategoriesManagement";
 import ManageUsers from "./pages/admin/ManageUsers";
 import ManageRequests from "./pages/admin/ManageRequests";
 import ManageVolunteers from "./pages/admin/ManageVolunteers";
 import Reports from "./pages/admin/Reports";
 import AdminSettings from "./pages/admin/Settings";
 
-// Route Protection
-import ProtectedRoute from "./routes/ProtectedRoute";
+import Requests from "./pages/requests/Requests";
+import CreateRequest from "./pages/requests/CreateRequest";
+import RequestDetails from "./pages/requests/RequestDetails";
 
 function App() {
   return (
     <Routes>
-
-      {/* Public Routes             */}
-
       <Route path="/" element={<Home />} />
-
       <Route path="/about" element={<About />} />
-
       <Route path="/login" element={<Login />} />
-
       <Route path="/register" element={<Register />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
 
-      <Route
-        path="/forgot-password"
-        element={<ForgotPassword />}
-      />
-
-      <Route
-        path="/requests"
-        element={<Requests />}
-      />
-
-      <Route
-        path="/requests/:id"
-        element={<RequestDetails />}
-      />
-
-      {/* User Routes               */}
+      <Route path="/requests" element={<Requests />} />
+      <Route path="/requests/new" element={<CreateRequest />} />
+      <Route path="/requests/:id" element={<RequestDetails />} />
 
       <Route
         path="/dashboard"
         element={
           <ProtectedRoute>
             <UserDashboard />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/my-requests"
-        element={
-          <ProtectedRoute>
-            <MyRequests />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/requests/new"
-        element={
-          <ProtectedRoute>
-            <CreateRequest />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/activity"
-        element={
-          <ProtectedRoute>
-            <MyActivity />
           </ProtectedRoute>
         }
       />
@@ -113,6 +64,24 @@ function App() {
       />
 
       <Route
+        path="/profile/edit"
+        element={
+          <ProtectedRoute>
+            <EditProfile />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/edit-profile"
+        element={
+          <ProtectedRoute>
+            <EditProfile />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
         path="/settings"
         element={
           <ProtectedRoute>
@@ -121,10 +90,17 @@ function App() {
         }
       />
 
-      {/* Volunteer Routes          */}
+      <Route
+        path="/my-activity"
+        element={
+          <ProtectedRoute>
+            <MyActivity />
+          </ProtectedRoute>
+        }
+      />
 
       <Route
-        path="/volunteer/dashboard"
+        path="/volunteer-dashboard"
         element={
           <ProtectedRoute>
             <VolunteerDashboard />
@@ -141,10 +117,35 @@ function App() {
         }
       />
 
-      {/* Admin Routes              */}
+      <Route
+        path="/opportunities/:id"
+        element={
+          <ProtectedRoute>
+            <OpportunityDetails />
+          </ProtectedRoute>
+        }
+      />
 
       <Route
-        path="/admin/dashboard"
+        path="/applications"
+        element={
+          <ProtectedRoute>
+            <MyApplications />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/applications/history"
+        element={
+          <ProtectedRoute>
+            <ApplicationHistory />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin-dashboard"
         element={
           <ProtectedRoute>
             <AdminDashboard />
@@ -156,7 +157,25 @@ function App() {
         path="/admin/users"
         element={
           <ProtectedRoute>
-            <ManageUsers />
+            <UsersManagement />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/categories"
+        element={
+          <ProtectedRoute>
+            <CategoriesManagement />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/dashboard"
+        element={
+          <ProtectedRoute>
+            <AdminDashboard />
           </ProtectedRoute>
         }
       />
@@ -197,17 +216,12 @@ function App() {
         }
       />
 
-      {/* 404                       */}
-
       <Route
         path="*"
         element={
-          <h1 className="text-center text-3xl mt-20">
-            404 - Page Not Found
-          </h1>
+          <h1 className="text-center text-3xl mt-20">404 - Page Not Found</h1>
         }
       />
-
     </Routes>
   );
 }
