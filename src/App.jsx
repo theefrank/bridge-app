@@ -20,7 +20,6 @@ import MyApplications from "./pages/volunteer/MyApplications";
 import ApplicationHistory from "./pages/volunteer/ApplicationHistory";
 
 import AdminDashboard from "./pages/admin/AdminDashboard";
-import UsersManagement from "./pages/admin/UsersManagement";
 import CategoriesManagement from "./pages/admin/CategoriesManagement";
 import ManageUsers from "./pages/admin/ManageUsers";
 import ManageRequests from "./pages/admin/ManageRequests";
@@ -157,7 +156,7 @@ function App() {
         path="/admin/users"
         element={
           <ProtectedRoute>
-            <UsersManagement />
+            <ManageUsers />
           </ProtectedRoute>
         }
       />
