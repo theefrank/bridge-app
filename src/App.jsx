@@ -42,8 +42,7 @@ function App() {
         
       <Route path="/forgot-password" element={<ForgotPassword />} /> 
         
-       
-
+        
       {/* Protected Routes */}
       <Route
         path="/dashboard"
