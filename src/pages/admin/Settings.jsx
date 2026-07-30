@@ -3,6 +3,22 @@ import { useState } from "react";
 import AdminSidebar from "../../components/admin/AdminSidebar";
 import SettingsSection from "../../components/admin/settings/SettingsSection";
 import SettingsToggle from "../../components/admin/settings/SettingsToggle";
+import ChangePasswordDialog from "../../components/admin/settings/ChangePasswordDialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../components/ui/select";
+import {
+  Building2,
+  Globe,
+  ShieldCheck,
+  UserCircle,
+} from "lucide-react";
+
+import { toast } from "sonner";
 
 export default function Settings() {
   const [platformName, setPlatformName] =
@@ -30,14 +46,58 @@ export default function Settings() {
 
   const [passwordLength, setPasswordLength] =
     useState(8);
+  
+  const [adminName, setAdminName] =
+  useState("Bridge Administrator");
 
-  const [theme, setTheme] =
-    useState("Light");
+  const [adminEmail, setAdminEmail] =
+  useState("admin@bridge.org"); 
+  
+  const [
+  passwordDialogOpen,
+  setPasswordDialogOpen,
+  ] = useState(false);
+
+  function handleReset() {
+  setPlatformName("Bridge");
+
+  setSupportEmail("support@bridge.org");
+
+  setDefaultRole("User");
+
+  setAllowRegistration(true);
+
+  setRequireApproval(false);
+
+  setEmailNotifications(true);
+
+  setSessionTimeout(30);
+
+  setPasswordLength(8);
+
+  setAdminName(
+  "Bridge Administrator"
+  );
+
+  setAdminEmail(
+  "admin@bridge.org"
+  );
+
+  toast.info(
+    "Settings have been reset to their default values."
+  );
+  }   
 
   function handleSave(e) {
     e.preventDefault();
 
-    alert("Settings saved successfully!");
+    toast.success(
+      "Settings saved successfully!",
+      {
+        description:
+          "Your platform settings have been updated.",
+      }
+    );    
 
     console.log({
       platformName,
@@ -48,7 +108,8 @@ export default function Settings() {
       emailNotifications,
       sessionTimeout,
       passwordLength,
-      theme,
+      adminName,
+      adminEmail,
     });
   }
 
@@ -77,11 +138,23 @@ export default function Settings() {
           className="space-y-8"
         >
 
+          <div className="grid xl:grid-cols-2 gap-8">
+
           <SettingsSection
-            title="General"
+            title={
+              <div className="flex items-center gap-2">
+
+                <Building2
+                  size={20}
+                  className="text-[#6B8F71]"
+                />
+
+                <span>General</span>
+
+              </div>
+            }
             description="Basic platform information."
           >
-
             <div>
 
               <label className="block font-medium mb-2">
@@ -126,28 +199,122 @@ export default function Settings() {
                 Default User Role
               </label>
 
-              <select
+              <Select
                 value={defaultRole}
-                onChange={(e) =>
-                  setDefaultRole(
-                    e.target.value
-                  )
-                }
-                className="bridge-input"
+                onValueChange={setDefaultRole}
               >
-                <option>User</option>
-                <option>Volunteer</option>
 
-              </select>
+                <SelectTrigger className="bridge-input">
+
+                  <SelectValue placeholder="Select role" />
+
+                </SelectTrigger>
+
+                <SelectContent>
+
+                  <SelectItem value="User">
+                    User
+                  </SelectItem>
+
+                  <SelectItem value="Volunteer">
+                    Volunteer
+                  </SelectItem>
+
+                </SelectContent>
+
+              </Select>
 
             </div>
 
           </SettingsSection>
 
           <SettingsSection
-            title="Platform"
-            description="Control platform access."
+            title={
+              <div className="flex items-center gap-2">
+
+                <UserCircle
+                  size={20}
+                  className="text-[#D08C60]"
+                />
+
+                <span>Administrator</span>
+
+              </div>
+            }
+
+            description="Manage your administrator account."
+
           >
+
+            <div>
+
+              <label className="block font-medium mb-2">
+                Full Name
+              </label>
+
+              <input
+                type="text"
+                value={adminName}
+                onChange={(e) =>
+                  setAdminName(e.target.value)
+                }
+                className="bridge-input"
+              />
+
+            </div>
+
+            <div>
+
+              <label className="block font-medium mb-2">
+                Email Address
+              </label>
+
+              <input
+                type="email"
+                value={adminEmail}
+                onChange={(e) =>
+                  setAdminEmail(e.target.value)
+                }
+                className="bridge-input"
+              />
+
+            </div>
+
+            <div>
+
+              <label className="block font-medium mb-2">
+                Password
+              </label>
+
+            <button
+              type="button"
+              onClick={() =>
+                setPasswordDialogOpen(true)
+              }
+              className="btn-secondary w-full"
+            >
+              Change Password
+            </button>
+
+            </div>
+
+          </SettingsSection>
+
+          <SettingsSection
+            title={
+              <div className="flex items-center gap-2">
+
+                <Globe
+                  size={20}
+                  className="text-[#D08C60]"
+                />
+
+                <span>Platform</span>
+
+              </div>
+            }
+            description="Control platform access."
+          >          
 
             <div className="flex justify-between items-center">
 
@@ -221,10 +388,20 @@ export default function Settings() {
           </SettingsSection>
 
           <SettingsSection
-            title="Security"
+            title={
+              <div className="flex items-center gap-2">
+
+                <ShieldCheck
+                  size={20}
+                  className="text-[#6B8F71]"
+                />
+
+                <span>Security</span>
+
+              </div>
+            }
             description="Authentication and session settings."
           >
-
             <div>
 
               <label className="block font-medium mb-2">
@@ -266,37 +443,28 @@ export default function Settings() {
             </div>
 
           </SettingsSection>
+          </div>
 
-          <SettingsSection
-            title="Appearance"
-            description="Customize the administrator interface."
-          >
+          <div className="flex justify-end gap-4">
 
-            <div>
-
-              <label className="block font-medium mb-2">
-                Theme
-              </label>
-
-              <select
-                value={theme}
-                onChange={(e) =>
-                  setTheme(
-                    e.target.value
-                  )
-                }
-                className="bridge-input"
-              >
-                <option>Light</option>
-                <option>Dark</option>
-                <option>System</option>
-              </select>
-
-            </div>
-
-          </SettingsSection>
-
-          <div className="flex justify-end">
+            <button
+              type="button"
+              onClick={handleReset}
+              className="
+                px-6
+                py-3
+                rounded-xl
+                border
+                border-gray-300
+                bg-white
+                text-gray-700
+                font-medium
+                hover:bg-gray-50
+                transition
+              "
+            >
+              Reset Settings
+            </button>
 
             <button
               type="submit"
@@ -305,9 +473,14 @@ export default function Settings() {
               Save Changes
             </button>
 
-          </div>
+          </div>          
 
         </form>
+
+        <ChangePasswordDialog
+        open={passwordDialogOpen}
+        onOpenChange={setPasswordDialogOpen}
+      />
 
       </main>
 

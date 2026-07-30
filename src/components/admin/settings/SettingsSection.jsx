@@ -8,7 +8,7 @@ export default function SettingsSection({
 
       <div className="mb-6">
 
-        <h2 className="text-2xl font-semibold">
+        <h2 className="flex items-center text-2xl font-semibold">
           {title}
         </h2>
 
