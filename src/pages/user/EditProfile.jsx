@@ -1,29 +1,23 @@
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
-import ActivityTimeline from "../../components/activity/ActivityTimeline";
+import EditProfileForm from "../../components/profile/EditProfileForm";
 
-export default function MyActivity() {
+export default function EditProfile() {
   return (
     <DashboardLayout>
-
       <div className="space-y-8">
-
         <div>
-
           <h1 className="text-4xl font-bold">
-            My Activity
+            Edit Profile
           </h1>
 
           <p className="text-gray-600 mt-2">
-            Keep track of everything you've done on
-            Bridge.
+            Keep your profile information accurate and
+            up to date.
           </p>
-
         </div>
 
-        <ActivityTimeline />
-
+        <EditProfileForm />
       </div>
-
     </DashboardLayout>
   );
 }
