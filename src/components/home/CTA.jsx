@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 export default function CTA() {
   return (
     <section className="py-20 px-6">
@@ -14,13 +15,18 @@ export default function CTA() {
           </p>
 
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <button className="btn-primary">
+            <Link
+            to="/requests/new"
+            className="btn-primary"
+            >
               Request Help
-            </button>
-
-            <button className="btn-secondary">
-              Become a Volunteer
-            </button>
+              </Link>
+               <Link
+               to="/opportunities"
+               className="btn-secondary"
+               >
+                Become a Volunteer
+                </Link>
           </div>
         </div>
       </div>

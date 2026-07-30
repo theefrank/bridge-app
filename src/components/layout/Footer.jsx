@@ -1,4 +1,5 @@
 import { Mail, MapPin, HeartHandshake } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
@@ -24,20 +25,24 @@ export default function Footer() {
             </h3>
 
             <ul className="space-y-2">
-          <li>
-            <a href="#" className="hover:text-[#E7B79B]">
-              Home
-            </a>
-          </li>
+              <li>
+  <Link
+    to="/"
+    className="hover:text-[#E7B79B]"
+  >
+    Home
+  </Link>
+</li>
+          
 
           <li>
-            <a href="#" className="hover:text-[#E7B79B]">
+            <a href="/#how-it-works" className="hover:text-[#E7B79B]">
               How It Works
             </a>
           </li>
 
           <li>
-            <a href="#" className="hover:text-[#E7B79B]">
+            <a href="/#categories" className="hover:text-[#E7B79B]">
               Categories
             </a>
           </li>
