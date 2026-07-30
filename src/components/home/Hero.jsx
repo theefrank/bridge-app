@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 export default function Hero() {
   return (
     <section className="pb-12">
@@ -23,13 +24,19 @@ export default function Hero() {
           </p>
 
           <div className="flex gap-4 mt-8">
-            <button className="btn-primary">
+            <Link
+             to="/register"
+             className="btn-primary"
+             >
               Get Started
-            </button>
-
-            <button className="btn-secondary">
+              </Link>
+              <Link
+              to="/requests"
+              className="btn-secondary"
+              >
               Browse Requests
-            </button>
+              </Link>
+            
           </div>
         </div>
 

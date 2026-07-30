@@ -1,13 +1,52 @@
+import DashboardLayout from "../../components/dashboard/DashboardLayout";
+
 export default function Profile() {
   return (
-    <div className="min-h-screen bg-gray-50 px-6 py-12">
-      <div className="mx-auto max-w-3xl rounded-lg bg-white p-8 shadow-sm">
-        <h1 className="text-3xl font-semibold text-gray-800">Profile</h1>
-        <p className="mt-4 text-gray-600">
-          Your profile page is ready and the app can now build successfully.
-        </p>
+    <DashboardLayout>
+    <div className="min-h-screen bg-[#FAF7F2] p-8">
+      <div className="max-w-3xl mx-auto bridge-card">
+        <h1 className="text-3xl font-bold mb-6">
+          My Profile
+        </h1>
+
+        <div className="space-y-4">
+          <div>
+            <h3 className="font-semibold">
+              Name
+            </h3>
+            <p>Jane Doe</p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold">
+              Email
+            </h3>
+            <p>jane@email.com</p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold">
+              Role
+            </h3>
+            <p>User</p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold">
+              Bio
+            </h3>
+            <p>
+              Passionate about community
+              support and learning.
+            </p>
+          </div>
+
+          <button className="btn-primary">
+            Edit Profile
+          </button>
+        </div>
       </div>
     </div>
+    </DashboardLayout>
   );
 }
-
