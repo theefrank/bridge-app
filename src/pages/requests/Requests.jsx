@@ -11,6 +11,7 @@ import {
 
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
 import RequestCard from "../../components/requests/RequestCard";
+import SearchBar from "../../components/common/SearchBar";
 
 const requests = [
   {
@@ -100,23 +101,12 @@ export default function Requests() {
       <div className="bridge-card mb-8">
         <div className="grid md:grid-cols-2 gap-4">
           {/* Search */}
-          <div className="relative">
-            <Search
-              size={18}
-              className="absolute left-3 top-4 text-gray-400"
-            />
-
-            <input
-              type="text"
-              placeholder="Search requests..."
-              value={searchTerm}
-              onChange={(e) =>
-                setSearchTerm(e.target.value)
-              }
-              className="bridge-input pl-10"
-            />
-          </div>
-
+          <SearchBar
+            placeholder="Search requests..."
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+          />
+          
           {/* Category Filter */}
           
           

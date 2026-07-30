@@ -1,4 +1,9 @@
-import { createContext, useContext, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 const AuthContext = createContext();
 
@@ -7,34 +12,85 @@ export default function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function checkSession() {
-      try {
-        const data = await getCurrentUser();
-        setUser(data);
-      } catch {
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
+    const savedUser = localStorage.getItem("bridgeUser");
+
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
     }
 
-    checkSession();
+    setLoading(false);
   }, []);
 
-  async function login(credentials) {
-    const data = await loginUser(credentials);
-    setUser(data);
-    return data;
+  function login(email, password) {
+
+  // Admin Login
+  if (
+    email === "admin@bridge.com" &&
+    password === "Admin@123"
+  ) {
+
+    const admin = {
+      id: 1,
+      name: "Bridge Admin",
+      email,
+      role: "admin",
+    };
+
+    localStorage.setItem(
+      "bridgeUser",
+      JSON.stringify(admin)
+    );
+
+    setUser(admin);
+
+    return admin;
   }
 
-  async function register(userData) {
-    const data = await registerUser(userData);
-    setUser(data);
-    return data;
+  // User Login
+  if (
+    email === "user@bridge.com" &&
+    password === "User@123"
+  ) {
+
+    const user = {
+      id: 2,
+      name: "Bridge User",
+      email,
+      role: "user",
+    };
+
+    localStorage.setItem(
+      "bridgeUser",
+      JSON.stringify(user)
+    );
+
+    setUser(user);
+
+    return user;
   }
 
-  async function logout() {
-    await logoutUser();
+  throw new Error("Invalid email or password.");
+}
+
+  function register(userData) {
+    const newUser = {
+      ...userData,
+      id: Date.now(),
+      role: "user",
+    };
+
+    localStorage.setItem(
+      "bridgeUser",
+      JSON.stringify(newUser)
+    );
+
+    setUser(newUser);
+
+    return newUser;
+  }
+
+  function logout() {
+    localStorage.removeItem("bridgeUser");
     setUser(null);
   }
 
@@ -47,6 +103,7 @@ export default function AuthProvider({ children }) {
         register,
         logout,
         isAuthenticated: !!user,
+        isAdmin: user?.role === "admin",
       }}
     >
       {children}

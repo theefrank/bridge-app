@@ -1,62 +1,116 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
 import { Eye, EyeOff } from "lucide-react";
 
+import { useAuth } from "../context/AuthContext";
+
 export default function Login() {
+
   const { login } = useAuth();
+
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] =
+    useState(false);
 
-  const handleLogin = (e) => {
+  const [errors, setErrors] =
+    useState({});
+
+  function handleChange(e) {
+
+    setErrors({});
+
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+
+  }
+
+  async function handleLogin(e) {
+
     e.preventDefault();
 
     const newErrors = {};
 
     if (!formData.email) {
-      newErrors.email = "Email is required";
+
+      newErrors.email =
+        "Email is required";
+
     } else if (
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+        formData.email
+      )
     ) {
-      newErrors.email = "Please enter a valid email address";
+
+      newErrors.email =
+        "Please enter a valid email address";
+
     }
 
     if (!formData.password) {
-       newErrors.password = "Password is required";
+
+      newErrors.password =
+        "Password is required";
+
     } else if (
       !/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&.#_-]).{8,}$/.test(
-      formData.password
-    )
+        formData.password
+      )
     ) {
-      newErrors.password = "Use at least 8 characters with a letter, number, and special character";
+
+      newErrors.password =
+        "Use at least 8 characters with a letter, number and special character";
+
     }
-    
+
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length > 0) {
       return;
     }
 
-    login({
-      id: 1,
-      name: "Test User",
-      role: "user",
-    });
+    try {
 
-    navigate("/dashboard");
-  };
+      const loggedInUser = await login(
+        formData.email,
+        formData.password
+      );
+
+      if (
+        loggedInUser.role === "admin"
+      ) {
+
+        navigate("/admin/dashboard");
+
+      } else {
+
+        navigate("/dashboard");
+
+      }
+
+    } catch (error) {
+
+      setErrors({
+        password: error.message,
+      });
+
+    }
+
+  }
 
   return (
+
     <div className="min-h-screen flex items-center justify-center bg-[#FAF7F2] px-6">
+
       <div className="bridge-card w-full max-w-md">
+
         <h1 className="text-3xl font-bold text-center mb-2">
           Welcome Back
         </h1>
@@ -66,16 +120,13 @@ export default function Login() {
         </p>
 
         <form onSubmit={handleLogin}>
+
           <input
             type="email"
+            name="email"
             placeholder="Email"
             value={formData.email}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                email: e.target.value,
-              })
-            }
+            onChange={handleChange}
             className={`bridge-input mb-1 ${
               errors.email
                 ? "border-red-500"
@@ -90,28 +141,42 @@ export default function Login() {
           )}
 
           <div className="relative mb-1">
-           <input
-           type={showPassword ? "text" : "password"}
-           placeholder="Password"
-           value={formData.password}
-           onChange={(e) =>
-           setFormData({
-           ...formData,
-           password: e.target.value,
-           })
-           }
-           className={`bridge-input pr-12 ${
-           errors.password ? "border-red-500" : ""
-           }`}
-           />
 
-           <button
-           type="button"
-           onClick={() => setShowPassword(!showPassword)}
-           className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
-           >
-           {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-           </button>
+            <input
+              type={
+                showPassword
+                  ? "text"
+                  : "password"
+              }
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              className={`bridge-input pr-12 ${
+                errors.password
+                  ? "border-red-500"
+                  : ""
+              }`}
+            />
+
+            <button
+              type="button"
+              onClick={() =>
+                setShowPassword(
+                  !showPassword
+                )
+              }
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+            >
+
+              {showPassword ? (
+                <EyeOff size={20} />
+              ) : (
+                <Eye size={20} />
+              )}
+
+            </button>
+
           </div>
 
           {errors.password && (
@@ -126,27 +191,36 @@ export default function Login() {
           >
             Login
           </button>
+
         </form>
 
         <div className="mt-6 text-center">
+
           <Link
             to="/forgot-password"
             className="text-[#D08C60]"
           >
             Forgot Password?
           </Link>
+
         </div>
 
         <p className="mt-4 text-center text-gray-600">
+
           Don't have an account?{" "}
+
           <Link
             to="/register"
             className="text-[#D08C60] font-medium"
           >
             Register
           </Link>
+
         </p>
+
       </div>
+
     </div>
+
   );
 }
