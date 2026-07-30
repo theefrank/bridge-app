@@ -10,6 +10,20 @@ pipenv install
 pipenv run python run.py
 ```
 
+## Seed demo data
+
+```bash
+cd backend
+pipenv run python seed.py
+```
+
+## Run tests
+
+```bash
+cd backend
+pipenv run python -m unittest discover -s tests -v
+```
+
 ## Endpoints
 
 - `GET /health`

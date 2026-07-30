@@ -7,7 +7,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "../../components/ui/select";
 
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
 import RequestCard from "../../components/requests/RequestCard";
