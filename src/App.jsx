@@ -24,9 +24,7 @@ import Requests from "./pages/requests/Requests";
 import CreateRequest from "./pages/requests/CreateRequest";
 import RequestDetails from "./pages/requests/RequestDetails";
 
-import EditProfile from "./pages/user/EditProfile";
-
-import ForgotPassword from "./pages/auth/ForgotPassword";
+import ForgotPassword from "./pages/public/ForgotPassword";
 
 function App() {
   return (
@@ -42,7 +40,7 @@ function App() {
         
       <Route path="/forgot-password" element={<ForgotPassword />} /> 
         
-        
+
       {/* Protected Routes */}
       <Route
         path="/dashboard"
@@ -140,18 +138,17 @@ function App() {
           }
       />
 
-          
-        <Route path="/requests" element={<Requests />} />
+      <Route path="/requests" element={<Requests />} />
 
-        <Route
+      <Route
         path="/requests/new"
         element={<CreateRequest />}
-        />
+      />
 
-        <Route
+      <Route
         path="/requests/:id"
         element={<RequestDetails />}
-        />
+      />
     </Routes>
      
   );
