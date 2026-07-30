@@ -1,6 +1,17 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./pages/public/Home";
+import { Routes, Route } from "react-router-dom";
+import Home from "./routes/Home";
+import About from "./routes/About";
+import Login from "./routes/Login";
+import Register from "./routes/Register";
+import Requests from "./pages/requests/Requests";
+import CreateRequest from "./pages/requests/CreateRequest";
+import RequestDetails from "./pages/requests/RequestDetails";
+
+// Dashboards
+import UserDashboard from "./pages/user/UserDashboard";
 import VolunteerDashboard from "./pages/volunteer/VolunteerDashboard";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+
 import Opportunities from "./pages/volunteer/Opportunities";
 import Profile from "./pages/profile/Profile";
 import MyApplications from "./pages/volunteer/MyApplications";
@@ -67,5 +78,4 @@ function App() {
     </BrowserRouter>
   );
 }
-
 export default App;
