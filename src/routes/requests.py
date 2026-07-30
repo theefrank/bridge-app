@@ -15,3 +15,9 @@ def get_requests():
         request.to_dict()
         for request in requests
     ])
+@requests_bp.get("/requests/<int:id>")
+def get_request(id):
+
+    request = Request.query.get_or_404(id)
+
+    return jsonify(request.to_dict())
