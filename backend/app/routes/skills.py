@@ -72,3 +72,18 @@ def update_skill(id):
     return jsonify(
         skill.to_dict()
     )
+@skills_bp.delete("/<int:id>")
+@admin_required
+def delete_skill(id):
+
+    skill = Skill.query.get_or_404(id)
+
+    db.session.delete(skill)
+
+    db.session.commit()
+
+    return jsonify({
+
+        "message":"Skill deleted"
+
+    })
