@@ -87,3 +87,18 @@ def approve(id):
         application.to_dict()
 
     )
+@applications_bp.delete("/<int:id>")
+@login_required
+def delete_application(id):
+
+    application = VolunteerApplication.query.get_or_404(id)
+
+    db.session.delete(application)
+
+    db.session.commit()
+
+    return jsonify({
+
+        "message":"Application deleted"
+
+    })
