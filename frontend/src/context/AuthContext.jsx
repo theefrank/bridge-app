@@ -5,7 +5,7 @@ import {
   useState,
 } from "react";
 
-import api from "../api";
+import api from "../services/api";
 
 const AuthContext = createContext();
 
@@ -51,21 +51,24 @@ function AuthProvider({ children }) {
   }
 
   async function register(userData) {
-    try {
-      await api.post("/auth/register", userData);
+  console.log("Sending:", userData);
 
-      return await login(
-        userData.email,
-        userData.password
-      );
-    } catch (error) {
-      throw new Error(
-        error.response?.data?.error ||
-          "Registration failed."
-      );
-    }
+  try {
+    await api.post("/auth/register", userData);
+
+    return await login(
+      userData.email,
+      userData.password
+    );
+  } catch (error) {
+    console.log(error.response);
+
+    throw new Error(
+      error.response?.data?.error ||
+      "Registration failed."
+    );
   }
-
+}
   function logout() {
     localStorage.removeItem("bridgeToken");
     localStorage.removeItem("bridgeUser");
