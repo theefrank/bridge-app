@@ -4,12 +4,13 @@ import {
   Briefcase,
 } from "lucide-react";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ApplicationDialog from "../../components/volunteer/ApplicationDialog";
 
 export default function OpportunityDetails() {
 
   const { id } = useParams();
+  const navigate = useNavigate();
   const [showApplicationDialog, setShowApplicationDialog] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
@@ -78,8 +79,8 @@ export default function OpportunityDetails() {
           opportunity={opportunity}
           onClose={() => setShowApplicationDialog(false)}
           onSubmitted={() => {
-            setShowApplicationDialog(false);
             setSubmitted(true);
+            navigate("/applications", { replace: true });
           }}
         />
       )}
