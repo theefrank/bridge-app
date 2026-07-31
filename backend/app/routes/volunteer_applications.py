@@ -69,3 +69,21 @@ def apply():
         application.to_dict()
 
     ),201
+
+@applications_bp.put("/<int:id>")
+@admin_required
+def approve(id):
+
+    application = VolunteerApplication.query.get_or_404(id)
+
+    data = request.get_json()
+
+    application.status = data["status"]
+
+    db.session.commit()
+
+    return jsonify(
+
+        application.to_dict()
+
+    )
