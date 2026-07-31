@@ -1,7 +1,9 @@
 import { MapPin } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import api from "../../services/api";
 
-const requests = [
+const fallbackRequests = [
   {
     id: 1,
     title: "Need Mathematics Tutor",
@@ -30,10 +32,31 @@ const requests = [
 
 export default function RequestDetails() {
   const { id } = useParams();
+  const [request, setRequest] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const request = requests.find(
-    (req) => req.id === Number(id)
-  );
+  useEffect(() => {
+    async function loadRequest() {
+      try {
+        const [requestsResponse, skillsResponse] = await Promise.all([
+          api.get("/requests"),
+          api.get("/skills"),
+        ]);
+        const found = requestsResponse.data.find((item) => item.id === Number(id));
+        const skill = skillsResponse.data.find((item) => item.id === found?.skill_id);
+        setRequest(found ? { ...found, category: skill?.name || "Community" } : null);
+      } catch {
+        setRequest(fallbackRequests.find((item) => item.id === Number(id)) || null);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadRequest();
+  }, [id]);
+
+  if (loading) {
+    return <div className="max-w-4xl mx-auto px-6 py-12">Loading request...</div>;
+  }
 
   if (!request) {
     return (
@@ -66,6 +89,9 @@ export default function RequestDetails() {
           <MapPin size={18} />
           {request.location}
         </p>
+          <Link to="/requests" className="btn-secondary inline-block mt-6">
+            Back to Requests
+          </Link>
       </div>
     </div>
   );

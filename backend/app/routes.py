@@ -5,7 +5,7 @@ from functools import wraps
 from flask import jsonify, request
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import app, db
-from app.models import User, Skill, Request, Review
+from app.models import Application, User, Skill, Request, Review
 
 
 def token_required(f):
@@ -23,9 +23,9 @@ def token_required(f):
 
         try:
             payload = jwt.decode(token, app.config["JWT_SECRET_KEY"], algorithms=["HS256"])
-            current_user = User.query.get(payload["sub"])
+            current_user = User.query.get(int(payload["sub"]))
             if not current_user:
-                return jsonify({"error": "User not found"}), 401
+                return jsonify({"error": "Session expired. Please log in again."}), 401
         except Exception:
             return jsonify({"error": "Token is invalid"}), 401
 
@@ -67,7 +67,7 @@ def login():
         return jsonify({"error": "Invalid credentials"}), 401
 
     token = jwt.encode(
-        {"sub": user.id, "exp": datetime.utcnow() + timedelta(hours=2)},
+        {"sub": str(user.id), "exp": datetime.utcnow() + timedelta(hours=2)},
         app.config["JWT_SECRET_KEY"],
         algorithm="HS256",
     )
@@ -241,3 +241,37 @@ def delete_review(current_user, review_id):
     db.session.delete(review)
     db.session.commit()
     return jsonify({"message": "Review deleted"})
+
+
+@app.route("/applications", methods=["GET"])
+@token_required
+def list_applications(current_user):
+    applications = Application.query.filter_by(user_id=current_user.id).order_by(Application.applied_at.desc()).all()
+    return jsonify([application.to_dict() for application in applications])
+
+
+@app.route("/applications", methods=["POST"])
+@token_required
+def create_application(current_user):
+    payload = request.get_json(silent=True) or {}
+    required = ("opportunity_id", "opportunity_title", "message")
+    if any(not payload.get(field) for field in required):
+        return jsonify({"error": "opportunity_id, opportunity_title and message are required"}), 400
+
+    existing = Application.query.filter_by(
+        user_id=current_user.id,
+        opportunity_id=str(payload["opportunity_id"]),
+    ).first()
+    if existing:
+        return jsonify({"error": "You have already applied for this opportunity"}), 409
+
+    application = Application(
+        opportunity_id=str(payload["opportunity_id"]),
+        opportunity_title=payload["opportunity_title"],
+        location=payload.get("location"),
+        message=payload["message"].strip(),
+        user_id=current_user.id,
+    )
+    db.session.add(application)
+    db.session.commit()
+    return jsonify(application.to_dict()), 201

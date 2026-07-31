@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Search, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
@@ -12,8 +12,9 @@ import {
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
 import RequestCard from "../../components/requests/RequestCard";
 import SearchBar from "../../components/common/SearchBar";
+import api from "../../services/api";
 
-const requests = [
+const fallbackRequests = [
   {
     id: 1,
     title: "Need Mathematics Tutor",
@@ -49,9 +50,36 @@ const requests = [
 ];
 
 export default function Requests() {
+  const [requests, setRequests] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] =
     useState("All");
+
+  useEffect(() => {
+    async function loadRequests() {
+      try {
+        const [requestsResponse, skillsResponse] = await Promise.all([
+          api.get("/requests"),
+          api.get("/skills"),
+        ]);
+        const skills = Object.fromEntries(
+          skillsResponse.data.map((skill) => [skill.id, skill])
+        );
+        setRequests(
+          requestsResponse.data.map((request) => ({
+            ...request,
+            category: skills[request.skill_id]?.name || "Community",
+          }))
+        );
+      } catch {
+        setRequests(fallbackRequests);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadRequests();
+  }, []);
 
   const filteredRequests = requests.filter(
     (request) => {
@@ -143,6 +171,8 @@ export default function Requests() {
             
         </div>
       </div>
+
+      {loading && <p className="mb-6 text-gray-600">Loading requests...</p>}
 
       {/* Results Count */}
       <div className="mb-6 text-gray-600">

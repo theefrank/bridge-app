@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 
 import { useAuth } from "../context/AuthContext";
+import { toast } from "sonner";
 
 export default function Login() {
 
@@ -17,6 +18,9 @@ export default function Login() {
 
   const [showPassword, setShowPassword] =
     useState(false);
+
+  const [loading, setLoading] =
+  useState(false);  
 
   const [errors, setErrors] =
     useState({});
@@ -56,17 +60,8 @@ export default function Login() {
 
     if (!formData.password) {
 
-      newErrors.password =
-        "Password is required";
-
-    } else if (
-      !/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&.#_-]).{8,}$/.test(
-        formData.password
-      )
-    ) {
-
-      newErrors.password =
-        "Use at least 8 characters with a letter, number and special character";
+    newErrors.password =
+      "Password is required";
 
     }
 
@@ -78,30 +73,49 @@ export default function Login() {
 
     try {
 
-      const loggedInUser = await login(
-        formData.email,
-        formData.password
-      );
+  setLoading(true);
 
-      if (
-        loggedInUser.role === "admin"
-      ) {
+  const loggedInUser =
+    await login(
+      formData.email,
+      formData.password
+    );
 
-        navigate("/admin/dashboard");
+  toast.success(
+    "Welcome back!"
+  );
 
-      } else {
+  if (
+    loggedInUser.role === "admin"
+  ) {
 
-        navigate("/dashboard");
+    navigate(
+      "/admin/dashboard"
+    );
 
-      }
+  } else {
 
-    } catch (error) {
+    navigate("/dashboard");
 
-      setErrors({
-        password: error.message,
-      });
+  }
 
-    }
+} catch (error) {
+
+  toast.error(
+    error.message ||
+      "Login failed."
+  );
+
+  setErrors({
+    password:
+      error.message,
+  });
+
+} finally {
+
+  setLoading(false);
+
+}
 
   }
 
@@ -187,9 +201,18 @@ export default function Login() {
 
           <button
             type="submit"
-            className="btn-primary w-full mt-2"
+            disabled={loading}
+            className="
+              btn-primary
+              w-full
+              mt-2
+              disabled:opacity-60
+              disabled:cursor-not-allowed
+            "
           >
-            Login
+            {loading
+              ? "Signing In..."
+              : "Login"}
           </button>
 
         </form>

@@ -19,6 +19,7 @@ class User(db.Model):
 
     requests = db.relationship("Request", back_populates="user", cascade="all, delete-orphan")
     reviews = db.relationship("Review", back_populates="user", cascade="all, delete-orphan")
+    applications = db.relationship("Application", back_populates="user", cascade="all, delete-orphan")
     skills = db.relationship("Skill", secondary=user_skills, back_populates="users")
 
     def to_dict(self):
@@ -106,4 +107,32 @@ class Review(db.Model):
             "user_id": self.user_id,
             "request_id": self.request_id,
             "created_at": self.created_at.isoformat(),
+        }
+
+
+class Application(db.Model):
+    __tablename__ = "applications"
+
+    id = db.Column(db.Integer, primary_key=True)
+    opportunity_id = db.Column(db.String(80), nullable=False)
+    opportunity_title = db.Column(db.String(120), nullable=False)
+    location = db.Column(db.String(120), nullable=True)
+    message = db.Column(db.Text, nullable=False)
+    status = db.Column(db.String(20), default="Pending", nullable=False)
+    applied_at = db.Column(db.DateTime, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+
+    user = db.relationship("User", back_populates="applications")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "opportunity_id": self.opportunity_id,
+            "title": self.opportunity_title,
+            "organization": "Bridge Community",
+            "location": self.location,
+            "message": self.message,
+            "status": self.status,
+            "appliedDate": self.applied_at.strftime("%d %b %Y"),
+            "applied_at": self.applied_at.isoformat(),
         }

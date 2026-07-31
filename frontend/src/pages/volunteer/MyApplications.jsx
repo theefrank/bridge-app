@@ -1,8 +1,10 @@
+import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
 import ApplicationCard from "../../components/volunteer/ApplicationCard";
+import api from "../../services/api";
 
 export default function MyApplications() {
-  const applications = [
+  const fallbackApplications = [
     {
       id: 1,
       title: "Mathematics Tutor",
@@ -30,6 +32,15 @@ export default function MyApplications() {
       status: "Rejected",
     },
   ];
+  const [applications, setApplications] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    api.get("/applications")
+      .then((response) => setApplications(response.data))
+      .catch(() => setApplications(fallbackApplications))
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <DashboardLayout>
@@ -49,8 +60,13 @@ export default function MyApplications() {
 
         </div>
 
+        {loading && <p className="text-gray-600">Loading applications...</p>}
+
         <div className="space-y-6">
 
+          {!loading && applications.length === 0 && (
+            <div className="bridge-card text-gray-600">You have not submitted any applications yet.</div>
+          )}
           {applications.map((application) => (
             <ApplicationCard
               key={application.id}

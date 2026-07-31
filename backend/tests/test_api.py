@@ -1,4 +1,8 @@
+import os
 import unittest
+
+os.environ["DATABASE_URL"] = "sqlite:///:memory:"
+
 from werkzeug.security import generate_password_hash
 from app import app, db
 from app.models import User

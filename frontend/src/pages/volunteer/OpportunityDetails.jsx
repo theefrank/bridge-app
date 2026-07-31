@@ -3,11 +3,16 @@ import {
   CalendarDays,
   Briefcase,
 } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import ApplicationDialog from "../../components/volunteer/ApplicationDialog";
 
 export default function OpportunityDetails() {
 
   const { id } = useParams();
+  const navigate = useNavigate();
+  const [showApplicationDialog, setShowApplicationDialog] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const opportunity = {
     id,
@@ -63,11 +68,22 @@ export default function OpportunityDetails() {
 
         </div>
 
-        <button className="btn-primary mt-10">
-          Apply Now
+        <button className="btn-primary mt-10" onClick={() => setShowApplicationDialog(true)} disabled={submitted}>
+          {submitted ? "Application Submitted" : "Apply Now"}
         </button>
 
       </div>
+
+      {showApplicationDialog && (
+        <ApplicationDialog
+          opportunity={opportunity}
+          onClose={() => setShowApplicationDialog(false)}
+          onSubmitted={() => {
+            setSubmitted(true);
+            navigate("/applications", { replace: true });
+          }}
+        />
+      )}
 
     </div>
   );

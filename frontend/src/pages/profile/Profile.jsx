@@ -1,6 +1,9 @@
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
+  const navigate = useNavigate();
+
   return (
     <DashboardLayout>
     <div className="min-h-screen bg-[#FAF7F2] p-8">
@@ -41,7 +44,7 @@ export default function Profile() {
             </p>
           </div>
 
-          <button className="btn-primary">
+          <button className="btn-primary" onClick={() => navigate("/profile/edit")}>
             Edit Profile
           </button>
         </div>
