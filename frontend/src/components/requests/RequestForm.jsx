@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../../services/api";
 import {
   Select,
   SelectContent,
@@ -8,6 +10,7 @@ import {
 } from "../ui/select";
 
 export default function RequestForm() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: "",
     category: "",
@@ -17,6 +20,12 @@ export default function RequestForm() {
 
   const [success, setSuccess] = useState(false);
   const [errors, setErrors] = useState({});
+  const [skills, setSkills] = useState([]);
+  const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    api.get("/skills").then((response) => setSkills(response.data)).catch(() => {});
+  }, []);
 
   function handleChange(e) {
     setFormData({
@@ -30,7 +39,7 @@ export default function RequestForm() {
     });
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     let newErrors = {};
@@ -57,16 +66,33 @@ export default function RequestForm() {
       return;
     }
 
-    console.log(formData);
+    try {
+      setSubmitting(true);
+      let skill = skills.find((item) => item.name === formData.category);
 
-    setSuccess(true);
+      if (!skill) {
+        const response = await api.post("/skills", {
+          name: formData.category,
+          category: formData.category,
+        });
+        skill = response.data;
+      }
 
-    setFormData({
-      title: "",
-      category: "",
-      location: "",
-      description: "",
-    });
+      await api.post("/requests", {
+        title: formData.title.trim(),
+        description: formData.description.trim(),
+        location: formData.location.trim(),
+        skill_id: skill.id,
+      });
+
+      setSuccess(true);
+      setFormData({ title: "", category: "", location: "", description: "" });
+      setTimeout(() => navigate("/requests"), 500);
+    } catch (error) {
+      setErrors({ submit: error.response?.data?.error || "Could not submit request." });
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -74,6 +100,12 @@ export default function RequestForm() {
       {success && (
         <div className="mb-6 p-4 rounded-xl bg-green-100 text-green-700">
           Request submitted successfully!
+        </div>
+      )}
+
+      {errors.submit && (
+        <div className="mb-6 p-4 rounded-xl bg-red-100 text-red-700">
+          {errors.submit}
         </div>
       )}
 
@@ -173,9 +205,10 @@ export default function RequestForm() {
 
         <button
           type="submit"
-          className="btn-primary"
+          className="btn-primary disabled:opacity-60"
+          disabled={submitting}
         >
-          Submit Request
+          {submitting ? "Submitting..." : "Submit Request"}
         </button>
       </form>
     </>

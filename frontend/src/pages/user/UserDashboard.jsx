@@ -203,9 +203,12 @@ export default function UserDashboard() {
                   {opportunity.description}
                 </p>
 
-                <button className="btn-primary w-full">
+                <Link
+                  to={`/opportunities/${opportunity.id}`}
+                  className="btn-primary w-full inline-block text-center"
+                >
                   View Details
-                </button>
+                </Link>
               </div>
             ))}
           </div>

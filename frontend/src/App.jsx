@@ -41,7 +41,14 @@ function App() {
       <Route path="/forgot-password" element={<ForgotPassword />} />
 
       <Route path="/requests" element={<Requests />} />
-      <Route path="/requests/new" element={<CreateRequest />} />
+      <Route
+        path="/requests/new"
+        element={
+          <ProtectedRoute>
+            <CreateRequest />
+          </ProtectedRoute>
+        }
+      />
       <Route path="/requests/:id" element={<RequestDetails />} />
 
       <Route

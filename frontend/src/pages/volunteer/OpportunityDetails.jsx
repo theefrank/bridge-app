@@ -3,11 +3,12 @@ import {
   CalendarDays,
   Briefcase,
 } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function OpportunityDetails() {
 
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const opportunity = {
     id,
@@ -63,7 +64,7 @@ export default function OpportunityDetails() {
 
         </div>
 
-        <button className="btn-primary mt-10">
+        <button className="btn-primary mt-10" onClick={() => navigate("/applications")}>
           Apply Now
         </button>
 

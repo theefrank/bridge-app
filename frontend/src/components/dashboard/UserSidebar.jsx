@@ -10,8 +10,18 @@ import {
 } from "lucide-react";
 
 import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 export default function UserSidebar() {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+
+  function handleLogout() {
+    logout();
+    navigate("/login");
+  }
+
   return (
     <aside className="w-72 bg-white border-r border-gray-200 flex flex-col justify-between min-h-screen">
 
@@ -122,6 +132,7 @@ export default function UserSidebar() {
       {/* Logout */}
       <div className="p-4 border-t border-gray-100">
         <button
+          onClick={handleLogout}
           className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-red-500 hover:bg-red-50 transition"
         >
           <LogOut size={20} />

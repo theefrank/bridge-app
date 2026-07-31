@@ -23,7 +23,7 @@ def token_required(f):
 
         try:
             payload = jwt.decode(token, app.config["JWT_SECRET_KEY"], algorithms=["HS256"])
-            current_user = User.query.get(payload["sub"])
+            current_user = User.query.get(int(payload["sub"]))
             if not current_user:
                 return jsonify({"error": "User not found"}), 401
         except Exception:
@@ -67,7 +67,7 @@ def login():
         return jsonify({"error": "Invalid credentials"}), 401
 
     token = jwt.encode(
-        {"sub": user.id, "exp": datetime.utcnow() + timedelta(hours=2)},
+        {"sub": str(user.id), "exp": datetime.utcnow() + timedelta(hours=2)},
         app.config["JWT_SECRET_KEY"],
         algorithm="HS256",
     )
