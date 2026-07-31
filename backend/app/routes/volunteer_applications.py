@@ -43,3 +43,29 @@ def get_applications():
         ]
 
     )
+
+@applications_bp.post("/")
+@login_required
+def apply():
+
+    data = request.get_json()
+
+    application = VolunteerApplication(
+
+        volunteer_id=get_jwt_identity(),
+
+        request_id=data["request_id"],
+
+        message=data.get("message")
+
+    )
+
+    db.session.add(application)
+
+    db.session.commit()
+
+    return jsonify(
+
+        application.to_dict()
+
+    ),201
