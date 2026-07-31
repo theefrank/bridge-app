@@ -27,9 +27,12 @@ function AuthProvider({ children }) {
   async function login(email, password) {
     try {
       const response = await api.post("/auth/login", {
-        email,
-        password,
-      });
+      email,
+      password,
+    });
+
+console.log("LOGIN RESPONSE:", response.data);
+      
 
       const { token, user } = response.data;
 

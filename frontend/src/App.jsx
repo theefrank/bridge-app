@@ -151,7 +151,7 @@ function App() {
       />
 
       <Route
-        path="/admin-dashboard"
+        path="/admin/dashboard"
         element={
           <ProtectedRoute>
             <AdminDashboard />

@@ -62,16 +62,41 @@ def register():
 @app.route("/auth/login", methods=["POST"])
 def login():
     payload = request.get_json(silent=True) or {}
+
+    print("Payload:", payload)
+
     user = User.query.filter_by(email=payload.get("email")).first()
-    if not user or not check_password_hash(user.password_hash, payload.get("password", "")):
+
+    print("User found:", user)
+    if user:
+        print("Stored email:", user.email)
+        print(
+            "Password check:",
+            check_password_hash(
+                user.password_hash,
+                payload.get("password", "")
+            ),
+        )
+
+    if not user or not check_password_hash(
+        user.password_hash,
+        payload.get("password", "")
+    ):
         return jsonify({"error": "Invalid credentials"}), 401
 
     token = jwt.encode(
-        {"sub": str(user.id), "exp": datetime.utcnow() + timedelta(hours=2)},
+        {
+            "sub": str(user.id),
+            "exp": datetime.utcnow() + timedelta(hours=2),
+        },
         app.config["JWT_SECRET_KEY"],
         algorithm="HS256",
     )
-    return jsonify({"token": token, "user": user.to_dict()})
+
+    return jsonify({
+        "token": token,
+        "user": user.to_dict(),
+    })
 
 
 @app.route("/users", methods=["GET"])
