@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import api from "../api";
 
 const AuthContext = createContext();
 
@@ -68,11 +69,28 @@ function AuthProvider({ children }) {
 }
 
   function register(userData) {
-    const newUser = {
-      ...userData,
-      id: Date.now(),
-      role: "user",
-    };
+  const newUser = {
+    ...userData,
+    id: Date.now(),
+    role: "user",
+  };
+
+  localStorage.setItem(
+    "bridgeUser",
+    JSON.stringify(newUser)
+  );
+
+  setUser(newUser);
+
+  return newUser;
+}async function register(userData) {
+  try {
+    const response = await api.post(
+      "/auth/register",
+      userData
+    );
+
+    const newUser = response.data.user;
 
     localStorage.setItem(
       "bridgeUser",
@@ -82,7 +100,16 @@ function AuthProvider({ children }) {
     setUser(newUser);
 
     return newUser;
+
+  } catch (error) {
+
+    throw new Error(
+      error.response?.data?.error ||
+      "Registration failed."
+    );
+
   }
+}
 
   function logout() {
     localStorage.removeItem("bridgeUser");
