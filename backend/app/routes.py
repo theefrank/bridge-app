@@ -25,7 +25,7 @@ def token_required(f):
             payload = jwt.decode(token, app.config["JWT_SECRET_KEY"], algorithms=["HS256"])
             current_user = User.query.get(int(payload["sub"]))
             if not current_user:
-                return jsonify({"error": "User not found"}), 401
+                return jsonify({"error": "Session expired. Please log in again."}), 401
         except Exception:
             return jsonify({"error": "Token is invalid"}), 401
 

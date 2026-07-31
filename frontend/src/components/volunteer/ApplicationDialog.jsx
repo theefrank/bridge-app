@@ -1,7 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import api from "../../services/api";
 
 export default function ApplicationDialog({ opportunity, onClose, onSubmitted }) {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -23,6 +27,12 @@ export default function ApplicationDialog({ opportunity, onClose, onSubmitted })
       });
       onSubmitted(response.data);
     } catch (requestError) {
+      if (requestError.response?.status === 401) {
+        logout();
+        onClose();
+        navigate("/login", { replace: true });
+        return;
+      }
       setError(requestError.response?.data?.error || "Could not submit application.");
     } finally {
       setSubmitting(false);
