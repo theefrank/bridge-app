@@ -2,8 +2,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["frontend/src/*"]
     },
     "ignoreDeprecations": "6.0"
-  }
+  },
+  "exclude": [
+    "frontend/src/pages/auth/Register.jsx"
+  ]
 }
