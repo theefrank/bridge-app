@@ -44,3 +44,31 @@ def create_skill():
         skill.to_dict()
     ),201
 
+@skills_bp.put("/<int:id>")
+@admin_required
+def update_skill(id):
+
+    skill = Skill.query.get_or_404(id)
+
+    data = request.get_json()
+
+    skill.name = data.get(
+        "name",
+        skill.name
+    )
+
+    skill.category = data.get(
+        "category",
+        skill.category
+    )
+
+    skill.description = data.get(
+        "description",
+        skill.description
+    )
+
+    db.session.commit()
+
+    return jsonify(
+        skill.to_dict()
+    )
