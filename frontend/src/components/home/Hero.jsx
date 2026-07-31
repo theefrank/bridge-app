@@ -42,7 +42,7 @@ export default function Hero() {
 
         <div className="h-150 lg:h-190 overflow-hidden">
           <img
-            src="src/assets/bridge-hero.jpeg"
+            src="frontend/src/assets/bridge-hero.jpeg"
             alt="Bridge Community"
             className="w-full h-full object-cover"
           />
