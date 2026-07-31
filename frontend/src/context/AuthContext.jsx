@@ -1,4 +1,10 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+
 import api from "../api";
 
 const AuthContext = createContext();
@@ -9,110 +15,61 @@ function AuthProvider({ children }) {
 
   useEffect(() => {
     const savedUser = localStorage.getItem("bridgeUser");
+    const token = localStorage.getItem("bridgeToken");
 
-    if (savedUser) {
+    if (savedUser && token) {
       setUser(JSON.parse(savedUser));
     }
 
     setLoading(false);
   }, []);
 
-  function login(email, password) {
+  async function login(email, password) {
+    try {
+      const response = await api.post("/auth/login", {
+        email,
+        password,
+      });
 
-  // Admin Login
-  if (
-    email === "admin@bridge.com" &&
-    password === "Admin@123"
-  ) {
+      const { token, user } = response.data;
 
-    const admin = {
-      id: 1,
-      name: "Bridge Admin",
-      email,
-      role: "admin",
-    };
+      localStorage.setItem("bridgeToken", token);
+      localStorage.setItem(
+        "bridgeUser",
+        JSON.stringify(user)
+      );
 
-    localStorage.setItem(
-      "bridgeUser",
-      JSON.stringify(admin)
-    );
+      setUser(user);
 
-    setUser(admin);
-
-    return admin;
+      return user;
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.error ||
+          "Invalid email or password."
+      );
+    }
   }
 
-  // User Login
-  if (
-    email === "user@bridge.com" &&
-    password === "User@123"
-  ) {
+  async function register(userData) {
+    try {
+      await api.post("/auth/register", userData);
 
-    const user = {
-      id: 2,
-      name: "Bridge User",
-      email,
-      role: "user",
-    };
-
-    localStorage.setItem(
-      "bridgeUser",
-      JSON.stringify(user)
-    );
-
-    setUser(user);
-
-    return user;
+      return await login(
+        userData.email,
+        userData.password
+      );
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.error ||
+          "Registration failed."
+      );
+    }
   }
-
-  throw new Error("Invalid email or password.");
-}
-
-  function register(userData) {
-  const newUser = {
-    ...userData,
-    id: Date.now(),
-    role: "user",
-  };
-
-  localStorage.setItem(
-    "bridgeUser",
-    JSON.stringify(newUser)
-  );
-
-  setUser(newUser);
-
-  return newUser;
-}async function register(userData) {
-  try {
-    const response = await api.post(
-      "/auth/register",
-      userData
-    );
-
-    const newUser = response.data.user;
-
-    localStorage.setItem(
-      "bridgeUser",
-      JSON.stringify(newUser)
-    );
-
-    setUser(newUser);
-
-    return newUser;
-
-  } catch (error) {
-
-    throw new Error(
-      error.response?.data?.error ||
-      "Registration failed."
-    );
-
-  }
-}
 
   function logout() {
+    localStorage.removeItem("bridgeToken");
     localStorage.removeItem("bridgeUser");
+
     setUser(null);
   }
 
@@ -138,4 +95,6 @@ function useAuth() {
 }
 
 export { AuthProvider, useAuth };
+
 export default AuthProvider;
+
