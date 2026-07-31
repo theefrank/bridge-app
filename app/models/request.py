@@ -47,17 +47,33 @@ class Request(db.Model):
         nullable=False
     )
 
+    user = db.relationship(
+        "User",
+        back_populates="requests"
+    )
+
+    skill = db.relationship(
+        "Skill",
+        back_populates="requests"
+    )
+
+    applications = db.relationship(
+        "VolunteerApplication",
+        back_populates="request",
+        cascade="all, delete-orphan"
+    )
+
     def to_dict(self):
-    return {
-        "id": self.id,
-        "title": self.title,
-        "description": self.description,
-        "category": self.category,
-        "status": self.status,
-        "location": self.location,
-        "user_id": self.user_id,
-        "volunteer_id": self.volunteer_id,
-        "skill_id": self.skill_id,
-        "created_at": self.created_at,
-        "completed_at": self.completed_at,
-    }
+        return {
+            "id": self.id,
+            "title": self.title,
+            "description": self.description,
+            "category": self.category,
+            "status": self.status,
+            "location": self.location,
+            "user_id": self.user_id,
+            "volunteer_id": self.volunteer_id,
+            "skill_id": self.skill_id,
+            "created_at": self.created_at,
+            "completed_at": self.completed_at,
+        }
