@@ -483,3 +483,68 @@ def opportunities():
         request.to_dict()
         for request in requests
     ])    
+
+
+@app.route("/settings", methods=["GET"])
+@token_required
+def get_settings(current_user):
+    return jsonify({
+        "email_notifications": current_user.email_notifications,
+        "application_updates": current_user.application_updates,
+        "request_updates": current_user.request_updates,
+    })
+
+
+@app.route("/settings", methods=["PUT"])
+@token_required
+def update_settings(current_user):
+
+    data = request.get_json()
+
+    current_user.email_notifications = data.get(
+        "email_notifications",
+        current_user.email_notifications,
+    )
+
+    current_user.application_updates = data.get(
+        "application_updates",
+        current_user.application_updates,
+    )
+
+    current_user.request_updates = data.get(
+        "request_updates",
+        current_user.request_updates,
+    )
+
+    db.session.commit()
+
+    return jsonify({
+        "message": "Settings updated successfully"
+    })
+
+
+@app.route("/change-password", methods=["PUT"])
+@token_required
+def change_password(current_user):
+    data = request.get_json()
+
+    current_password = data.get("current_password")
+    new_password = data.get("new_password")
+
+    if not check_password_hash(
+        current_user.password_hash,
+        current_password,
+    ):
+        return jsonify(
+            {"error": "Current password is incorrect"}
+        ), 400
+
+    current_user.password_hash = generate_password_hash(
+        new_password
+    )
+
+    db.session.commit()
+
+    return jsonify(
+        {"message": "Password updated successfully"}
+    ), 200

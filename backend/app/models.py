@@ -26,6 +26,10 @@ class User(db.Model):
     applications = db.relationship("Application", back_populates="user", cascade="all, delete-orphan")
     skills = db.relationship("Skill", secondary=user_skills, back_populates="users")
 
+    email_notifications = db.Column(db.Boolean, default=True)
+    application_updates = db.Column(db.Boolean, default=True)
+    request_updates = db.Column(db.Boolean, default=True)
+
     def to_dict(self):
         return {
             "id": self.id,
@@ -38,6 +42,9 @@ class User(db.Model):
             "profile_completed": self.profile_completed,
             "skills": [skill.name for skill in self.skills],
             "created_at": self.created_at.isoformat(),
+            "email_notifications": self.email_notifications,
+            "application_updates": self.application_updates,
+            "request_updates": self.request_updates,
         }
 
 

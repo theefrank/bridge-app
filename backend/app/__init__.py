@@ -53,7 +53,12 @@ def ensure_profile_columns():
             connection.execute(db.text("ALTER TABLE users ADD COLUMN bio TEXT"))
         if "profile_completed" not in columns:
             connection.execute(db.text("ALTER TABLE users ADD COLUMN profile_completed BOOLEAN DEFAULT 0"))
-
+        if "email_notifications" not in columns:
+            connection.execute(db.text("ALTER TABLE users ADD COLUMN email_notifications BOOLEAN DEFAULT 1"))
+        if "application_updates" not in columns:
+            connection.execute(db.text("ALTER TABLE users ADD COLUMN application_updates BOOLEAN DEFAULT 1"))
+        if "request_updates" not in columns:
+            connection.execute(db.text("ALTER TABLE users ADD COLUMN request_updates BOOLEAN DEFAULT 1"))   
 
 with app.app_context():
     db.create_all()
