@@ -333,11 +333,31 @@ def create_application(current_user):
 @app.route("/dashboard", methods=["GET"])
 @token_required
 def dashboard(current_user):
+    today = datetime.utcnow().date()  # noqa: DTZ003
+
+    requests_today = Request.query.filter(
+        Request.user_id == current_user.id,
+        db.func.date(Request.created_at) == today
+    ).count()
+
+    applications_today = Application.query.filter(
+        Application.user_id == current_user.id,
+        db.func.date(Application.applied_at) == today
+    ).count()
+
+    reviews_today = Review.query.filter(
+        Review.user_id == current_user.id,
+        db.func.date(Review.created_at) == today
+    ).count()
+
     return jsonify({
         "requestsCreated": Request.query.filter_by(user_id=current_user.id).count(),
         "applications": Application.query.filter_by(user_id=current_user.id).count(),
         "reviews": Review.query.filter_by(user_id=current_user.id).count(),
-        "peopleHelped": Review.query.filter_by(user_id=current_user.id).count(),
+
+        "requestsToday": requests_today,
+        "applicationsToday": applications_today,
+        "reviewsToday": reviews_today,
     })
 
 @app.route("/my-requests", methods=["GET"])
@@ -357,33 +377,54 @@ def my_requests(current_user):
 def activity(current_user):
     activities = []
 
-    for user_request in current_user.requests:
-        created_at = user_request.created_at or datetime.now(timezone.utc)
+    user_requests = (
+        Request.query.filter_by(user_id=current_user.id)
+        .order_by(Request.created_at.desc())
+        .limit(5)
+        .all()
+    )
+
+    for user_request in user_requests:
         activities.append({
-            "id": f"request-{user_request.id}",
-            "type": "request",
-            "title": user_request.title,
-            "description": "You created this request for your community.",
-            "date": created_at.strftime("%d %b %Y"),
-            "time": created_at.strftime("%I:%M:%S %p"),
-            "timestamp": created_at.isoformat(),
+        "title": f"Created request: {user_request.title}",
+        "description": user_request.status.capitalize(),
+        "created_at": user_request.created_at.isoformat(),
+    })
+
+    applications = (
+        Application.query.filter_by(user_id=current_user.id)
+        .order_by(Application.applied_at.desc())
+        .limit(5)
+        .all()
+    )
+
+    for application in applications:
+        activities.append({
+            "title": f"Applied for {application.opportunity_title}",
+            "description": application.status,
+            "created_at": application.applied_at.isoformat(),
         })
 
-    for application in current_user.applications:
-        applied_at = application.applied_at or datetime.now(timezone.utc)
+    reviews = (
+        Review.query.filter_by(user_id=current_user.id)
+        .order_by(Review.created_at.desc())
+        .limit(5)
+        .all()
+    )
+
+    for review in reviews:
         activities.append({
-            "id": f"application-{application.id}",
-            "type": "application",
-            "title": application.opportunity_title,
-            "description": "You applied to help with this opportunity.",
-            "date": applied_at.strftime("%d %b %Y"),
-            "time": applied_at.strftime("%I:%M:%S %p"),
-            "timestamp": applied_at.isoformat(),
+            "title": "Submitted a review",
+            "description": f"{review.rating}/5 stars",
+            "created_at": review.created_at.isoformat(),
         })
 
-    activities.sort(key=lambda item: item["timestamp"], reverse=True)
+    activities.sort(
+        key=lambda activity: activity["created_at"],
+        reverse=True,
+    )
 
-    return jsonify(activities)
+    return jsonify(activities[:6])
 
 @app.route("/opportunities", methods=["GET"])
 def opportunities():
