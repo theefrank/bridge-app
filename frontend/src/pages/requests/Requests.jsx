@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Search, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import {
   Select,
   SelectContent,
@@ -50,6 +51,7 @@ const fallbackRequests = [
 ];
 
 export default function Requests() {
+  const { user } = useAuth();
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -60,7 +62,7 @@ export default function Requests() {
     async function loadRequests() {
       try {
         const [requestsResponse, skillsResponse] = await Promise.all([
-          api.get("/requests"),
+          user ? api.get("/my-requests") : api.get("/requests"),
           api.get("/skills"),
         ]);
         const skills = Object.fromEntries(
@@ -73,13 +75,13 @@ export default function Requests() {
           }))
         );
       } catch {
-        setRequests(fallbackRequests);
+        setRequests([]);
       } finally {
         setLoading(false);
       }
     }
     loadRequests();
-  }, []);
+  }, [user]);
 
   const filteredRequests = requests.filter(
     (request) => {
@@ -108,11 +110,13 @@ export default function Requests() {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
         <div>
           <h1 className="text-4xl font-bold">
-            Community Requests
+            {user ? "My Requests" : "Community Requests"}
           </h1>
 
           <p className="text-gray-600 mt-2">
-            Browse requests and offer your support.
+            {user
+              ? "Here are the requests you have created and are tracking."
+              : "Browse requests and offer your support."}
           </p>
         </div>
 
@@ -197,8 +201,7 @@ export default function Requests() {
           </h3>
 
           <p className="text-gray-600">
-            Try adjusting your search or
-            category filter.
+            This space will fill up as the community starts creating requests. For now, there is nothing to show yet.
           </p>
         </div>
       )}

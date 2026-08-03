@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: bridge-app-backend
+    env: python
+    plan: free
+    buildCommand: "cd backend && pip install pipenv && pipenv install --deploy"
+    startCommand: "cd backend && pipenv run gunicorn run:app --bind 0.0.0.0:$PORT"
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: CORS_ORIGINS
+        value: https://your-vercel-app.vercel.app
+      - key: DATABASE_URL
+        value: postgresql://user:password@host:5432/dbname

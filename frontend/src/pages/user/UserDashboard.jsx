@@ -1,6 +1,6 @@
+import { useEffect, useState } from "react";
 import {
   FileText,
-  HeartHandshake,
   Users,
   Plus,
   Search,
@@ -8,68 +8,50 @@ import {
 } from "lucide-react";
 
 import { Link } from "react-router-dom";
+
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
+import api from "../../services/api";
 
 export default function UserDashboard() {
-  const stats = [
-    {
-      id: 1,
-      title: "Requests Created",
-      value: 4,
-      icon: FileText,
-    },
-    {
-      id: 2,
-      title: "Volunteer Activities",
-      value: 2,
-      icon: HandHelping,
-    },
-    {
-      id: 3,
-      title: "People Helped",
-      value: 12,
-      icon: Users,
-    },
-  ];
+  const [stats, setStats] = useState(null);
+  const [activities, setActivities] = useState([]);
+  const [opportunities, setOpportunities] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const activities = [
-    {
-      id: 1,
-      title: "Mathematics Tutor Request",
-      description: "Created 2 days ago",
-    },
-    {
-      id: 2,
-      title: "Community Cleanup",
-      description: "Volunteered yesterday",
-    },
-    {
-      id: 3,
-      title: "Career Guidance",
-      description: "Opportunity viewed",
-    },
-  ];
+  useEffect(() => {
+  async function loadDashboard() {
+    try {
+      const [
+        statsResponse,
+        activityResponse,
+        opportunitiesResponse,
+      ] = await Promise.all([
+        api.get("/dashboard"),
+        api.get("/activity"),
+        api.get("/opportunities"),
+      ]);
 
-  const opportunities = [
-    {
-      id: 1,
-      title: "Mathematics Tutor",
-      description:
-        "Help a high school student improve math skills.",
-    },
-    {
-      id: 2,
-      title: "Career Guidance",
-      description:
-        "Mentor students interested in technology careers.",
-    },
-    {
-      id: 3,
-      title: "Community Cleanup",
-      description:
-        "Join volunteers making the environment cleaner.",
-    },
-  ];
+      setStats(statsResponse.data);
+      setActivities(activityResponse.data);
+      setOpportunities(opportunitiesResponse.data);
+
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  loadDashboard();
+  }, []);
+
+  if (loading) {
+  return (
+    <DashboardLayout>
+      <p className="p-8">Loading...</p>
+    </DashboardLayout>
+  );
+  }
 
   return (
     <DashboardLayout>
@@ -89,12 +71,28 @@ export default function UserDashboard() {
 
         {/* Stats */}
         <div className="grid md:grid-cols-3 gap-6 mb-8">
-          {stats.map((stat) => {
+          {[
+            {
+              title: "Requests Created",
+              value: stats.requestsCreated,
+              icon: FileText,
+            },
+            {
+              title: "Volunteer Applications",
+              value: stats.applications,
+              icon: HandHelping,
+            },
+            {
+              title: "Reviews",
+              value: stats.reviews,
+              icon: Users,
+            },
+          ].map((stat, index) => {
             const Icon = stat.icon;
 
             return (
               <div
-                key={stat.id}
+                key={index}
                 className="bridge-card hover:shadow-lg transition"
               >
                 <Icon
@@ -156,20 +154,26 @@ export default function UserDashboard() {
             </h2>
 
             <div className="space-y-5">
-              {activities.map((activity) => (
-                <div
-                  key={activity.id}
-                  className="border-l-4 border-[#D08C60] pl-4"
-                >
-                  <h3 className="font-semibold">
-                    {activity.title}
-                  </h3>
+              {activities.length === 0 ? (
+                <p className="text-gray-500">
+                  No recent activity yet.
+                </p>
+              ) : (
+                activities.map((activity, index) => (
+                  <div
+                    key={index}
+                    className="border-l-4 border-[#D08C60] pl-4"
+                  >
+                    <h3 className="font-semibold">
+                      {activity.title}
+                    </h3>
 
-                  <p className="text-gray-600 text-sm">
-                    {activity.description}
-                  </p>
-                </div>
-              ))}
+                    <p className="text-gray-600 text-sm">
+                      {activity.description}
+                    </p>
+                  </div>
+                ))
+              )}    
             </div>
           </div>
         </div>
@@ -190,27 +194,33 @@ export default function UserDashboard() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            {opportunities.map((opportunity) => (
-              <div
-                key={opportunity.id}
-                className="border rounded-xl p-4 hover:shadow-md transition"
-              >
-                <h3 className="font-semibold mb-2">
-                  {opportunity.title}
-                </h3>
-
-                <p className="text-gray-600 text-sm mb-4">
-                  {opportunity.description}
-                </p>
-
-                <Link
-                  to={`/opportunities/${opportunity.id}`}
-                  className="btn-primary w-full inline-block text-center"
+            {opportunities.length === 0 ? (
+              <p className="text-gray-500">
+                No opportunities available.
+              </p>
+            ) : (
+              opportunities.map((opportunity) => (
+                <div
+                  key={opportunity.id}
+                  className="border rounded-xl p-4 hover:shadow-md transition"
                 >
-                  View Details
-                </Link>
-              </div>
-            ))}
+                  <h3 className="font-semibold mb-2">
+                    {opportunity.title}
+                  </h3>
+
+                  <p className="text-gray-600 text-sm mb-4">
+                    {opportunity.description}
+                  </p>
+
+                  <Link
+                    to={`/requests/${opportunity.id}`}
+                    className="btn-primary w-full inline-block text-center"
+                  >
+                    View Details
+                  </Link>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </main>

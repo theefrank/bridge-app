@@ -1,22 +1,22 @@
 import { Briefcase, Clock3, HandHeart } from "lucide-react";
 
-export default function VolunteerStats() {
+export default function VolunteerStats({ applications = 0, loading = false }) {
   const stats = [
     {
       title: "Applications",
-      value: 12,
+      value: loading ? "--" : applications,
       icon: <Briefcase size={28} />,
       color: "bg-[#6B8F71]/10 text-[#6B8F71]",
     },
     {
       title: "Hours Volunteered",
-      value: 48,
+      value: "0",
       icon: <Clock3 size={28} />,
       color: "bg-[#FAF1EB] text-[#D08C60]",
     },
     {
       title: "People Helped",
-      value: 18,
+      value: "0",
       icon: <HandHeart size={28} />,
       color: "bg-[#6B8F71]/10 text-[#6B8F71]",
     },
@@ -32,15 +32,10 @@ export default function VolunteerStats() {
           <div className="flex justify-between items-center">
             <div>
               <p className="text-gray-500">{stat.title}</p>
-
-              <h2 className="text-4xl font-bold mt-2">
-                {stat.value}
-              </h2>
+              <h2 className="text-4xl font-bold mt-2">{stat.value}</h2>
             </div>
 
-            <div
-              className={`w-14 h-14 rounded-xl flex items-center justify-center ${stat.color}`}
-            >
+            <div className={`w-14 h-14 rounded-xl flex items-center justify-center ${stat.color}`}>
               {stat.icon}
             </div>
           </div>

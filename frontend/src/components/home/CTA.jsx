@@ -9,9 +9,8 @@ export default function CTA() {
           </h2>
 
           <p className="text-gray-600 max-w-2xl mx-auto mb-8">
-            Whether you need support or want to help others,
-            Bridge makes it easier to connect, collaborate,
-            and create meaningful impact.
+            Whether you need support or want to help others, Bridge makes it
+            easier to connect, collaborate, and create lasting impact.
           </p>
 
           <div className="flex flex-col sm:flex-row justify-center gap-4">

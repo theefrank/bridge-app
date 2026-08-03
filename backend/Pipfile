@@ -12,6 +12,8 @@ python-dotenv = "*"
 werkzeug = "*"
 PyJWT = "*"
 flask-jwt-extended = "*"
+gunicorn = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 black = "*"

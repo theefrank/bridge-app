@@ -72,6 +72,28 @@ console.log("LOGIN RESPONSE:", response.data);
     );
   }
 }
+
+  async function updateUser(updatedData) {
+    if (!user?.id) {
+      throw new Error("No active user session.");
+    }
+
+    try {
+      const response = await api.put(`/users/${user.id}`, updatedData);
+      const updatedUser = response.data;
+
+      localStorage.setItem("bridgeUser", JSON.stringify(updatedUser));
+      setUser(updatedUser);
+
+      return updatedUser;
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.error ||
+        "Unable to update profile."
+      );
+    }
+  }
+
   function logout() {
     localStorage.removeItem("bridgeToken");
     localStorage.removeItem("bridgeUser");
@@ -86,6 +108,7 @@ console.log("LOGIN RESPONSE:", response.data);
         loading,
         login,
         register,
+        updateUser,
         logout,
         isAuthenticated: !!user,
         isAdmin: user?.role === "admin",

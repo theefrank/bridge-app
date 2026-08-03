@@ -1,11 +1,12 @@
-import os
-import jwt
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from functools import wraps
+
+import jwt
 from flask import jsonify, request
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
+
 from app import app, db
-from app.models import Application, User, Skill, Request, Review
+from app.models import Application, Request, Review, Skill, User
 
 
 def token_required(f):
@@ -26,7 +27,7 @@ def token_required(f):
             current_user = User.query.get(int(payload["sub"]))
             if not current_user:
                 return jsonify({"error": "Session expired. Please log in again."}), 401
-        except Exception:
+        except (jwt.InvalidTokenError, ValueError, KeyError):
             return jsonify({"error": "Token is invalid"}), 401
 
         return f(current_user, *args, **kwargs)
@@ -53,6 +54,7 @@ def register():
         email=payload["email"],
         password_hash=generate_password_hash(payload["password"]),
         role=payload.get("role", "user"),
+        full_name=payload.get("full_name") or payload.get("username"),
     )
     db.session.add(user)
     db.session.commit()
@@ -87,7 +89,7 @@ def login():
     token = jwt.encode(
         {
             "sub": str(user.id),
-            "exp": datetime.utcnow() + timedelta(hours=2),
+            "exp": datetime.now(timezone.utc) + timedelta(hours=2),
         },
         app.config["JWT_SECRET_KEY"],
         algorithm="HS256",
@@ -111,12 +113,39 @@ def list_users(current_user):
 def update_user(current_user, user_id):
     user = User.query.get_or_404(user_id)
     payload = request.get_json(silent=True) or {}
+
     if payload.get("username"):
         user.username = payload["username"]
     if payload.get("email"):
         user.email = payload["email"]
     if payload.get("role"):
         user.role = payload["role"]
+    if payload.get("full_name") is not None:
+        user.full_name = payload["full_name"]
+    if payload.get("location") is not None:
+        user.location = payload["location"]
+    if payload.get("bio") is not None:
+        user.bio = payload["bio"]
+
+    if payload.get("skills") is not None:
+        skills_data = payload["skills"]
+        if isinstance(skills_data, str):
+            skill_names = [name.strip() for name in skills_data.split(",") if name.strip()]
+        else:
+            skill_names = [str(name).strip() for name in skills_data if str(name).strip()]
+
+        user.skills.clear()
+        for skill_name in skill_names:
+            skill = Skill.query.filter_by(name=skill_name).first()
+            if not skill:
+                skill = Skill(name=skill_name, description=f"Skill added for {user.username}", category="Community")
+                db.session.add(skill)
+                db.session.flush()
+            user.skills.append(skill)
+
+    profile_fields = [user.full_name or user.username, user.location, user.bio]
+    user.profile_completed = all(field and str(field).strip() for field in profile_fields)
+
     db.session.commit()
     return jsonify(user.to_dict())
 
@@ -300,3 +329,72 @@ def create_application(current_user):
     db.session.add(application)
     db.session.commit()
     return jsonify(application.to_dict()), 201
+
+@app.route("/dashboard", methods=["GET"])
+@token_required
+def dashboard(current_user):
+    return jsonify({
+        "requestsCreated": Request.query.filter_by(user_id=current_user.id).count(),
+        "applications": Application.query.filter_by(user_id=current_user.id).count(),
+        "reviews": Review.query.filter_by(user_id=current_user.id).count(),
+        "peopleHelped": Review.query.filter_by(user_id=current_user.id).count(),
+    })
+
+@app.route("/my-requests", methods=["GET"])
+@token_required
+def my_requests(current_user):
+    requests = (
+        Request.query
+        .filter_by(user_id=current_user.id)
+        .order_by(Request.created_at.desc())
+        .all()
+    )
+
+    return jsonify([request.to_dict() for request in requests])
+
+@app.route("/activity", methods=["GET"])
+@token_required
+def activity(current_user):
+    activities = []
+
+    for user_request in current_user.requests:
+        created_at = user_request.created_at or datetime.now(timezone.utc)
+        activities.append({
+            "id": f"request-{user_request.id}",
+            "type": "request",
+            "title": user_request.title,
+            "description": "You created this request for your community.",
+            "date": created_at.strftime("%d %b %Y"),
+            "time": created_at.strftime("%I:%M:%S %p"),
+            "timestamp": created_at.isoformat(),
+        })
+
+    for application in current_user.applications:
+        applied_at = application.applied_at or datetime.now(timezone.utc)
+        activities.append({
+            "id": f"application-{application.id}",
+            "type": "application",
+            "title": application.opportunity_title,
+            "description": "You applied to help with this opportunity.",
+            "date": applied_at.strftime("%d %b %Y"),
+            "time": applied_at.strftime("%I:%M:%S %p"),
+            "timestamp": applied_at.isoformat(),
+        })
+
+    activities.sort(key=lambda item: item["timestamp"], reverse=True)
+
+    return jsonify(activities)
+
+@app.route("/opportunities", methods=["GET"])
+def opportunities():
+
+    requests = (
+        Request.query
+        .filter_by(status="pending")
+        .all()
+    )
+
+    return jsonify([
+        request.to_dict()
+        for request in requests
+    ])    

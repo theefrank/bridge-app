@@ -15,12 +15,12 @@ export default function Hero() {
           </h1>
 
           <p className="mt-6 text-lg text-gray-600">
-            Find support. Share skills. Build community.
+            Find support, offer help, and build stronger local connections.
           </p>
 
           <p className="mt-4 text-gray-500">
-            Bridge connects people who need help with those who are ready to
-            make a difference.
+            Bridge helps neighbors request support and volunteers respond with
+            care, clarity, and purpose.
           </p>
 
           <div className="flex gap-4 mt-8">

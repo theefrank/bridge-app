@@ -1,19 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Camera, Save, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 export default function EditProfileForm() {
   const navigate = useNavigate();
+  const { user, updateUser } = useAuth();
 
   const [formData, setFormData] = useState({
-    fullName: "Penzi Mbuthia",
-    email: "penzi@gmail.com",
-    location: "Nairobi, Kenya",
-    bio: "Passionate about using technology to connect communities and make a positive impact.",
-    skills: "React, Flask, Python, SQL",
+    fullName: "",
+    email: "",
+    location: "",
+    bio: "",
+    skills: "",
   });
 
   const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        fullName: user.full_name || user.username || "",
+        email: user.email || "",
+        location: user.location || "",
+        bio: user.bio || "",
+        skills: (user.skills || []).join(", "),
+      });
+    }
+  }, [user]);
 
   function handleChange(e) {
     setFormData({
@@ -60,14 +75,27 @@ export default function EditProfileForm() {
     return Object.keys(newErrors).length === 0;
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     if (!validate()) return;
 
-    console.log(formData);
+    setSubmitting(true);
 
-    navigate("/profile");
+    try {
+      await updateUser({
+        email: formData.email,
+        full_name: formData.fullName,
+        location: formData.location,
+        bio: formData.bio,
+        skills: formData.skills,
+      });
+      navigate("/profile");
+    } catch (error) {
+      setErrors({ submit: error.message });
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -215,6 +243,10 @@ export default function EditProfileForm() {
 
       {/* Buttons */}
 
+      {errors.submit && (
+        <p className="text-sm text-red-500">{errors.submit}</p>
+      )}
+
       <div className="flex gap-4 justify-end">
         <button
           type="button"
@@ -228,9 +260,10 @@ export default function EditProfileForm() {
         <button
           type="submit"
           className="btn-primary flex items-center gap-2"
+          disabled={submitting}
         >
           <Save size={18} />
-          Save Changes
+          {submitting ? "Saving..." : "Save Changes"}
         </button>
       </div>
     </form>

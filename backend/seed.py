@@ -1,3 +1,5 @@
+import os
+
 from app import app, db
 from app.models import User, Skill, Request, Review
 from werkzeug.security import generate_password_hash
@@ -5,6 +7,12 @@ from werkzeug.security import generate_password_hash
 with app.app_context():
     db.drop_all()
     db.create_all()
+
+    should_seed_demo_data = os.getenv("SEED_DEMO_DATA", "false").lower() in {"1", "true", "yes", "on"}
+
+    if not should_seed_demo_data:
+        print("Database initialized successfully. No demo data was created.")
+        raise SystemExit(0)
 
     admin = User(username="admin", email="admin@example.com", password_hash=generate_password_hash("admin123"), role="admin")
     volunteer = User(username="volunteer", email="volunteer@example.com", password_hash=generate_password_hash("volunteer123"), role="user")
@@ -25,4 +33,4 @@ with app.app_context():
     review2 = Review(rating=4, comment="Helpful and responsive", user_id=admin.id, request_id=request2.id)
     db.session.add_all([review1, review2])
     db.session.commit()
-    print("Seed data created successfully")
+    print("Demo seed data created successfully")

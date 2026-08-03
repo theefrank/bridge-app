@@ -15,6 +15,10 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
     role = db.Column(db.String(20), default="user")
+    full_name = db.Column(db.String(120), nullable=True)
+    location = db.Column(db.String(120), nullable=True)
+    bio = db.Column(db.Text, nullable=True)
+    profile_completed = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     requests = db.relationship("Request", back_populates="user", cascade="all, delete-orphan")
@@ -28,6 +32,11 @@ class User(db.Model):
             "username": self.username,
             "email": self.email,
             "role": self.role,
+            "full_name": self.full_name,
+            "location": self.location,
+            "bio": self.bio,
+            "profile_completed": self.profile_completed,
+            "skills": [skill.name for skill in self.skills],
             "created_at": self.created_at.isoformat(),
         }
 
