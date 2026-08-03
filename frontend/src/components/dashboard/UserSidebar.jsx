@@ -74,11 +74,17 @@ export default function UserSidebar() {
           </NavLink>
 
           <NavLink
-            to="/requests"
-            className={navClass}
+            to="/my-requests"
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-4 py-3 rounded-xl transition ${
+                isActive
+                  ? "bg-sage text-white"
+                  : "text-gray-700 hover:bg-gray-100"
+              }`
+            }
           >
             <FileText size={20} />
-            Requests
+            My Requests
           </NavLink>
 
           <NavLink

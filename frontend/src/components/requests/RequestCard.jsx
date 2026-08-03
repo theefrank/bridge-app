@@ -1,18 +1,15 @@
 import { MapPin } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 
 export default function RequestCard({
-  id,
   title,
   category,
   location,
   description,
+  actions,
 }) {
-  const navigate = useNavigate();
-
   return (
-    <div className="bridge-card">
-      <span className="inline-block px-3 py-1 rounded-full bg-[#FAF1EB] text-[#D08C60] text-sm mb-4">
+    <div className="bridge-card flex flex-col h-full">
+      <span className="inline-block px-3 py-1 rounded-full bg-[#FAF1EB] text-[#D08C60] text-sm mb-4 w-fit">
         {category}
       </span>
 
@@ -20,21 +17,18 @@ export default function RequestCard({
         {title}
       </h3>
 
-      <p className="text-gray-600 mb-4">
+      <p className="text-gray-600 flex-1">
         {description}
       </p>
 
-      <p className="text-sm text-gray-500 mb-5 flex items-center gap-1 mt-3">
-        <MapPin size={18} />
+      <p className="text-sm text-gray-500 flex items-center gap-2 mt-5">
+        <MapPin size={16} />
         {location}
       </p>
 
-      <button
-        onClick={() => navigate(`/requests/${id}`)}
-        className="btn-primary"
-      >
-        View Details
-      </button>
+      <div className="flex flex-wrap gap-3 mt-6">
+        {actions}
+      </div>
     </div>
   );
 }

@@ -189,8 +189,18 @@ export default function Requests() {
         <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
           {filteredRequests.map((request) => (
             <RequestCard
-              key={request.id}
-              {...request}
+              title={request.title}
+              category={request.category}
+              location={request.location}
+              description={request.description}
+              actions={
+                <Link
+                  to={`/requests/${request.id}`}
+                  className="btn-primary"
+                >
+                  View Details
+                </Link>
+              }
             />
           ))}
         </div>

@@ -8,6 +8,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import ForgotPassword from "./routes/ForgotPassword";
 
 import UserDashboard from "./pages/user/UserDashboard";
+import MyRequests from "./pages/user/MyRequests";
 import MyActivity from "./pages/user/MyActivity";
 import Settings from "./pages/user/Settings";
 import Profile from "./pages/user/Profile";
@@ -49,6 +50,16 @@ function App() {
           </ProtectedRoute>
         }
       />
+
+      <Route
+        path="/my-requests"
+        element={
+          <ProtectedRoute>
+            <MyRequests />
+          </ProtectedRoute>
+        }
+      />
+
       <Route path="/requests/:id" element={<RequestDetails />} />
 
       <Route

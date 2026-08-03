@@ -14,20 +14,35 @@ def token_required(f):
     def decorated(*args, **kwargs):
         token = None
         auth_header = request.headers.get("Authorization", "")
+
+        print("AUTH HEADER:", auth_header)
+
         if auth_header.startswith("Bearer "):
             token = auth_header.split(" ", 1)[1]
         elif auth_header:
             token = auth_header
 
+        print("TOKEN:", token)
+
         if not token:
             return jsonify({"error": "Token is missing"}), 401
 
         try:
-            payload = jwt.decode(token, app.config["JWT_SECRET_KEY"], algorithms=["HS256"])
+            payload = jwt.decode(
+                token,
+                app.config["JWT_SECRET_KEY"],
+                algorithms=["HS256"],
+            )
+
+            print("PAYLOAD:", payload)
+
             current_user = User.query.get(int(payload["sub"]))
+
             if not current_user:
                 return jsonify({"error": "Session expired. Please log in again."}), 401
-        except (jwt.InvalidTokenError, ValueError, KeyError):
+
+        except (jwt.InvalidTokenError, ValueError, KeyError) as e:
+            print("JWT ERROR:", repr(e))
             return jsonify({"error": "Token is invalid"}), 401
 
         return f(current_user, *args, **kwargs)
@@ -223,33 +238,56 @@ def create_request(current_user):
     )
     db.session.add(request_item)
     db.session.commit()
+
+    print("Saved request ID:", request_item.id)
+    print("Saved for user:", request_item.user_id)
+    print("=" * 40)
+
     return jsonify(request_item.to_dict()), 201
 
 
 @app.route("/requests/<int:request_id>", methods=["PUT"])
 @token_required
 def update_request(current_user, request_id):
-    request_item = Request.query.get_or_404(request_id)
-    payload = request.get_json(silent=True) or {}
-    if payload.get("title"):
-        request_item.title = payload["title"]
-    if payload.get("description"):
-        request_item.description = payload["description"]
-    if payload.get("status"):
-        request_item.status = payload["status"]
-    if payload.get("location") is not None:
-        request_item.location = payload["location"]
+    user_request = Request.query.get_or_404(request_id)
+
+    if user_request.user_id != current_user.id:
+        return jsonify({"error": "Unauthorized"}), 403
+
+    data = request.get_json()   # <-- Flask request object
+
+    user_request.title = data.get("title", user_request.title)
+    user_request.description = data.get(
+        "description",
+        user_request.description,
+    )
+    user_request.location = data.get(
+        "location",
+        user_request.location,
+    )
+
+    if data.get("skill_id"):
+        user_request.skill_id = data["skill_id"]
+
     db.session.commit()
-    return jsonify(request_item.to_dict())
+
+    return jsonify(user_request.to_dict()), 200
 
 
 @app.route("/requests/<int:request_id>", methods=["DELETE"])
 @token_required
 def delete_request(current_user, request_id):
-    request_item = Request.query.get_or_404(request_id)
-    db.session.delete(request_item)
+    request = Request.query.get_or_404(request_id)
+
+    if request.user_id != current_user.id:
+        return jsonify({"error": "Unauthorized"}), 403
+
+    db.session.delete(request)
     db.session.commit()
-    return jsonify({"message": "Request deleted"})
+
+    return jsonify({
+        "message": "Request deleted successfully."
+    }), 200
 
 
 @app.route("/reviews", methods=["GET"])
@@ -369,6 +407,12 @@ def my_requests(current_user):
         .order_by(Request.created_at.desc())
         .all()
     )
+
+    print("Current user:", current_user.id)
+    print("Requests found:", len(requests))
+
+    for request in requests:
+        print(request.id, request.title, request.user_id)
 
     return jsonify([request.to_dict() for request in requests])
 
