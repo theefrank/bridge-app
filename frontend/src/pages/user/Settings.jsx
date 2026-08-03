@@ -74,13 +74,38 @@ export default function Settings() {
     }
   }
 
+  async function handleDeleteAccount() {
+  try {
+    await api.delete("/account");
+
+    toast.success("Your account has been deleted.");
+
+    logout();
+
+    navigate("/", { replace: true });
+
+  } catch (error) {
+    toast.error(
+      error.response?.data?.error ||
+      "Could not delete account."
+    );
+  }
+  }
+
   useEffect(() => {
   async function loadSettings() {
     try {
       const response = await api.get("/settings");
       setSettings(response.data);
     } catch (error) {
-      console.error("Failed to load settings", error);
+      console.error(error);
+      console.error(error.response);
+      console.error(error.response?.data);
+
+      toast.error(
+        error.response?.data?.error ||
+        "Could not delete account."
+      );
     }
   }
 
@@ -308,6 +333,7 @@ export default function Settings() {
 
                     <AlertDialogAction
                       className="bg-red-600 hover:bg-red-700"
+                      onClick={handleDeleteAccount}
                     >
                       Delete Account
                     </AlertDialogAction>
