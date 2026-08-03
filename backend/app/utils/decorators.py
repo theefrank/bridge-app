@@ -8,7 +8,7 @@ from flask_jwt_extended import (
 )
 
 from app.extensions import db
-from app.models.user import User
+from backend.app.models.user import User
 
 def admin_required(fn):
 
